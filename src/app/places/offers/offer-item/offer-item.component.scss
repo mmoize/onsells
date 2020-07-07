@@ -1,0 +1,23 @@
+.offerDetail{
+    display: flex;
+    align-items: center;
+
+}
+
+.space-left{
+    margin-left: 5px;
+}
+
+
+h1{
+    font-size: 18px;
+    border: 1px solid var( --ion-color-primary);
+    padding: 8px;
+    border-radius: 10px;
+    color: var( --ion-color-primary);
+}
+
+
+ion-text {
+    --background: #5fc2e9;
+}

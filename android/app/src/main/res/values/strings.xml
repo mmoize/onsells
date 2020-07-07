@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">placebnb</string>
+    <string name="title_activity_main">placebnb</string>
+    <string name="package_name">com.placebnb</string>
+    <string name="custom_url_scheme">com.placebnb</string>
+</resources>
