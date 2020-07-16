@@ -27,7 +27,7 @@ export class AuthPage implements OnInit {
   }
 
 
- authenticate(email: string, password: string) {
+ authenticate(email: string, password: string, username: string) {
     this.loadingCtrl.create({ keyboardClose: true, message: 'Logging in..' }).
     then(loadingEl => {
       loadingEl.present();
@@ -35,7 +35,7 @@ export class AuthPage implements OnInit {
       if (this.isLogin) {
         authObs = this.authService.login(email, password);
       } else {
-        authObs = this.authService.signup(email, password);
+        authObs = this.authService.signup(email, password, username);
       }
 
       authObs.subscribe(resData => {
@@ -70,8 +70,9 @@ export class AuthPage implements OnInit {
     }
     const email = form.value.email;
     const password = form.value.password;
+    const username = form.value.username;
 
-    this.authenticate(email, password);
+    this.authenticate(email,  password, username);
   }
 
   onSwitchAuthMode() {

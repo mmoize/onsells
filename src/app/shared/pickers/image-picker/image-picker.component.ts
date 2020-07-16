@@ -12,7 +12,7 @@ import '@ionic/pwa-elements';
   styleUrls: ['./image-picker.component.scss'],
 })
 export class ImagePickerComponent implements OnInit {
-  @ViewChild('filePicker', {static: false}) filePickerRef: ElementRef<HTMLInputElement>;
+  @ViewChild('filePicker') filePickerRef: ElementRef<HTMLInputElement>;
   usePicker = false;
   @Input() showPreview = false;
   @Output() imagePick = new EventEmitter<string | File>();

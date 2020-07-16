@@ -1,4 +1,5 @@
 import { BehaviorSubject, from } from 'rxjs';
+import * as jwt_decode from 'jwt-decode';
 
 import { environment } from './../../environments/environment';
 import { Injectable, OnDestroy } from '@angular/core';
@@ -8,15 +9,14 @@ import { map, tap } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
 
 export interface AuthResponseData {
-  kind: string;
-  idToken: string;
+  user_id: string;
+  username: string;
   email: string;
-  refreshToken: string;
-  localId: string;
-  expiresIn: string;
-  registered?: boolean;
-
+  token: string;
+  expiresIn: Date;
 }
+  
+
 
 @Injectable({
   providedIn: 'root'
@@ -32,26 +32,34 @@ export class AuthService  implements OnDestroy {
   // tslint:disable-next-line: variable-name
   private activeLogoutTimer: any;
 
-  get userId() {
-    return this._user.asObservable().pipe(map(user => {
-       if (user) {
-        return user.id;
-       } else {
-         return null;
-       }
-      })
-    );
-  }
-
-  get token() {
+  get UserId() {
     return this._user.asObservable().pipe(map(user => {
       if (user) {
-       return user.token;
+        return user.user_id;
       } else {
         return null;
       }
-     })
-    );
+    }));
+  }
+  get userName() {
+    return this._user.asObservable().pipe(map(user => {
+      if (user) {
+        console.log('this si username', user.username);
+        return user.username;
+      } else {
+        return null;
+      }
+    }));
+  }
+
+  get userToken() {
+    return this._user.asObservable().pipe(map(user => {
+      if (user) {
+        return user.token;
+      } else {
+        return null;
+      }
+    }));
   }
 
   get userIsAuthenticated() {
@@ -66,21 +74,42 @@ export class AuthService  implements OnDestroy {
     );
   }
 
+  get User_username() {
+    return this._user.asObservable().pipe(map(userRes => {
+      console.log(userRes);
+      return userRes.username;
+    }));
+  }
+
+  async returnUserId() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dit = JSON.parse(value);
+    const dat = dit.user_id;
+    return dat;
+  }
+
   constructor(private http: HttpClient) { }
 
   autoLogin() {
-      return from(Plugins.Storage.get({key: 'authdata'})).pipe(map(storedData => {
-        if (!storedData || !storedData.value) {
-          return null;
-        }
-        const parsedData = JSON.parse(
-          storedData.value) as {token: string; tokenExpirationDate: string; userId: string; email: string; };
-        const expirationTime = new Date(parsedData.token);
-        if (expirationTime <= new Date()) {
-            return null;
-          }
-        const user = new User(parsedData.userId, parsedData.email, parsedData.token, expirationTime );
-        return user;
+    return from (Plugins.Storage.get({key: 'authData'}))
+      .pipe(map(storedData => {
+         if (!storedData || !storedData.value) {
+           return null;
+         }
+         const parsedData = JSON .parse(storedData.value) as
+         {user_Id: string; username: string;  email: string; token: string; tokenExpirationDate: string };
+         const expirationTime = new Date(parsedData.tokenExpirationDate);
+         if (expirationTime <= new Date()) {
+           return null;
+         }
+         const user = new User(
+          parsedData.user_Id,
+          parsedData.username,
+          parsedData.email,
+          parsedData.token,
+          expirationTime
+         );
+         return user;
       }),
       tap(user => {
         if (user) {
@@ -94,17 +123,14 @@ export class AuthService  implements OnDestroy {
     );
   }
 
-  signup(email: string, password: string) {
+  signup(username: string, email: string, password: string) {
      return this.http.post<AuthResponseData>
-     (`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey
-    }`, {email, password, returnSecureToken: true}
+     ('https://sellet.herokuapp.com/api/users/', {email, password, username}
     ).pipe(tap(this.setUserData.bind(this)));
   }
 
   login(email: string, password: string) {
-     return this.http.post<AuthResponseData>(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
-      ${environment.firebaseApiKey
-      }`, {email, password, returnSecureToken: true}
+     return this.http.post<AuthResponseData>('https://sellet.herokuapp.com/api/users/login/', {email, password}
     ).pipe(tap(this.setUserData.bind(this)));
   }
 
@@ -116,19 +142,43 @@ export class AuthService  implements OnDestroy {
     Plugins.Storage.remove({key: 'authData'});
   }
 
-  private setUserData(userData: AuthResponseData) {
-
-      const expirationTime = new Date (new Date().getTime() + (+userData.expiresIn * 1000));
-      const user = new User(
-        userData.localId, userData.email, userData.idToken, expirationTime
-      );
-      this._user.next(user);
-      this.autoLogout(user.tokenDuration);
-      this.storeAuthData(userData.localId, userData.idToken, expirationTime.toISOString(), userData.email);
+  getTokenExpirationDate(token: string): Date {
+    const decoded = jwt_decode(token);
+    if (decoded.exp === undefined) { return null; }
+    const date  = new Date(0);
+    date.setUTCSeconds(decoded.exp);
+    return date;
   }
-  private storeAuthData(userId: string, token: string, tokenExpirationDate: string, email: string) {
-    const data = JSON.stringify({userId, token, tokenExpirationDate, email});
-    Plugins.Storage.set({key: 'authData', value: data });
+
+  getUserId(token: string) {
+    const decoded = jwt_decode(token);
+    const userId = decoded.id;
+    return userId;
+  }
+
+  private setUserData(userData: AuthResponseData) {
+    const oneToken = JSON.stringify(userData);
+    const parsedToken = JSON.parse(oneToken);
+    const theToken = parsedToken.user.token;
+    const theUsername = parsedToken.user.username;
+    const theEmail = parsedToken.user.email;
+    const theUserId = this.getUserId(theToken);
+    const tokenExpirationDate =  this.getTokenExpirationDate(theToken);
+    const user = new User(
+      userData.user_id = theUserId,
+      userData.username = theUsername,
+      userData.email = theEmail,
+      userData.token = theToken,
+      tokenExpirationDate,
+    );
+    this._user.next(user);
+    this.autoLogout(user.tokenDuration);
+    this.storeAuthData(userData.user_id, userData.username, userData.email, userData.token, tokenExpirationDate);
+  }
+
+  private storeAuthData(user_id: string, username: string, email: string, token: string, tokenExpirationDate: Date ) {
+    const data = JSON.stringify({user_id, username, email, token, tokenExpirationDate });
+    Plugins.Storage.set({key: 'authData', value: data});
   }
 
   private autoLogout(duration: number) {

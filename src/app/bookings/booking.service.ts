@@ -48,7 +48,7 @@ export class BookingService  {
         dateTo: Date ) {
         let generatedId: string;
         let newBooking: Booking;
-        return this.authService.userId.pipe(take(1), switchMap(userId => {
+        return this.authService.UserId.pipe(take(1), switchMap(userId => {
             if (!userId) {
                 throw new Error('No user id found!');
             }
@@ -91,7 +91,7 @@ export class BookingService  {
 
 
     fetchBookings() {
-        return this.authService.userId.pipe(take(1), switchMap(userId => {
+        return this.authService.UserId.pipe(take(1), switchMap(userId => {
             if (!userId) {
                 throw new Error('User not found!');
             }

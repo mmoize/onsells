@@ -146,7 +146,7 @@ export class PlacesService {
     ) {
     let generatedId: string;
     let newPlace: Place;
-    return this.authService.userId.pipe(take(1), switchMap(userId => {
+    return this.authService.UserId.pipe(take(1), switchMap(userId => {
       if (!userId) {
         throw new Error('No user Found');
       }

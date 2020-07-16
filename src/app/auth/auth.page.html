@@ -11,6 +11,17 @@
         <ion-col size-md="6" offset-md="3">
           <ion-list>
             <ion-item>
+                <ion-label position="floating">username</ion-label>
+                <ion-input
+                type="text"
+                ngModel
+                name="username" 
+                required
+                username
+                #usernameCtrl="ngModel"
+                ></ion-input>
+            </ion-item>
+            <ion-item>
                 <ion-label position="floating">E-Mail</ion-label>
                 <ion-input
                 type="email"
