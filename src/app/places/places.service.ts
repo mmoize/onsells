@@ -82,7 +82,7 @@ export class PlacesService {
   constructor(private authService: AuthService, private httpService: HttpClient) { }
 
   fetchPlaces() {
-   return this.authService.token.pipe(switchMap(token => {
+   return this.authService.userToken.pipe(switchMap(token => {
       return this.httpService.get<{[Key: string]: PlaceData}>(`https://myplaces-ae5f2.firebaseio.com/offered-places.json?auth=${{token}}`)
     }))
     .pipe(map(resData => {

@@ -23,6 +23,8 @@ export interface AuthResponseData {
 })
 export class AuthService  implements OnDestroy {
 
+ private _usertoken = new BehaviorSubject<User>(null);
+
   // tslint:disable-next-line: variable-name
   private _user = new BehaviorSubject<User>(null);
 
@@ -86,6 +88,26 @@ export class AuthService  implements OnDestroy {
     const dit = JSON.parse(value);
     const dat = dit.user_id;
     return dat;
+  }
+
+  async returnUsername() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dit = JSON.parse(value);
+    const dat = dit.username;
+    return dat;
+  }
+   
+ 
+  async returnUserToken() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+    console.log('for auth token', dicToken);
+    
+    this._usertoken.next(dicToken);
+    return this._usertoken.asObservable().pipe(map(usertokens => {
+      return usertokens;
+    }));
   }
 
   constructor(private http: HttpClient) { }

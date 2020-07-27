@@ -1,25 +1,27 @@
 import { switchMap, map, tap } from 'rxjs/operators';
 import { Post } from './post.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, async } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ProductLocation } from './location.model';
+import { Plugins } from '@capacitor/core';
 
 interface PostData{
   id: string;
   location: ProductLocation;
   owner: [];
   product: [];
-  created: Date;
-  updated: Date;
+  // productimages: [];
+  created_at: Date;
+  updated_at: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-
+  usertoken;
 
   private _posts = new BehaviorSubject<Post[]>([]);
 
@@ -30,10 +32,13 @@ export class PostService {
   constructor(private authService: AuthService,
               private httpService: HttpClient) { }
 
-  postsUrl = 'https://sellet.herokuapp.com/api/viewpost/'
+  postsUrl = 'https://sellet.herokuapp.com/api/viewpost/';
+  postDetailUrl = 'https://sellet.herokuapp.com/api/postdetail/';
+  postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/'
 
   fetchPosts() {
     return this.authService.userToken.pipe(switchMap(token => {
+      this.usertoken = token;
       return this.httpService.get<{[Key: string]: PostData}>(this.postsUrl, {
         headers: {
           'Content-Type': 'application/json',
@@ -42,16 +47,19 @@ export class PostService {
       });
 
     })).pipe(map(resultData => {
+
       const posts = [];
+      // tslint:disable-next-line: forin
       for (const key in resultData) {
         if (resultData.hasOwnProperty(key)) {
+         
           posts.push(new Post (
               resultData[key].id,
               resultData[key].product,
               resultData[key].owner,
               resultData[key].location,
-              resultData[key].created,
-              resultData[key].updated
+              resultData[key].created_at,
+              resultData[key].updated_at
             )
           );
         }
@@ -64,5 +72,45 @@ export class PostService {
     );
   }
 
-  
+  async getPostDetail(id:string) {
+
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+    console.log('for auth token', dicToken);
+
+
+    this.httpService.get(`${this.postImageSetUrl}${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + dicToken,
+      }
+    }).subscribe(resData => {
+      console.log('all', resData);
+    });
+
+
+
+    return this.authService.userToken.pipe(switchMap(token => {
+      console.log(token);
+      return this.httpService.get<PostData>(`${this.postDetailUrl}${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          // tslint:disable-next-line: max-line-length
+          Authorization: 'Token ' + dicToken ,
+        }
+      });
+    })).pipe(map(postData => {
+      console.log('this is original data', postData);
+      return new Post(
+        postData[0].id,
+        postData[0].product,
+        postData[0].owner,
+        postData[0].location,
+        postData[0].created_at,
+        postData[0].updated_at
+      );
+    }));
+  }
+
 }

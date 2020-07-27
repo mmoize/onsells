@@ -24,6 +24,10 @@ const routes: Routes = [
     path: 'board',
     loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule)
   },
+  {
+    path: 'messages',
+    loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
+  },
 ];
 
 @NgModule({

@@ -42,7 +42,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
       }
       this.isLoading = true;
       let fetchedUserId: string;
-      this.authService.userId.pipe(switchMap(userId => {
+      this.authService.UserId.pipe(switchMap(userId => {
         if (!userId) {
           throw new Error('Found no user!');
         }
@@ -95,7 +95,7 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
       ]
     }).then(actionSheetEl => {
       actionSheetEl.present();
-    });
+    }); 
   }
 
   openBookingModal(mode: 'select' | 'random') {

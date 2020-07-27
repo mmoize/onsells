@@ -45,7 +45,7 @@ export class AuthPage implements OnInit {
         this.router.navigateByUrl('/places/discover');
       }, errRes => {
         loadingEl.dismiss();
-        const code = errRes.error.error.message;
+        const code = errRes.error.error;
         let message = 'Could not sign you up, please try again.';
         if (code === 'EMAIL_EXISTS') {
            message = 'This Email already exists';

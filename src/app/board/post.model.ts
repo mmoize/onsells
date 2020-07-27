@@ -4,9 +4,10 @@ export class Post {
         public id: string,
         public product: [],
         public owner: [],
+        // public productimages: [],
         public location: ProductLocation,
-        public created: Date,
-        public updated: Date,
+        public created_at: Date,
+        public updated_at: Date,
 
 
     ) {}
