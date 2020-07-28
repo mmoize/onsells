@@ -12,19 +12,14 @@ export class User {
         public username: string,
         public email: string,
         // tslint:disable-next-line: variable-name
-        private _token: string,
+        public token: string,
         // tslint:disable-next-line: variable-name
         public tokenExpirationDate: Date,
 
 
     ) {}
 
-    get token() {
-        // if (!this._tokenExpirationDate || this._tokenExpirationDate <= new Date()) {
-       //      return null;
-         //   }
-         return this._token;
-   }
+ 
 
     // get _tokenExpirationDate() {
     //     const tokenDecode = this.token;

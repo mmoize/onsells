@@ -76,6 +76,19 @@ export class AuthService  implements OnDestroy {
     );
   }
 
+  get userTok() {
+    return this._user.asObservable().pipe(map(user => {
+        if (user) {
+          console.log('this  is user', user);
+          return  user.token;
+        } else {
+          return null;
+        }
+
+      })
+    );
+  }
+
   get User_username() {
     return this._user.asObservable().pipe(map(userRes => {
       console.log(userRes);
@@ -104,10 +117,7 @@ export class AuthService  implements OnDestroy {
     const dicToken = dic.token;
     console.log('for auth token', dicToken);
     
-    this._usertoken.next(dicToken);
-    return this._usertoken.asObservable().pipe(map(usertokens => {
-      return usertokens;
-    }));
+    return dicToken;
   }
 
   constructor(private http: HttpClient) { }

@@ -22,6 +22,7 @@ export class MessagesPage implements OnInit {
   data_dic_outbox = [];
   myOutBox = [];
   refPost;
+  msgloadEmpty = true;
 
   public userListArray: any = [];
   public userData: [];
@@ -45,6 +46,10 @@ export class MessagesPage implements OnInit {
 
   }
 
+  ionViewDidLeave(){
+
+  }
+
 
   async ionViewWillEnter() {
 
@@ -54,47 +59,45 @@ export class MessagesPage implements OnInit {
     this.username = dicUsername;
     
 
-    this.messageService.fetchMessages().subscribe(resData => {
-      this.messagesData = resData;
-      console.log(resData);
-      this.retreiveData();
+    (await this.messageService.fetchMessages()).subscribe(resData => {
 
-      for (const key in this.messagesData) {
-        if (this.messagesData.hasOwnProperty(key)) {
-          console.log('this is recipient username', this.messagesData[key].newest[0].recipient.username);
-          console.log('this is sender username', this.messagesData[key].newest[0].sender.username);
-          const msgSenderUsername = this.messagesData[key].newest[0].sender.username;
-          const currentUsername = this.username;
-          
-          if (currentUsername === msgSenderUsername) {
-            console.log('its a send true', msgSenderUsername);
-            this.inbox.push({'msg': this.messagesData[key], 'sent': true, 'recieved': false, 'avatar': this.messagesData[key].newest[0].recipient.image  });
-          } else if (currentUsername !== msgSenderUsername) {
-            console.log('its not a send ', msgSenderUsername);
-            this.inbox.push({'msg': this.messagesData[key], 'sent': false, 'recieved': true, 'avatar': this.messagesData[key].newest[0].recipient.image, 'unread': true });
+      if (this.msgloadEmpty) {
+        this.messagesData = resData;
+        this.msgloadEmpty = false;
+        for (const key in this.messagesData) {
+          if (this.messagesData.hasOwnProperty(key)) {
+            console.log('this is recipient username', this.messagesData[key].newest[0].recipient.username);
+            console.log('this is sender username', this.messagesData[key].newest[0].sender.username);
+            const msgSenderUsername = this.messagesData[key].newest[0].sender.username;
+            const currentUsername = this.username;
+            
+            if (currentUsername === msgSenderUsername) {
+              console.log('its a send true', msgSenderUsername);
+              // tslint:disable-next-line: max-line-length
+              this.inbox.push({'msg': this.messagesData[key], 'sent': true, 'recieved': false, 'avatar': this.messagesData[key].newest[0].recipient.image  });
+            } else if (currentUsername !== msgSenderUsername) {
+              console.log('its not a send ', msgSenderUsername);
+              // tslint:disable-next-line: max-line-length
+              this.inbox.push({'msg': this.messagesData[key], 'sent': false, 'recieved': true, 'avatar': this.messagesData[key].newest[0].recipient.image, 'unread': true });
+            }
+    
           }
-  
         }
       }
+     
+      console.log( 'incoming data',resData);
+
       console.log('mesg', this.inbox);
 
     });
   }
 
-  onClick() {
-    this.messageService.fetchMessages().subscribe(resData => {
-      this.messagesData = resData;
-      console.log(resData);
-      this.retreiveData();
-    });
 
-  }
 
-  async retreiveData() {
 
-  }
 
-  tappedOnMessage(user) {
+  onClickDetail(id) {
+    this.router.navigateByUrl(`/messages/message-detail/${id}`);
   }
 
 
