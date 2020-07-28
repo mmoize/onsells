@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1051265958828",
+    "firebase_url": "https://fleek-market.firebaseio.com",
+    "project_id": "fleek-market",
+    "storage_bucket": "fleek-market.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051265958828:android:186ae70e89a44aaf5d7009",
+        "android_client_info": {
+          "package_name": "com.fleek.market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051265958828-uhpf9r1c5m8i6atsoqlnbtdccppfbam1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUR2ebHiAgOjldd7P5Yku739jJjmS1Y4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1051265958828-uhpf9r1c5m8i6atsoqlnbtdccppfbam1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
