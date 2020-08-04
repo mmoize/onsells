@@ -1,6 +1,6 @@
 {
-  "appId": "com.placebnb",
-  "appName": "placebnb",
+  "appId": "com.fleeks",
+  "appName": "fleeks",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

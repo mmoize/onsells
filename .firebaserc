@@ -1,5 +1,15 @@
 {
   "projects": {
-    "default": "myplaces-ae5f2"
+    "production": "fleek-market",
+    "default": "fleek-market"
+  },
+  "targets": {
+    "fleek-market": {
+      "hosting": {
+        "app": [
+          "fleek-market"
+        ]
+      }
+    }
   }
 }

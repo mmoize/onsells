@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'message-detail/:roomId',
     loadChildren: () => import('./message-detail/message-detail.module').then( m => m.MessageDetailPageModule)
+  },
+  {
+    path: 'create-message',
+    loadChildren: () => import('./create-message/create-message.module').then( m => m.CreateMessagePageModule)
   }
 
 ];

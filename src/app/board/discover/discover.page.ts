@@ -1,3 +1,4 @@
+import { FcmService } from './../../fcm.service';
 import { Router } from '@angular/router';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthService } from './../../auth/auth.service';
@@ -83,7 +84,9 @@ export class DiscoverPage implements OnInit {
 
   constructor(private postservice: PostService,
               private authservice: AuthService,
-              private routes: Router
+              private routes: Router,
+              
+
               ) { }
 
   ngOnInit() {
