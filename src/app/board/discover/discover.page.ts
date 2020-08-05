@@ -85,25 +85,54 @@ export class DiscoverPage implements OnInit {
   constructor(private postservice: PostService,
               private authservice: AuthService,
               private routes: Router,
-              
+              // private fcm: FcmService
 
               ) { }
 
   ngOnInit() {
-    this.postsSub = this.postservice.posts.subscribe(resultData => {
-      this.loadedPosts = resultData; // data from post service.
-      this.relevantPosts = this.loadedPosts;
-      this.listedLoadedPosts = this.relevantPosts.slice(1);
-    });
+    // this.postsSub = this.postservice.posts.subscribe(resultData => {
+    //   this.loadedPosts = resultData; // data from post service.
+    //   // this.relevantPosts = this.loadedPosts;
+      
+    //   for (const key in this.loadedPosts) {
+    //     if (this.loadedPosts.hasOwnProperty(key)) {
+
+    //        if (this.loadedPosts[key].id in this.loadedPosts) {
+    //           console.log('yes its in here', this.loadedPosts[key].id);
+    //        } else  {
+    //             console.log('not in here', this.loadedPosts[key].id);
+    //             this.listedLoadedPosts.push(this.loadedPosts[key]);
+    //        }
+    //     }
+    //   }
+  
+    // });
+
     console.log(this.loadedPosts);
     setTimeout(() => {
-      this.postsSub = this.postservice.posts.subscribe(resultData => {
-        this.loadedPosts = resultData; // data from post service.
-        this.relevantPosts = this.loadedPosts;
-        this.listedLoadedPosts = this.relevantPosts.slice(1);
-        console.log('data postservice',resultData);
+      this.postservice.postRes.subscribe(postData => {
+        console.log('second results', postData);
+        this.listedLoadedPosts = postData;
+        for (const key in postData) {
+          if (postData.hasOwnProperty(key)) {
+    
+             if (postData[key].id in this.loadedPosts) {
+                console.log('yes its in here', postData[key].id);
+             } else  {
+                  console.log('not in here', postData[key].id);
+                  this.loadedPosts.push(postData[key]);
+                  this.listedLoadedPosts.push(postData[key]);
+             }
+          }
+        }
       });
-    }, 4000);
+      // this.postsSub = this.postservice.posts.subscribe(resultData => {
+      //   this.loadedPosts = resultData; // data from post service.
+      //   this.relevantPosts = this.loadedPosts;
+      //   this.listedLoadedPosts = this.relevantPosts.slice(1);
+      //   console.log('data postservice',resultData);
+      // });
+    }, 1500);
   }
 
 
@@ -112,6 +141,7 @@ export class DiscoverPage implements OnInit {
    this.postservice.fetchPosts().subscribe(() => {
      this.isLoading = false;
    });
+
   }
 
   onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {

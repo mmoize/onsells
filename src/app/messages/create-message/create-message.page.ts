@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-message',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateMessagePage implements OnInit {
 
-  constructor() { }
+  roomsMessages;
+  topAvatar;
+
+  constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
+
   }
 
 }

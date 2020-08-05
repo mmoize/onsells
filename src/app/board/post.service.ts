@@ -72,6 +72,12 @@ export class PostService {
     );
   }
 
+  get postRes() {
+    return this._posts.asObservable().pipe(tap(resData => {
+      console.log('post data', resData);
+    }));
+  }
+
   async getPostDetail(id:string) {
 
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;

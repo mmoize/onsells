@@ -1,10 +1,11 @@
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../message.service';
-import { ActionSheetController, PopoverController, NavController } from '@ionic/angular';
+import { ActionSheetController, PopoverController, NavController, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
 
 @Component({
   selector: 'app-message-detail',
@@ -29,6 +30,7 @@ export class MessageDetailPage implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private navCtrl: NavController,
+              private modalCtrl: ModalController,
     ) { } 
 
   ngOnInit() {
@@ -40,7 +42,11 @@ export class MessageDetailPage implements OnInit {
       }
 
       (await this.messageService.fetchMessageDetail(paramMap.get('roomId'))).subscribe(resData => {
-        this.roomsMessages = resData;
+        let newData = null;
+        newData = resData;
+        newData.reverse();
+        console.log('this is newdata', newData);
+        this.roomsMessages = newData;
         console.log('msg', this.roomsMessages);
         console.log('this is room', this.roomsMessages[0].data.msg_data.recipient.id);
         
@@ -116,7 +122,10 @@ export class MessageDetailPage implements OnInit {
 
     this.messageService.sendExistMsgRoom(data).then(async () =>{
       (await this.messageService.fetchMessageDetail(this.roomId)).subscribe(resData => {
-        this.roomsMessages = resData;
+        let newData = null;
+        newData = resData;
+        newData.reverse();
+        this.roomsMessages = newData;
         console.log('msg', this.roomsMessages);
         console.log('this is room', this.roomsMessages[0].data.msg_data.recipient.id);
         
@@ -141,6 +150,17 @@ export class MessageDetailPage implements OnInit {
       });
     });
 
+  }
+
+
+  openModal() {
+    this.modalCtrl.create({
+      component: UserprofileComponent,
+      componentProps: {selectedProfile: this.topAvatar}
+    }).then(modalEl => {
+      modalEl.present();
+      
+    });
   }
   
 

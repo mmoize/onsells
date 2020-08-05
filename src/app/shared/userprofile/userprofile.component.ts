@@ -9,16 +9,23 @@ import { ModalController } from '@ionic/angular';
 })
 export class UserprofileComponent implements OnInit {
   @Input() selectedPost: Post;
+  @Input() selectedProfile;
   imagestring;
   image_string
 
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
-     console.log('user_post', this.selectedPost);
-     this.image_string = this.selectedPost.owner;
-     this.imagestring = this.image_string.image;
-     console.log('user_post_iamge', this.imagestring);
+    if (this.selectedPost) {
+      console.log('user_post', this.selectedPost);
+      this.image_string = this.selectedPost.owner;
+      this.imagestring = this.image_string.image;
+      console.log('user_post_iamge', this.selectedPost);
+    } else if (this.selectedProfile) {
+      this.imagestring = this.selectedProfile.image;
+    }
+
+
   }
 
   onCancel() {

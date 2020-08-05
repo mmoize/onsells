@@ -1,6 +1,7 @@
+import { UserprofileComponent } from './../shared/userprofile/userprofile.component';
 import { MessageService } from './message.service';
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetController, PopoverController } from '@ionic/angular';
+import { ActionSheetController, PopoverController, ModalController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { switchMap } from 'rxjs/operators';
@@ -37,6 +38,7 @@ export class MessagesPage implements OnInit {
               public popoverCtrl: PopoverController,
               private router: Router,
               private route: ActivatedRoute,
+              private modalCtrl: ModalController,
               ) { }
 
   ngOnInit() {
@@ -63,6 +65,8 @@ export class MessagesPage implements OnInit {
 
       if (this.msgloadEmpty) {
         this.messagesData = resData;
+        this.messagesData.reverse();
+        
         this.msgloadEmpty = false;
         for (const key in this.messagesData) {
           if (this.messagesData.hasOwnProperty(key)) {
@@ -80,15 +84,11 @@ export class MessagesPage implements OnInit {
               // tslint:disable-next-line: max-line-length
               this.inbox.push({'msg': this.messagesData[key], 'sent': false, 'recieved': true, 'avatar': this.messagesData[key].newest[0].recipient.image, 'unread': true });
             }
-    
           }
         }
       }
-     
-      console.log( 'incoming data',resData);
-
+      console.log( 'incoming data', resData);
       console.log('mesg', this.inbox);
-
     });
   }
 
@@ -99,6 +99,9 @@ export class MessagesPage implements OnInit {
   onClickDetail(id) {
     this.router.navigateByUrl(`/messages/message-detail/${id}`);
   }
+
+
+
 
 
 }

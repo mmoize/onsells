@@ -1,3 +1,5 @@
+import { NewMessageComponent } from './../../../shared/new-message/new-message.component';
+import { CreateMessagePage } from './../../../messages/create-message/create-message.page';
 import { UserprofileComponent } from './../../../shared/userprofile/userprofile.component';
 import { PostService } from './../../post.service';
 import { Post } from './../../post.model';
@@ -142,6 +144,16 @@ export class ProductDetailPage implements OnInit, OnDestroy {
       modalEl.present();
       return modalEl.onDidDismiss();
     });
+  }
+
+  openMessageModal() {
+    this.modalCtrl.create({
+      component: NewMessageComponent,
+      componentProps: {seletedProfile: this.post}
+    }).then(modalEl => {
+      modalEl.present();
+    });
+
   }
 
 

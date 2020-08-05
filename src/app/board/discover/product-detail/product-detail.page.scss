@@ -15,8 +15,8 @@ ion-card-content {
 
 img {
     object-fit: fill;
-    height: 100%;
-    width: 100%;
+    max-width: 500;
+    max-height: 450;
 }
 
 ion-col{

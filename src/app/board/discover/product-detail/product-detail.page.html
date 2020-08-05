@@ -48,8 +48,8 @@
               
               <ion-label >
                 <h3>Price: {{ post?.product[0].price |currency }}</h3>
-              </ion-label>
-              <ion-icon slot="end" color="primary" name="chatbox-ellipses-outline"></ion-icon>
+              </ion-label >
+              <ion-icon (click)="openMessageModal()" slot="end" color="primary" name="chatbox-ellipses-outline"></ion-icon>
             </ion-item>
             <ion-label id="labelDescription">
               <p>{{ post?.product[0].description }}</p>

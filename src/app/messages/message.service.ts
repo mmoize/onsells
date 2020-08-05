@@ -18,6 +18,7 @@ export class MessageService {
 messagesUrl = 'https://sellet.herokuapp.com/api/lobby/';
 messageRoomUrl = 'https://sellet.herokuapp.com/api/room/';
 sendExistMsgRmUrl = 'https://sellet.herokuapp.com/api/postmessager/1';
+createNewMessageUrl = 'https://sellet.herokuapp.com/api/postmessagex/1';
 
 
   fetchMessages() {
@@ -64,6 +65,18 @@ sendExistMsgRmUrl = 'https://sellet.herokuapp.com/api/postmessager/1';
       return xhr.send(msgData);
     });
 
+  }
+
+  createNewMessage(msgData) {
+    console.log('this new msg', msgData)
+    return this.authService.returnUserToken().then(usertoken => {
+      const xhr = new XMLHttpRequest();
+      const url = this.createNewMessageUrl;
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader( 'Authorization', 'Token ' + usertoken);
+      xhr.withCredentials = true;
+      return xhr.send(msgData);
+    });
   }
 
 

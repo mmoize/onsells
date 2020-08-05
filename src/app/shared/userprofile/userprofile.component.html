@@ -30,9 +30,13 @@
                   <ion-card-header>
                     <ion-card-title>Bio</ion-card-title>
                   </ion-card-header>
-                  <ion-card-content>
+                  <ion-card-content *ngIf="selectedPost">
                     
                     {{ selectedPost?.owner.bio }}
+                  </ion-card-content>
+                  <ion-card-content *ngIf="selectedProfile">
+                    
+                    {{ selectedProfile.bio }}
                   </ion-card-content>
                 </ion-card>
     
