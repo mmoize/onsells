@@ -1,4 +1,5 @@
-import { switchMap, map, tap } from 'rxjs/operators';
+
+import { switchMap, map, tap, take } from 'rxjs/operators';
 import { Post } from './post.model';
 import { BehaviorSubject, async } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -21,20 +22,39 @@ interface PostData{
   providedIn: 'root'
 })
 export class PostService {
-  usertoken;
-
-  private _posts = new BehaviorSubject<Post[]>([]);
 
   get posts() {
+    console.log('its main db', this._posts);
     return this._posts.asObservable();
+    
   }
 
   constructor(private authService: AuthService,
               private httpService: HttpClient) { }
 
+  get postRes() {
+    return this._posts.asObservable().pipe(tap(resData => {
+      console.log('post data', resData);
+    }));
+  }
+  usertoken;
+
+  private _posts = new BehaviorSubject<Post[]>([]);
+
   postsUrl = 'https://sellet.herokuapp.com/api/viewpost/';
   postDetailUrl = 'https://sellet.herokuapp.com/api/postdetail/';
-  postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/'
+  postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/';
+
+  getPosts(id: string) {
+  return this.fetchPosts().pipe( () => {
+      return this._posts.asObservable().pipe(tap(resData => {
+        console.log('post data', resData);
+        return {...resData.find(p => p.id === id )};
+      }));
+    });
+
+    
+  }
 
   fetchPosts() {
     return this.authService.userToken.pipe(switchMap(token => {
@@ -68,17 +88,12 @@ export class PostService {
     }),
     tap(resData => {
       this._posts.next(resData);
+      console.log('asa', this._posts);
     })
     );
   }
 
-  get postRes() {
-    return this._posts.asObservable().pipe(tap(resData => {
-      console.log('post data', resData);
-    }));
-  }
-
-  async getPostDetail(id:string) {
+  async getPostDetail(id: string) {
 
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);

@@ -1,3 +1,4 @@
+import { PostService } from './../board/post.service';
 import { BehaviorSubject, from } from 'rxjs';
 import * as jwt_decode from 'jwt-decode';
 
@@ -5,7 +6,7 @@ import { environment } from './../../environments/environment';
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user.model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, timeout } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
 
 export interface AuthResponseData {
@@ -145,6 +146,7 @@ export class AuthService  implements OnDestroy {
       }),
       tap(user => {
         if (user) {
+          
           this._user.next(user);
           this.autoLogout(user.tokenDuration);
         }
@@ -189,6 +191,7 @@ export class AuthService  implements OnDestroy {
   }
 
   private setUserData(userData: AuthResponseData) {
+
     const oneToken = JSON.stringify(userData);
     const parsedToken = JSON.parse(oneToken);
     const theToken = parsedToken.user.token;

@@ -1,3 +1,4 @@
+import { PostService } from './../board/post.service';
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanLoad, Route, UrlSegment, Router } from '@angular/router';
@@ -9,7 +10,7 @@ import { take, tap, switchMap } from 'rxjs/operators';
 })
 export class AuthGuard implements CanLoad  {
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private postservice: PostService) {
 
   }
 
@@ -18,6 +19,7 @@ export class AuthGuard implements CanLoad  {
     switchMap(isAuthenticated => {
       if (!isAuthenticated) {
         return this.authService.autoLogin();
+        
       } else {
         return of(isAuthenticated);
       }

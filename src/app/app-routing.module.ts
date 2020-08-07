@@ -25,6 +25,10 @@ const routes: Routes = [
     loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule)
   },
   {
+    path: 'discover',
+    loadChildren: () => import('./board/discover/discover.module').then( m => m.DiscoverPageModule)
+  },
+  {
     path: 'messages',
     loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
   },

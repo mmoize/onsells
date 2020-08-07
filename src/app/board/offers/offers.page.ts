@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from './../post.service';
 import { Post } from './../post.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -16,8 +16,10 @@ export class OffersPage implements OnInit, OnDestroy {
   isLoading = false;
   loadedOffers: Post[];
 
+
   constructor(private postservice: PostService,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private routes: Router
               ) { }
 
   ngOnInit() {
@@ -42,6 +44,10 @@ export class OffersPage implements OnInit, OnDestroy {
     if (this.postSub) {
       this.postSub.unsubscribe();
     }
+  }
+
+  onNewProduct() {
+    this.routes.navigateByUrl(`/board/offers/new-product`);
   }
 
 }

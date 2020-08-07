@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, ModalController, ActionSheetController, LoadingController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
+import { take, map } from 'rxjs/operators';
 
 
 @Component({
@@ -98,12 +99,18 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    let don ='';
     this.route.paramMap.subscribe(async paramMap => {
+      don = paramMap.get('postId')
       console.log('this is the id',paramMap.get('postId') );
       if (!paramMap.has('postId')) {
         this.navCtrl.navigateBack('/board/discover');
         return;
       }
+      this.postService.getPosts(don).subscribe(data => {
+
+        console.log('thisi data', data);
+      });
       this.isLoading = false;
       (await this.postService.getPostDetail(paramMap.get('postId'))).subscribe(postDetail => {
         this.post = postDetail;
@@ -111,6 +118,8 @@ export class ProductDetailPage implements OnInit, OnDestroy {
         console.log('this is postDetail', postDetail);
         console.log('this is postDetail', this.avatarImageStr);
       }
+
+      
       // , error => {
       //   this.alertCtrl.create({
       //         header: 'An error occurred '  ,

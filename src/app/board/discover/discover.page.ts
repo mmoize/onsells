@@ -110,7 +110,7 @@ export class DiscoverPage implements OnInit {
 
     console.log(this.loadedPosts);
     setTimeout(() => {
-      this.postservice.postRes.subscribe(postData => {
+      this.postsSub = this.postservice.postRes.subscribe(postData => {
         console.log('second results', postData);
         this.listedLoadedPosts = postData;
         for (const key in postData) {
@@ -138,14 +138,15 @@ export class DiscoverPage implements OnInit {
 
   ionViewWillEnter() {
    this.isLoading = true;
-   this.postservice.fetchPosts().subscribe(() => {
+   this.postservice.fetchPosts().subscribe(result => {
      this.isLoading = false;
+     console.log('ion view results', result);
    });
 
   }
 
   onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
-    this.authservice.userName.pipe(take(1)).subscribe(usernameRes => {
+   this.authservice.userName.pipe(take(1)).subscribe(usernameRes => {
       console.log(event.detail);
       if (event.detail.value === 'all') {
         this.relevantPosts = this.loadedPosts;
@@ -162,6 +163,12 @@ export class DiscoverPage implements OnInit {
 
   onDetail(id) {
     this.routes.navigateByUrl(`/board/discover/post-detail/${id}`)
+  }
+
+  ngOnDestroy() {
+    if (this.postsSub) {
+      this.postsSub.unsubscribe();
+    }
   }
 
 }
