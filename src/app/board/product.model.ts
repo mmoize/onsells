@@ -1,14 +1,17 @@
-export class Post {
+export class Product {
     constructor(
-        public barcode: string,
-        public category: string,
-        public created: string,
-        public description: string,
         public id: string,
+        public user: [],
+        public title: string,
         public price: string,
-        public productimage_set: [],
+        public description: string,
+        public category: string,
+        public barcode: string,
         public slug: string,
-        public taggit: []
+        public productimage_set: [],
+        public created: string,
+        // public slug: string,
+        // public taggit: []
 
     ) {}
 }

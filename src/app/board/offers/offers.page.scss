@@ -16,3 +16,21 @@ ion-item-option {
     border-radius: 10px;
 
 }
+
+#outer {
+    display: flex;
+    flex-direction: column-reverse;
+    float: left;
+}
+
+h3 {
+    background-color: rgb(35, 43, 39, 0.5);
+    font-weight: bolder;
+    color: rgb(19, 224, 122, 0.8);
+    border-radius: 5px;
+}
+
+#productheader {
+    font-weight: bolder;
+    font-size: larger;
+}

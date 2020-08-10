@@ -20,7 +20,7 @@
       </ion-card>
     </ion-col>
   </ion-row>
-  <ion-row *ngIf="formPhotoList">
+  <ion-row *ngIf="selectedImage">
     <ion-col>
 
       <ion-slides pager="true" [options]="slideOpts" >
@@ -139,8 +139,8 @@
    <ion-row>
      <ion-col size-sm="6" offset-sm="3">
        <ion-item lines="none">
-        <ion-button slot="start">save product</ion-button>
-        <ion-button slot="end">next..Post </ion-button>
+        <ion-button (click)="createProduct()" slot="start">save product</ion-button>
+        <ion-button (click)="onPostProduct()" slot="end">next..Post </ion-button>
        </ion-item>
      </ion-col>
    </ion-row>

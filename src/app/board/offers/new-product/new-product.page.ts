@@ -1,6 +1,8 @@
+import { stringify } from 'querystring';
+import { PostService } from './../../post.service';
 import { CameraSource, Camera, CameraResultType } from '@capacitor/core';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Platform, ActionSheetController } from '@ionic/angular';
+import { Platform, ActionSheetController, LoadingController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -16,10 +18,14 @@ export class NewProductPage implements OnInit {
   productPhotoCount;
   formPhotoList = [];
   selectedImage = [];
+  theSelectedImage = [];
   form: FormGroup;
   addedImage = false;
   constructor(private plt: Platform,
               private sanitizer: DomSanitizer ,
+              private routes: Router,
+              private loadingCtrl: LoadingController,
+              private postservice: PostService,
               private actionSheetCtrl: ActionSheetController) { }
 
                slideOpts = {
@@ -202,7 +208,7 @@ export class NewProductPage implements OnInit {
       const blobDatas = this.b64toBlob(image.base64String, `image/${image.format}`);
       console.log('this is your image', blobData);
       const imageName = 'Give me a name';
-      imageData = blobData;
+      imageData = blobDatas;
       imageFormat = image.format;
       const urlCreator = window.URL || window.webkitURL;
       const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(urlCreator.createObjectURL(blobDatas));
@@ -213,20 +219,25 @@ export class NewProductPage implements OnInit {
       }
       console.log('my id', getRandomArbitrary(1,20));
       
-      const ranId = getRandomArbitrary(1,20)
+      const ranId = getRandomArbitrary(1,20);
       const prevImage = {};
+      const uploadImage = {};
       prevImage['id'] = ranId;
-      // prevImagex['image'] = urlCreator.createObjectURL(blobData);
       prevImage['image'] = safeUrl;
+      prevImage['format'] = imageFormat;
 
-      
+      // prevImagex['image'] = urlCreator.createObjectURL(blobData);
+     
+      uploadImage['image'] = blobDatas;
+      uploadImage['format'] = imageFormat;
+      uploadImage['id'] = ranId;
 
       this.selectedImage.push(prevImage);
-
+      this.theSelectedImage.push(uploadImage);
       this.formPhotoList.push(prevImage);
       console.log('this is formlist', this.selectedImage);
 
-      if (this.formPhotoList) {
+      if (this.selectedImage) {
         const count = Object.keys(this.selectedImage).length;
         this.productPhotoCount = count;
       }
@@ -238,8 +249,6 @@ export class NewProductPage implements OnInit {
 
 
   onClickProdImage() {
-
-    
     if (this.ClickedProdImage) {
       this.ClickedProdImage = false;
     } else {
@@ -248,7 +257,12 @@ export class NewProductPage implements OnInit {
   }
 
 
+
    onDelete(id) {
+
+    let b = this.theSelectedImage.filter(b => b.id !== id);
+
+    this.theSelectedImage = b;
 
     // function shuffle(array) {
     //   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -268,24 +282,68 @@ export class NewProductPage implements OnInit {
     
     //   return array;
     // }
-  //  let a =  {...this.selectedImage.find(image => image.id === id)};
-  //  let b = a.id;
-
-  //  const toDelete =this.selectedImage.map(item => {
-  //   delete item.b;
-  //   let imagePre;
 
     let c = this.selectedImage.filter(b => b.id !== id);
     // shuffle(c);
     this.selectedImage = c;
 
+    if (this.selectedImage) {
+      const count = Object.keys(this.selectedImage).length;
+      this.productPhotoCount = count;
+
+    } else {
+      this.addedImage = false;
+      const count = Object.keys(this.selectedImage).length;
+      this.productPhotoCount = count;
+    }
+
     return console.log('this axax', this.selectedImage);
-}
+
+  }
+
+
+  createProduct() {
+    this.loadingCtrl.create({keyboardClose:true, message: 'Create your Product'})
+    .then(loadingEl => {
+      loadingEl.present();
+      const data = new FormData();
+      for (const key in this.theSelectedImage) {
+        if (this.theSelectedImage.hasOwnProperty(key)) {
+         console.log('this is ur images',  this.theSelectedImage[key].image);
+         data.append('image', this.theSelectedImage[key].image, `product.${this.theSelectedImage[key].format}` );
+        }
+      }
+
+      function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+      console.log('my id', getRandomArbitrary(1, 1000));
+      let barcode = getRandomArbitrary(1, 1000);
+
+      data.append('title', this.form.value.title);
+      data.append('description', this.form.value.description);
+      data.append('price', this.form.value.price);
+      data.append('category', this.form.value.category);
+      data.append('slug', this.form.value.slug);
+      data.append('barcode', barcode);
+
+      console.log('this is ur imagesasa',  data.get('image'));
+      console.log('your new product', barcode);
+
+      this.postservice.createProductUpload(data).then(resData => {
+        console.log('your new product', resData);
+
+      });
+      loadingEl.dismiss();
+    });
+
+  }
 
 
 
-
-
+  onPostProduct() {
+    this.routes.navigateByUrl(`/board/offers/new-post`);
+  }
 
 
 

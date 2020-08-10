@@ -9,6 +9,7 @@ import { OffersPageRoutingModule } from './offers-routing.module';
 import { OffersPage } from './offers.page';
 import { OfferProductPage } from './offer-product/offer-product.page';
 import { ProductOfferComponent } from './product-offer/product-offer.component';
+import { NewPostPipe } from './new-post.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ProductOfferComponent } from './product-offer/product-offer.component';
     IonicModule,
     OffersPageRoutingModule
   ],
-  declarations: [OffersPage, OfferProductPage, ProductOfferComponent ]
+  declarations: [OffersPage, OfferProductPage, ProductOfferComponent, NewPostPipe ]
 })
 export class OffersPageModule {}
