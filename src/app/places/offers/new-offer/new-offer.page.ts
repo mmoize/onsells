@@ -1,5 +1,5 @@
 import { switchMap } from 'rxjs/operators';
-import { PlaceLocation } from './../../location.model';
+import { PlaceLocation } from '../../../location.model';
 import { Place } from './../../place.model';
 import { Router } from '@angular/router';
 import { PlacesService } from './../../places.service';

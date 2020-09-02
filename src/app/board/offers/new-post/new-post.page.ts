@@ -1,3 +1,5 @@
+import { PlaceLocation } from 'src/app/location.model';
+
 import { LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../post.service';
@@ -26,28 +28,50 @@ export class NewPostPage implements OnInit {
   ngOnInit() {
 
     this.form = new FormGroup({
-      title: new FormControl(null, {
-        updateOn: 'blur',
-        validators: []
-      }),
-      slug: new FormControl(null, {
-        updateOn: 'blur',
-        validators: []
-      }),
       latitude: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [Validators.required, Validators.min(1)]
-      }),
+        validators: [Validators.required
+        ]}),
       longitude: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [Validators.required, Validators.maxLength(150)]
-      }),
-      // location: new FormControl(null, {
-      //   validators: [Validators.required
-      //   ]}),
+        validators: [Validators.required
+        ]}),
       // image: new FormControl(null)
     });
   }
+
+  onLocationPicked(data) {
+    this.form.patchValue({latitude: data.lat});
+    this.form.patchValue({longitude: data.lng});
+  }
+
+  async ionViewDidEnter(){
+  
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+
+
+    this.postservice.fetchProducts(dicToken).subscribe( data => {
+      this.postservice.getProducts.subscribe(data => {
+        if (!this.loadedProducts) {
+            this.loadedProducts = data;
+            const count = Object.keys(this.loadedProducts).length;
+            this.userPostCount = count;
+        } else {
+          for (const key in this.loadedProducts)  {
+            if (this.loadedProducts.hasOwnProperty(key)) {
+              if (this.loadedProducts[key].id in this.loadedProducts) {
+              } else {
+                this.loadedProducts.push(this.loadedProducts[key]);
+              }
+            }
+          }
+        }
+        console.log('offer prod data', data);
+      });
+    });
+
+  }
+
 
   async ionViewWillEnter() {
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
@@ -90,18 +114,21 @@ export class NewPostPage implements OnInit {
   onCreatePostListing(data) {
    this.loadingCtrl.create({keyboardClose: true, message: 'Create your Product'})
    .then(loadingEl => {
-    const ProductData = new FormData();
-    ProductData.append('title', this.selectedProduct.title);
-    ProductData.append('slug', this.selectedProduct.slug);
-    ProductData.append('latitude', this.form.value.latitude);
-    ProductData.append('longitude', this.form.value.longitude);
+     loadingEl.present()
+     const ProductData = new FormData();
+     ProductData.append('title', this.selectedProduct.title);
+     ProductData.append('slug', this.selectedProduct.slug);
+     ProductData.append('latitude', this.form.value.latitude);
+     ProductData.append('longitude', this.form.value.longitude);
 
-    console.log('new listing', ProductData);
-    this.postservice.createPostListing(ProductData).then(resData => {
+     console.log('new listing', ProductData);
+     this.postservice.createPostListing(ProductData).then(resData => {
       console.log('your new listing', resData);
-      loadingEl.dismiss();
-      this.routes.navigateByUrl(`/board/offers/`);
     });
+     setTimeout(() => {
+      loadingEl.dismiss();
+      this.routes.navigateByUrl(`/board/offers`);
+    }, 2000);
     
    });
   }

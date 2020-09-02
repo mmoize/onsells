@@ -4,7 +4,7 @@ import { PostService } from './../post.service';
 import { Post } from './../post.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IonItemSliding } from '@ionic/angular';
+import { IonItemSliding, NavController, LoadingController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 
 @Component({
@@ -15,11 +15,16 @@ import { Plugins } from '@capacitor/core';
 export class OffersPage implements OnInit, OnDestroy {
 
   private postSub: Subscription;
+  private prodSub: Subscription;
   isLoading = false;
   loadedOffers: Post[];
   loadedProducts: Product[];
+  loadingProduct;
   loadedUserPosts: Post[];
   userPostCount;
+  ClickedProdImage = false;
+  productPhotoCount;
+  loaded = false;
 
 
   slideOpts = {
@@ -117,11 +122,20 @@ export class OffersPage implements OnInit, OnDestroy {
 
   constructor(private postservice: PostService,
               private route: ActivatedRoute,
-              private routes: Router
+              private routes: Router,
+              private loadingCtrl: LoadingController,
               ) { }
 
   ngOnInit() {
 
+  }
+
+  checkRoleExistenceProduct(id: string):boolean {
+    return this.loadedProducts.some(r => r.id === id);
+  }
+
+  checkRoleExistencePost(id: string):boolean {
+    return this.loadedUserPosts.some(r => r.id === id);
   }
 
   async ionViewWillEnter() {
@@ -129,28 +143,90 @@ export class OffersPage implements OnInit, OnDestroy {
      this.postservice.fetchPosts().subscribe(() => {
        this.isLoading = false;
      });
-   
+
+    ////////////////////--product--///////////////////////////////////
+
      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
      const dic = JSON.parse(value);
      const dicToken = dic.token;
- 
+
      this.postservice.fetchProducts(dicToken).subscribe( data => {
-      this.postservice.getProducts.subscribe(data => {
-        if (!this.loadedProducts) {
-            this.loadedProducts = data;
+      // this.postservice.getProducts.subscribe(data => {
+      //   if (!this.loadedProducts) {
+      //       this.loadedProducts = data;
+      //   } else {
+      //     for (const key in this.loadedProducts)  {
+      //       if (this.loadedProducts.hasOwnProperty(key)) {
+      //         if (this.loadedProducts[key].id in this.loadedProducts) {
+      //         } else {
+      //           this.loadedProducts.push(this.loadedProducts[key]);
+      //         }
+      //       }
+      //     }
+      //   }
+      //   console.log('offer prod data', data);
+      // });
+     });
+
+
+     setTimeout(() => {
+      this.prodSub = this.postservice.getProducts.subscribe(prodData => {
+
+        // this.listedLoadedPosts = postData;
+        // const checkRoleExistence = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+        // console.log('second resultsaa', checkRoleExistence(postData[key].id));
+        this.loadingProduct = prodData;
+        if (!this.loaded) {
+          this.loadedProducts = prodData;
+          this.loaded =true;
         } else {
-          for (const key in this.loadedProducts)  {
+
+          for (const key in this.loadedProducts) {
             if (this.loadedProducts.hasOwnProperty(key)) {
-              if (this.loadedProducts[key].id in this.loadedProducts) {
-              } else {
-                this.loadedProducts.push(this.loadedProducts[key]);
+              const checkRoleExistence = roleParam => this.loadingProduct.some( data => data.id === roleParam );
+              const itshere = checkRoleExistence(this.loadedProducts[key].id);
+              console.log('my others azx', itshere);
+              if (itshere) {
+                  console.log('yes its in here',prodData[key].id);
+              } else  {
+                let b = this.loadedProducts.filter(b => b.id !== this.loadedProducts[key].id);
+
+                this.loadedProducts = b;
+                  //this.loadedProducts .push(prodData[key]);
               }
             }
           }
+
+
+          for (const key in this.loadingProduct) {
+            if (this.loadingProduct.hasOwnProperty(key)) {
+              const checkRoleExistencepost = roleParam => this.loadedProducts.some( data => data.id === roleParam );
+              const itshere = checkRoleExistencepost(this.loadingProduct[key].id);
+              if (itshere) {
+                console.log('its here', );
+              } else {
+                //console.log('its not here', this.loadingPosts[key]);
+                // this.listedLoadedPosts.push(this.loadingPosts[key]);
+                this.loadedProducts.unshift(this.loadingProduct[key]);
+              }
+            }
+          }
+
         }
-        console.log('offer prod data', data);
+
       });
-     });
+      // this.postsSub = this.postservice.posts.subscribe(resultData => {
+      //   this.loadedPosts = resultData; // data from post service.
+      //   this.relevantPosts = this.loadedPosts;
+      //   this.listedLoadedPosts = this.relevantPosts.slice(1);
+      //   console.log('data postservice',resultData);
+      // });
+    }, 1500);
+
+
+
+
+
 
      this.postservice.fetchUserPosts(dicToken).subscribe(data => {
        this.postservice.getUserPosts.subscribe(resData => {
@@ -160,7 +236,117 @@ export class OffersPage implements OnInit, OnDestroy {
        });
      });
 
+
+     setTimeout(() => {
+      this.postSub = this.postservice.getUserPosts.subscribe(postData => {
+
+        // this.listedLoadedPosts = postData;
+        // const checkRoleExistence = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+        // console.log('second resultsaa', checkRoleExistence(postData[key].id));
+
+        if (!this.loadedUserPosts) {
+          this.loadedUserPosts = postData;
+        } else {
+
+          for (const key in postData) {
+            if (postData.hasOwnProperty(key)) {
+              const itshere = this.checkRoleExistencePost(postData[key].id);
+              console.log('my others azx', itshere);
+              if (itshere) {
+                  console.log('yes its in here',postData[key].id);
+              } else  {
+                  console.log('not in here', postData[key].id);
+                  console.log('its the AList', this.loadedUserPosts );
+                  this.loadedUserPosts.push(postData[key]);
+              }
+            }
+          }
+
+        }
+
+      });
+      // this.postsSub = this.postservice.posts.subscribe(resultData => {
+      //   this.loadedPosts = resultData; // data from post service.
+      //   this.relevantPosts = this.loadedPosts;
+      //   this.listedLoadedPosts = this.relevantPosts.slice(1);
+      //   console.log('data postservice',resultData);
+      // });
+    }, 1500);
+
   }
+
+  onClickProdImage() {
+    if (this.ClickedProdImage) {
+      this.ClickedProdImage = false;
+    } else {
+      this.ClickedProdImage = true;
+    }
+  }
+
+  onDelete(id) {
+    this.loadingCtrl.create({ message: 'Deleting your product'}).then(loadingEl => {
+      loadingEl.present();
+      this.postservice.productDelete(id);
+
+      setTimeout(() => {
+       loadingEl.dismiss();
+     }, 2000);
+    });
+
+    console.log('this is id', id);
+    let b = this.loadedProducts.filter(b => b.id !== id);
+
+    this.loadedProducts = b;
+    console.log('this is id', b);
+
+
+    // function shuffle(array) {
+    //   let currentIndex = array.length, temporaryValue, randomIndex;
+
+    //   // While there remain elements to shuffle...
+    //   while (0 !== currentIndex) {
+
+    //     // Pick a remaining element...
+    //     randomIndex = Math.floor(Math.random() * currentIndex);
+    //     currentIndex -= 1;
+
+    //     // And swap it with the current element.
+    //     temporaryValue = array[currentIndex];
+    //     array[currentIndex] = array[randomIndex];
+    //     array[randomIndex] = temporaryValue;
+    //   }
+
+    //   return array;
+    // }
+
+
+    // let c = this.loadedUserPosts.filter(b => b.id !== id);
+    // // shuffle(c);
+    // this.loadedUserPosts = c;
+    // console.log('this x', this.loadedUserPosts)
+
+    // if (this.loadedUserPosts) {
+    //   const count = Object.keys(this.loadedUserPosts).length;
+    //   this.productPhotoCount = count;
+
+    // } else {
+    //   const count = Object.keys(this.loadedUserPosts).length;
+    //   this.productPhotoCount = count;
+    // }
+
+  }
+
+  onDeleteListing(id) {
+    let c = this.loadedUserPosts.filter(b => b.id !== id);
+    this.loadedUserPosts = c;
+    console.log('this is usersDEEEEEEl', c);
+
+    this.postservice.onPostDelete(id).then(() => {
+        // this.ionViewWillEnter();
+      });
+  }
+
+
 
   onEdit(postId: string, slidingitem: IonItemSliding)  {
     slidingitem.close();
@@ -180,7 +366,6 @@ export class OffersPage implements OnInit, OnDestroy {
   onNewPostListing() {
     this.routes.navigateByUrl(`/board/offers/new-post`);
   }
-
 
 
 

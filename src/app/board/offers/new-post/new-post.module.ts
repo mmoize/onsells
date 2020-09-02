@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { NewPostPageRoutingModule } from './new-post-routing.module';
 
 import { NewPostPage } from './new-post.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { NewPostPage } from './new-post.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    NewPostPageRoutingModule
+    NewPostPageRoutingModule,
+    SharedModule,
   ],
   declarations: [NewPostPage]
 })

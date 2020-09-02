@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title> Select Category</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col>
+      <ion-list>
+        <ion-list-header>
+         
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Home & Garden</ion-label>
+            <ion-select [(ngModel)]="selectedCategory"   (ngModelChange)="onChange($event)" class="custom-options">
+              <ion-select-option *ngFor="let category of homeGardenCategoryList" [value]="category">{{category.name}}</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Clothing & Accessories</ion-label>
+          <ion-select [(ngModel)]="selectedCategory"     (ngModelChange)="onChange($event)" class="custom-options">
+            <ion-select-option *ngFor="let category of clothingAccCategoryList" [value]="category">{{category.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Electronics</ion-label>
+          <ion-select  [(ngModel)]="selectedCategory"  (ngModelChange)="onChange($event)" class="custom-options">
+            <ion-select-option *ngFor="let category of eletronicsCategoryList" [value]="category">{{category.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Family</ion-label>
+          <ion-select  [(ngModel)]="selectedCategory"  (ngModelChange)="onChange($event)" class="custom-options">
+            <ion-select-option *ngFor="let category of familyCategoryList" [value]="category">{{category.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Hobbies</ion-label>
+          <ion-select [(ngModel)]="selectedCategory"   (ngModelChange)="onChange($event)" class="custom-options">
+            <ion-select-option *ngFor="let category of hobbiesCategoryList" [value]="category">{{category.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Entertainment</ion-label>
+          <ion-select [(ngModel)]="selectedCategory"   (ngModelChange)="onChange($event)" class="custom-options">
+            <ion-select-option *ngFor="let category of entertainmentCategoryList" [value]="category">{{category.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

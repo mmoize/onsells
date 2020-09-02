@@ -2,17 +2,72 @@
     <ion-toolbar color="primary">
       <ion-buttons slot='start'>
         <ion-menu-button menu="m1"></ion-menu-button>
-      </ion-buttons>  
-      <ion-title id="theTitle" >Marketplace </ion-title>
+      </ion-buttons> 
+      <div id="divToolBar">
+        <ion-title id="theTitle" > MarketPlace </ion-title>
+
+      </div>
     </ion-toolbar>
   </ion-header>
   
   
   <ion-content>
-    <ion-segment (ionChange)="onFilterUpdate($event)">
-      <ion-segment-button value="all">All products</ion-segment-button>
-      <ion-segment-button value="bookable">Buyable Products</ion-segment-button>
-    </ion-segment>
+
+    <ion-row id="rowsearch">
+      <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+        <div id="divsearchInput">
+          <ion-searchbar   (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
+        </div>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col  size ="12" size-sm="4" offset-sm ="4" >
+          <ion-note (click)="onDisplayFilters()" >filters</ion-note>
+          <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
+          <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <div id="divSpinner" *ngIf="searching" class="spinner-container">
+      <ion-spinner color="primary" ></ion-spinner>
+    </div>
+    <!-- <ion-list>
+      <ion-item *ngFor="let item of items">
+        <ion-label (click)="onSearch()">
+          {{ item.product[0].title }}
+        </ion-label>
+      </ion-item>
+    </ion-list> -->
+
+    <!-- <ion-segment 
+    color="primary" 
+    scrollable="true"
+    [(ngModel)]="segmentModel" 
+    (ionChange)="segmentChanged($event)">
+
+    <ion-segment-button  *ngFor="let category of categoryList" value="all">
+      <ion-item (click)="onClickedCategory(category.id)" lines="none">
+        <ion-icon slot="start" [src]="category.icon"></ion-icon>
+        <ion-label>{{ category.name }}</ion-label>
+      </ion-item>
+    </ion-segment-button>
+
+    </ion-segment> -->
+
+
+    <ion-row *ngIf="onfilter" >
+      <ion-col size ="12" size-sm="8" offset-sm ="2" >
+       <ion-slides [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
+          <ion-slide *ngFor="let category of categoryList"  >
+            <ion-item (click)="onClickedCategory(category.id)" lines="none">
+              <ion-icon slot="start" [src]="category.icon"></ion-icon>
+              <ion-label>{{ category.name }}</ion-label>
+            </ion-item>
+        </ion-slide>
+       </ion-slides>
+      </ion-col>
+    </ion-row>
+
     <ion-grid *ngIf="isLoading">
       <ion-row > 
         <ion-col  size ="12" size-sm="8" offset-sm ="2" text-center>
@@ -22,13 +77,13 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <!-- <ion-grid *ngIf="!isLoading && (!relevantPosts  || relevantPosts.length <=0) ">
+    <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
       <ion-row>
         <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-           <h3>There are no available products right now, please come back later</h3>
+           <h4>There are no available products right now, please come back later</h4>
         </ion-col>
       </ion-row>
-    </ion-grid> -->
+    </ion-grid>
     <ion-grid>
 
       <ion-row>
@@ -55,25 +110,27 @@
     <ion-grid>
         <ion-row>
             <ion-col size ="12" size-sm="8" offset-sm ="2" >
-                <div class="pins">
-                    <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                            <img (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> 
-                            <div id="toplay">
-                              <ion-label >
-                                  <h3 >{{ post?.product[0].price |currency }}</h3>
-                              </ion-label>
-                            </div>
 
-                          <!-- <ion-item>
-                            <ion-label >
-                              {{ post?.product[0].title}}
-                            </ion-label>
-                            <ion-label slot="end" >
-                              <h2 >{{ post?.product[0].price |currency }}</h2>
-                            </ion-label>
-                          </ion-item> -->
-                    </div>
-                  </div>
+              <div class="pins">
+                <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
+                        <img (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> 
+                        <div id="toplay">
+                          <ion-label >
+                              <h3 >{{ post?.product[0].price |currency }}</h3>
+                          </ion-label>
+                        </div>
+        
+                      <!--  approxItemHeight="70px" <ion-item>
+                        <ion-label >
+                          {{ post?.product[0].title}}
+                        </ion-label>
+                        <ion-label slot="end" >
+                          <h2 >{{ post?.product[0].price |currency }}</h2>
+                        </ion-label>
+                      </ion-item> -->
+                </div>
+              </div>
+
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -107,9 +164,7 @@
   
   </ion-grid> -->
 
-  <ion-buttons>
-    <ion-button >click Me</ion-button> 
-  </ion-buttons><!--  (click)="fcm.sub('marketplace')"  -->
+
 
 
 

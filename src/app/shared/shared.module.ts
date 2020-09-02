@@ -1,3 +1,4 @@
+import { CategoryPickerComponent } from './pickers/category-picker/category-picker.component';
 import { UserprofileComponent } from './userprofile/userprofile.component';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -7,9 +8,9 @@ import { MapModalComponent } from './map-modal/map-modal.component';
 import { ImagePickerComponent } from './pickers/image-picker/image-picker.component';
 
 @NgModule ({
-    declarations: [LocationPickerComponent, MapModalComponent, ImagePickerComponent],
+    declarations: [LocationPickerComponent,  UserprofileComponent, MapModalComponent, ImagePickerComponent],
     imports: [CommonModule, IonicModule],
-    exports: [LocationPickerComponent, MapModalComponent, ImagePickerComponent, UserprofileComponent],
+    exports: [LocationPickerComponent,  MapModalComponent, ImagePickerComponent, UserprofileComponent],
     entryComponents: [MapModalComponent]
 })
 

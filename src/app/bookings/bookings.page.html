@@ -1,74 +1,71 @@
-<!-- <ion-header>
+<ion-header>
+
   <ion-toolbar>
-    <ion-buttons>
-      <ion-menu-button menu="m1"></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Your Bookings</ion-title>
+    <ion-title> Deals</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
+
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col size-md = "6" offset-md ="3" *ngIf="isLoading" text-center>
-         <ion-spinner color="primary"></ion-spinner>
-      </ion-col>
-      <ion-col size-md = "6" offset-md ="3" *ngIf="!isLoading && ( !loadedBookings || loadedBookings.length <= 0)" text-center>
-        <h3>No Booking Found!</h3>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-md = "6" offset-md ="3" *ngIf="!isLoading && loadedBookings && loadedBookings.length > 0">
-        <ion-list>
-          <ion-item-sliding *ngFor="let booking of loadedBookings" #slidingBooking>
-            <ion-item>
-              <ion-avatar slot="start">
-                 <ion-img [src]="booking.placeImage"></ion-img>
-              </ion-avatar>
-              <ion-label>
-                <h5> {{ booking.placeTitle }}</h5>
-                <p> Guests: {{ booking.guestNumber }} </p>
-              </ion-label>
-            </ion-item>
-            <ion-item-options>
-              <ion-item-option color ="danger" (click)="onCancelBooking(booking.id)">
-                <ion-icon name="trash" slote="icon-only"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-list> 
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content> -->
-<ion-content  class="ion-padding" scroll-y="false">
-      <ion-slides>
 
-        <ion-slide>
-          <div class="slide">
-            <img src="./slide-1.png"/>
-            <h2>Welcome</h2>
-            <p>The <b>ionic conference app</b> is a practical preview of the ionic framework in action, and a demonstration of proper code use.</p>
-          </div>
-        </ion-slide>
+  <ion-fab right top edge (click)="openCart()">
+    <button ion-fab color="danger"><ion-icon name="cart"></ion-icon></button>
+  </ion-fab>
 
-        <ion-slide>
-          <img src="./slide-2.png"/>
-          <h2>What is Ionic?</h2>
-          <p><b>Ionic Framework</b> is an open source SDK that enables developers to build high quality mobile apps with web technologies like HTML, CSS, and JavaScript.</p>
-        </ion-slide>
+  <ion-card>
+    <ion-slides autoplay="3000" loop="true">
+      <ion-slide *ngFor="let image of product.images">
+        <img [src]="image.src" />
+      </ion-slide>
+    </ion-slides>
 
-        <ion-slide>
-          <img src="./slide-3.png"/>
-          <h2>What is Ionic Appflow?</h2>
-          <p><b>Ionic Appflow</b> is a powerful set of services and features built on top of Ionic Framework that brings a totally new level of app development agility to mobile dev teams.</p>
-        </ion-slide>
+    <ion-card-content>
+      <ion-card-title>
+        {{ product.title }} &nbsp;
+        <ion-chip style="margin-left: 5px;">
+          <ion-label color="danger"> catt </ion-label>
+          <ion-label color="danger"> catt </ion-label>
+        </ion-chip>
+      </ion-card-title>
 
-        <ion-slide>
-          <img src="./slide-4.png"/>
-          <h2>Ready to Play?</h2>
-          <ion-button fill="clear">Continue <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
-        </ion-slide>
 
-      </ion-slides>
-    </ion-content>
+
+    </ion-card-content>
+
+
+  </ion-card>
+
+
+
+  <ion-card >
+    <!-- <ion-card-content>
+      <ion-card-title>
+        Specifications
+      </ion-card-title>
+
+      <ion-grid>
+        <ion-row *ngFor="let att of product.attributes">
+          <ion-col col-4>
+            {{ att.name}}
+          </ion-col>
+          <ion-col col-8>
+            <span *ngFor="let option of att.options"> {{ option }}</span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-card-content> -->
+  </ion-card>
+
+  
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button icon-left block outline color="danger" (click)="addToCart(product)">
+      <ion-icon name="basket"></ion-icon> {{ requireOptions ? 'Select Product Options' : 'Add to Cart for ' + '$' + ' ' + productPrice}}
+    </button>
+  </ion-toolbar>
+</ion-footer>

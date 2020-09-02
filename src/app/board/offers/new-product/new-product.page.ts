@@ -1,11 +1,13 @@
+import { CategoryPickerComponent } from './../../../shared/pickers/category-picker/category-picker.component';
 import { stringify } from 'querystring';
 import { PostService } from './../../post.service';
 import { CameraSource, Camera, CameraResultType } from '@capacitor/core';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Platform, ActionSheetController, LoadingController } from '@ionic/angular';
+import { Platform, ActionSheetController, LoadingController, ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { PlaceLocation } from 'src/app/location.model';
 
 @Component({
   selector: 'app-new-product',
@@ -21,9 +23,16 @@ export class NewProductPage implements OnInit {
   theSelectedImage = [];
   form: FormGroup;
   addedImage = false;
+  selectedCategory;
+
+
+
+
   constructor(private plt: Platform,
               private sanitizer: DomSanitizer ,
+              private modalCtrl: ModalController,
               private routes: Router,
+              private alertCtrl: AlertController,
               private loadingCtrl: LoadingController,
               private postservice: PostService,
               private actionSheetCtrl: ActionSheetController) { }
@@ -120,6 +129,10 @@ export class NewProductPage implements OnInit {
                 }
               };
 
+
+
+            
+
   ngOnInit() {
     this.form = new FormGroup({
       title: new FormControl(null, {
@@ -134,10 +147,6 @@ export class NewProductPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required, Validators.min(1)]
       }),
-      category: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [Validators.required, Validators.maxLength(150)]
-      }),
       slug: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required, Validators.maxLength(150)]
@@ -147,6 +156,18 @@ export class NewProductPage implements OnInit {
         validators: [Validators.required]
       }),
       dateTo: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required]
+      }),
+      category_name: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required]
+      }),
+      category_slug: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required]
+      }),
+      category_parent: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required]
       }),
@@ -302,8 +323,26 @@ export class NewProductPage implements OnInit {
   }
 
 
+  onClick(){
+    this.modalCtrl.create({
+      component:CategoryPickerComponent,
+    
+    }).then(modalEl => {
+      modalEl.present();
+      return modalEl.onDidDismiss().then(data => {
+        this.selectedCategory = data
+        this.form.patchValue({category_name: this.selectedCategory.data.name});
+        this.form.patchValue({category_slug: this.selectedCategory.data.slug});
+        this.form.patchValue({category_parent: this.selectedCategory.data.parent});
+        console.log('this is categor', this.selectedCategory.data.slug);
+      });
+    });
+  }
+
+
+
   createProduct() {
-    this.loadingCtrl.create({keyboardClose:true, message: 'Create your Product'})
+    this.loadingCtrl.create({keyboardClose:true, message: 'Creating your item..'})
     .then(loadingEl => {
       loadingEl.present();
       const data = new FormData();
@@ -323,9 +362,11 @@ export class NewProductPage implements OnInit {
       data.append('title', this.form.value.title);
       data.append('description', this.form.value.description);
       data.append('price', this.form.value.price);
-      data.append('category', this.form.value.category);
       data.append('slug', this.form.value.slug);
       data.append('barcode', barcode);
+      data.append('category_name', this.form.value.category_name);
+      data.append('category_slug', this.form.value.category_slug);
+      data.append('category_parent', this.form.value.category_parent);
 
       console.log('this is ur imagesasa',  data.get('image'));
       console.log('your new product', barcode);
@@ -334,16 +375,54 @@ export class NewProductPage implements OnInit {
         console.log('your new product', resData);
 
       });
-      loadingEl.dismiss();
+      setTimeout(() => {
+        loadingEl.dismiss();
+        this.routes.navigateByUrl(`/board/offers`);
+      }, 2000);
+
     });
 
   }
 
 
+  private showAlert() {
+    this.alertCtrl.create({
+      header: 'You are about leave',
+      // tslint:disable-next-line: object-literal-shorthand
+      message: 'Save Draft',
+      buttons: ['okay', 'Discard'],
+    }).then(alertEl => {
+      alertEl.present();
+    });
+  }
+
+
+  // ionViewWillLeave() {
+  //  this.showAlert();
+  // }
 
   onPostProduct() {
-    this.routes.navigateByUrl(`/board/offers/new-post`);
+    this.createProduct();
+    setTimeout(() => {
+      this.routes.navigateByUrl(`/board/offers/new-post`);
+    },2500);
+
   }
+
+
+  // onClick() {
+  //   this.modalCtrl.create({component: CategoryPickerComponent}).then(modelEl => {
+  //     modelEl.onDidDismiss().then(modalData => {
+  //       if (!modalData.data) {
+  //         return;
+  //       }
+
+  //     });
+  //     modelEl.present();
+  //   });
+  // }
+
+
 
 
 

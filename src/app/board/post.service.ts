@@ -1,6 +1,6 @@
 import { stringify } from 'querystring';
 import { Product } from './product.model';
-
+import { PlaceLocation, Coordinates } from '../location.model';
 
 import { switchMap, map, tap, take } from 'rxjs/operators';
 import { Post } from './post.model';
@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ProductLocation } from './location.model';
-import { Plugins } from '@capacitor/core';
+import { Plugins, Capacitor } from '@capacitor/core';
 
 interface PostData {
   id: string;
@@ -39,6 +39,9 @@ interface ProductData {
   providedIn: 'root'
 })
 export class PostService {
+  public items: any = [];
+  latitude;
+  longitude;
 
   get posts() {
     console.log('its main db', this._posts);
@@ -60,15 +63,21 @@ export class PostService {
   private _posts = new BehaviorSubject<Post[]>([]);
   private _products = new BehaviorSubject<Product[]>([]);
 
-  postsUrl = 'https://sellet.herokuapp.com/api/viewpost/';
+  postsUrl = 'https://sellet.herokuapp.com/api/postviewvialocation/';
   postDetailUrl = 'https://sellet.herokuapp.com/api/postdetail/';
   postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/';
   userPostsUrl = 'https://sellet.herokuapp.com/api/userpostview/';
   userPostListingsUrl = 'https://sellet.herokuapp.com/api/postcreateview/1';
+  postDeleteUrl = 'https://sellet.herokuapp.com/api/userdeletepostview/';
+  postCategoryUrl = 'https://sellet.herokuapp.com/api/viewpostfilter/';
+  postSearchUrl = 'https://sellet.herokuapp.com/api/postsearchview/?product__title__startswith=';
 
   productCreateUrl = 'https://sellet.herokuapp.com/api/products/';
   productsFetchUrl = 'https://sellet.herokuapp.com/api/userproductview/';
   productDeleteUrl = 'https://sellet.herokuapp.com/api/userdeleteproductview/';
+  
+
+
 
 
   getPosts(id: string) {
@@ -78,17 +87,126 @@ export class PostService {
         return {...resData.find(p => p.id === id )};
       }));
     });
-
-    
   }
 
-  fetchPosts() {
+  filterItems(searchTerm) {
+    console.log('search item', searchTerm);
+    return this.items.filter(item => {
+      return item.product[0].title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    });
+  }
+
+  private locateUser() {
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+       ///
+      return;
+    }
+
+    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+      const Coordinates: Coordinates = {
+        lat: geoPosition.coords.latitude,
+        lng: geoPosition.coords.longitude
+      };
+      this.latitude = Coordinates.lat;
+      this.longitude = Coordinates.lng;
+
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+
+  fetchPostSearch(searchTerm, dicToken) {
+    
     return this.authService.userToken.pipe(switchMap(token => {
       this.usertoken = token;
-      return this.httpService.get<{[Key: string]: PostData}>(this.postsUrl, {
+      return this.httpService.get<{[Key: string]:  PostData}>(`${this.postSearchUrl}${searchTerm}`, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Token ' + token,
+          Authorization: 'Token ' + dicToken,
+        }
+      });
+
+    })).pipe(map(resultData => {
+
+      const posts = [];
+      // tslint:disable-next-line: forin
+      for (const key in resultData) {
+        if (resultData.hasOwnProperty(key)) {
+         
+          posts.push(new Post (
+              resultData[key].id,
+              resultData[key].product,
+              resultData[key].owner,
+              resultData[key].location,
+              resultData[key].created_at,
+              resultData[key].updated_at
+            )
+          );
+        }
+      }
+      return posts;
+    }),
+    tap(resData => {
+      this._posts.next(resData);
+      console.log('asa for post', resData);
+    })
+    );
+  }
+
+
+  fetchPosts(lat, lng, tokenStr) {
+    
+    this.locateUser();
+    return this.authService.userToken.pipe(switchMap(token => {
+      this.locateUser();
+      if (this.latitude === undefined) {
+        this.locateUser();
+      }
+      this.usertoken = token;
+      return this.httpService.get<{[Key: string]: PostData}>( `${this.postsUrl}?latitude=${lat}&longitude=${lng}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Token ' + tokenStr,
+        }
+      });
+
+    })).pipe(map(resultData => {
+
+      const posts = [];
+      // tslint:disable-next-line: forin
+      for (const key in resultData) {
+        if (resultData.hasOwnProperty(key)) {
+          this.items.unshift(resultData[key]);
+          posts.push(new Post (
+              resultData[key].id,
+              resultData[key].product,
+              resultData[key].owner,
+              resultData[key].location,
+              resultData[key].created_at,
+              resultData[key].updated_at
+            )
+          );
+        }
+      }
+      return posts;
+    }),
+    tap(resData => {
+      
+      this._posts.next(resData);
+      console.log('asa for post', this.items);
+    })
+    );
+  }
+
+
+  fetchPostCategory(category_id, dicToken) {
+    return this.authService.userToken.pipe(switchMap(token => {
+      this.usertoken = token;
+      return this.httpService.get<{[Key: string]: PostData}>(`${this.postCategoryUrl}${category_id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Token ' + dicToken,
         }
       });
 
@@ -118,6 +236,8 @@ export class PostService {
     })
     );
   }
+
+
 
   async getPostDetail(id: string) {
 
@@ -173,6 +293,24 @@ export class PostService {
     xhr.withCredentials = true;
     return xhr.send(data);
   }
+
+  async onPostDelete(id) {
+
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+    console.log('for auth token', dicToken);
+  
+    return this.httpService.delete(`${this.postDeleteUrl}${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        // tslint:disable-next-line: max-line-length
+        Authorization: 'Token ' + dicToken ,
+      }
+    }).subscribe(() => {
+  
+    });
+   }
 
 
 
@@ -286,8 +424,22 @@ export class PostService {
   }
 
 
- productDelete(id) {
-   this.httpService.delete(`${this.productDeleteUrl}${id}`);
+ async productDelete(id) {
+
+  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const dic = JSON.parse(value);
+  const dicToken = dic.token;
+  console.log('for auth token', dicToken);
+
+  return this.httpService.delete(`${this.productDeleteUrl}${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      // tslint:disable-next-line: max-line-length
+      Authorization: 'Token ' + dicToken ,
+    }
+  }).subscribe(() => {
+
+  });
  }
 
 

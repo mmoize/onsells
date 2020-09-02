@@ -1,5 +1,5 @@
 
-import { PlaceLocation, Coordinates } from './../../../places/location.model';
+import { PlaceLocation, Coordinates } from '../../../location.model';
 
 import { environment } from './../../../../environments/environment';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
@@ -51,6 +51,7 @@ export class LocationPickerComponent implements OnInit {
   private openMap() {
     this.modalCtrl.create({component: MapModalComponent}).then(modelEl => {
       modelEl.onDidDismiss().then(modalData => {
+        console.log('this is maps',modalData);
         if (!modalData.data) {
           return;
         }
@@ -99,6 +100,7 @@ export class LocationPickerComponent implements OnInit {
       if (!geoData || !geoData.results || geoData.results.length === 0) {
         return null;
       }
+      console.log(geoData.results[0].formatted_address);
       return geoData.results[0].formatted_address;
     })
     );

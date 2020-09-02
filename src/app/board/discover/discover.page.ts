@@ -1,12 +1,17 @@
+import { Category } from './../category.model';
 import { FcmService } from './../../fcm.service';
 import { Router } from '@angular/router';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthService } from './../../auth/auth.service';
 import { PostService } from './../post.service';
 import { Post } from './../post.model';
-import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Subscription, fromEvent } from 'rxjs';
+import { take, debounceTime, map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { Plugins, Capacitor } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
+import { FormControl } from '@angular/forms';
+import {  Coordinates } from '../location.model';
 
 @Component({
   selector: 'app-discover',
@@ -14,11 +19,75 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./discover.page.scss'],
 })
 export class DiscoverPage implements OnInit {
+
+
+  @ViewChild('itemSearch') itemSearch: ElementRef<any>;
+  public items: any;
   isLoading = false;
   private postsSub: Subscription;
   loadedPosts: Post[];
   listedLoadedPosts: Post[];
   relevantPosts: Post[];
+  loadingPosts: Post[];
+  loaded = false;
+  isCategory = false;
+  categoryId;
+  searching: any = false;
+  searchTerm: string = '';
+  searchControl: FormControl;
+  latitude;
+  longitude;
+  onfilter = false;
+
+
+  categoryList = [
+    new Category(
+      '0',
+      'All',
+      'assets/icons/homeandgarden.svg'
+    ),
+    new Category(
+      '1',
+      'Home ',
+      'assets/icons/homeandgarden.svg'
+    ),
+    new Category(
+      '7',
+      'Entertainment',
+      'assets/icons/entertainment.svg'
+    ),
+    new Category(
+      '3',
+      'Electronics',
+      'assets/icons/electronics.svg'
+
+    ),
+    new Category(
+      '4',
+      'Family',
+      'assets/icons/family.svg'
+
+    ),
+    new Category(
+      '2',
+      'Clothing & Accessories',
+      'assets/icons/clothingandaccessories.svg'
+
+    ),
+    new Category(
+      '5',
+      'Classifieds',
+      'assets/icons/classifieds.svg'
+    ),
+    new Category(
+      '6',
+      'Hobbies',
+      'assets/icons/Hobies.svg'
+    ),
+
+  ];
+
+
 
   slideOpts = {
     on: {
@@ -82,49 +151,74 @@ export class DiscoverPage implements OnInit {
   };
 
 
-  constructor(private postservice: PostService,
-              private authservice: AuthService,
-              private routes: Router,
+constructor(public postservice: PostService,
+            private authservice: AuthService,
+            private routes: Router,
+            private platForm: Platform
               // private fcm: FcmService
 
-              ) { }
-
-  ngOnInit() {
-    // this.postsSub = this.postservice.posts.subscribe(resultData => {
-    //   this.loadedPosts = resultData; // data from post service.
-    //   // this.relevantPosts = this.loadedPosts;
-      
-    //   for (const key in this.loadedPosts) {
-    //     if (this.loadedPosts.hasOwnProperty(key)) {
-
-    //        if (this.loadedPosts[key].id in this.loadedPosts) {
-    //           console.log('yes its in here', this.loadedPosts[key].id);
-    //        } else  {
-    //             console.log('not in here', this.loadedPosts[key].id);
-    //             this.listedLoadedPosts.push(this.loadedPosts[key]);
-    //        }
-    //     }
-    //   }
+              ) {
+                this.searchControl = new FormControl();
+               }
   
-    // });
+checkRoleExistence(id: string):boolean {
+    return this.loadedPosts.some(r => r.id === id);
+  }
 
-    console.log(this.loadedPosts);
+
+
+
+
+   ngOnInit() {
+  
     setTimeout(() => {
+
       this.postsSub = this.postservice.postRes.subscribe(postData => {
-        console.log('second results', postData);
-        this.listedLoadedPosts = postData;
-        for (const key in postData) {
-          if (postData.hasOwnProperty(key)) {
-    
-             if (postData[key].id in this.loadedPosts) {
-                console.log('yes its in here', postData[key].id);
-             } else  {
-                  console.log('not in here', postData[key].id);
-                  this.loadedPosts.push(postData[key]);
-                  this.listedLoadedPosts.push(postData[key]);
-             }
+        this.loadingPosts = postData;
+  
+       // console.log('second resultsaa', checkRoleExistence(postData[key].id));
+        console.log('my others azx', this.loadingPosts );
+        if (!this.loaded) {
+          this.listedLoadedPosts = postData;
+          this.loaded =true;
+        } else {
+          
+          for (const key in this.listedLoadedPosts) {
+            if (this.listedLoadedPosts.hasOwnProperty(key)) {
+              const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
+              const itshere = checkRoleExistence(this.listedLoadedPosts[key].id);
+              console.log('my others azx', itshere);
+              if (itshere) {
+                  console.log('yes its in here', this.listedLoadedPosts[key].id);
+              } else  {
+                let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
+  
+                this.listedLoadedPosts = b;
+  
+                console.log('its the AList', this.listedLoadedPosts);
+                this.listedLoadedPosts.push(postData[key]);
+              }
+            }
           }
+          console.log('my others azx', this.listedLoadedPosts);
+  
+          for (const key in this.loadingPosts) {
+            if (this.loadingPosts.hasOwnProperty(key)) {
+              const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+              const itshere = checkRoleExistencepost(this.loadingPosts[key].id);
+              if (itshere) {
+                console.log('its here', );
+              } else {
+                console.log('its not here', this.loadingPosts[key]);
+                // this.listedLoadedPosts.push(this.loadingPosts[key]);
+                this.listedLoadedPosts.unshift(this.loadingPosts[key]);
+              }
+            }
+          }
+  
+  
         }
+  
       });
       // this.postsSub = this.postservice.posts.subscribe(resultData => {
       //   this.loadedPosts = resultData; // data from post service.
@@ -132,37 +226,198 @@ export class DiscoverPage implements OnInit {
       //   this.listedLoadedPosts = this.relevantPosts.slice(1);
       //   console.log('data postservice',resultData);
       // });
-    }, 1500);
-  }
+    }, 1000);
 
-
-  ionViewWillEnter() {
-   this.isLoading = true;
-   this.postservice.fetchPosts().subscribe(result => {
-     this.isLoading = false;
-     console.log('ion view results', result);
-   });
 
   }
 
-  onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
-   this.authservice.userName.pipe(take(1)).subscribe(usernameRes => {
-      console.log(event.detail);
-      if (event.detail.value === 'all') {
-        this.relevantPosts = this.loadedPosts;
-        this.listedLoadedPosts = this.relevantPosts.slice(1);
-      } else {
-        // this.relevantPosts = this.loadedPosts.filter(post => post.owner['username'] !== usernameRes );
-        console.log('this is post', this.relevantPosts);
-        console.log('this username', usernameRes);
-        this.listedLoadedPosts = this.relevantPosts.slice(1);
-      }
+onSearch() {
+    this.listedLoadedPosts = this.items;
+  }
+
+  async ionViewDidEnter(){
+   
+
+
+  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const dic = JSON.parse(value);
+  const dicToken = dic.token;
+  console.log('for auth token', dicToken);
+  this.searchControl.valueChanges
+ .pipe(
+  filter(res => res.length > 2),
+   debounceTime(700)
+   )
+ .subscribe(search => {
+  this.searchTerm= search;
+  console.log('this is search', search);
+   //this.setFilteredItems();
+  this.postservice.fetchPostSearch(search, dicToken).subscribe(resData => {
+     console.log('this is there posts', resData);
+     if (resData.length >= 0) {
+      this.listedLoadedPosts = resData;
+      this.searching = false;
+     } else {
+       // this code displayes data after user search returns '0 posts'
+       this.searching = false;
+       setTimeout(() => {
+         const categoryId = 0
+         this.onClickedCategory(categoryId).then(resData => {
+           console.log('test if its working', resData);
+         });
+       }, 1000);
+     }
+
+  });
+ });
+  }
+
+onSearchInput(ev){
+    this.searching = true;
+    console.log('this is search ev',ev.target.value);
+    if (ev.target.value.length <= 0) {
+      this.searching = false;
+      console.log('this is search ev',ev.target.value);
+    } else if (ev.target.value.length > 0) {
+      this.searching = true;
+      console.log('this is search ev',ev.target.value);
+    }
+}
+
+setFilteredItems() {
+  this.items = this.postservice.filterItems(this.searchTerm);
+  console.log('here is items', this.searchTerm);
+}
+
+
+
+  async onClickedCategory(category_id) {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+    console.log('for auth token', dicToken);
+
+    if (category_id !=='0') {
+      this.isLoading = true;
+      this.postservice.fetchPostCategory(category_id, dicToken).subscribe(data => {
+        console.log('this is category data', data);
+        this.listedLoadedPosts = data;
+        this.isLoading = false;
+      });
+    } else {
+      this.postservice.fetchPosts(this.latitude, this.longitude, dicToken).subscribe(result => {
+        this.postsSub = this.postservice.postRes.subscribe(postData => {
+          console.log('its coming', postData);
+          this.listedLoadedPosts = postData;
+        });
+      });
+
+    }
+
+
+  }
+  
+  private locateUser() {
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+       ///
+      return;
+    }
+
+    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+      const Coordinates: Coordinates = {
+        lat: geoPosition.coords.latitude,
+        lng: geoPosition.coords.longitude
+      };
+      this.latitude = Coordinates.lat;
+      this.longitude = Coordinates.lng;
+    }).catch(err => {
+      console.log(err);
     });
-
   }
+
+
+
+  async ionViewWillEnter() {
+  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const dic = JSON.parse(value);
+  const dicToken = dic.token;
+  console.log('for auth token', dicToken);
+  if (this.listedLoadedPosts === undefined) {
+    this.isLoading= true;
+  }
+
+  this.locateUser()
+
+
+  setTimeout(() => {
+    this.postservice.fetchPosts(this.latitude, this.longitude, dicToken).subscribe(result => {
+      this.isLoading = false;
+    });
+    // this.postsSub = this.postservice.postRes.subscribe(postData => {
+    //   this.loadingPosts = postData;
+
+    //  // console.log('second resultsaa', checkRoleExistence(postData[key].id));
+    //   console.log('my others azx', this.loadingPosts );
+    //   if (!this.loaded) {
+    //     this.listedLoadedPosts = postData;
+    //     this.loaded =true;
+    //   } else {
+        
+    //     for (const key in this.listedLoadedPosts) {
+    //       if (this.listedLoadedPosts.hasOwnProperty(key)) {
+    //         const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
+    //         const itshere = checkRoleExistence(this.listedLoadedPosts[key].id);
+    //         console.log('my others azx', itshere);
+    //         if (itshere) {
+    //             console.log('yes its in here', this.listedLoadedPosts[key].id);
+    //         } else  {
+    //           let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
+
+    //           this.listedLoadedPosts = b;
+
+    //           console.log('its the AList', this.listedLoadedPosts);
+    //           this.listedLoadedPosts.push(postData[key]);
+    //         }
+    //       }
+    //     }
+    //     console.log('my others azx', this.listedLoadedPosts);
+
+    //     for (const key in this.loadingPosts) {
+    //       if (this.loadingPosts.hasOwnProperty(key)) {
+    //         const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+    //         const itshere = checkRoleExistencepost(this.loadingPosts[key].id);
+    //         if (itshere) {
+    //           console.log('its here', );
+    //         } else {
+    //           console.log('its not here', this.loadingPosts[key]);
+    //           // this.listedLoadedPosts.push(this.loadingPosts[key]);
+    //           this.listedLoadedPosts.unshift(this.loadingPosts[key]);
+    //         }
+    //       }
+    //     }
+
+
+    //   }
+
+    // });
+    // this.postsSub = this.postservice.posts.subscribe(resultData => {
+    //   this.loadedPosts = resultData; // data from post service.
+    //   this.relevantPosts = this.loadedPosts;
+    //   this.listedLoadedPosts = this.relevantPosts.slice(1);
+    //   console.log('data postservice',resultData);
+    // });
+  }, 2000);
+
+}
+
+
+
+
+  
+
 
   onDetail(id) {
-    this.routes.navigateByUrl(`/board/discover/post-detail/${id}`)
+    this.routes.navigateByUrl(`/board/discover/post-detail/${id}`);
   }
 
   ngOnDestroy() {
@@ -171,6 +426,12 @@ export class DiscoverPage implements OnInit {
     }
   }
 
-  
+  onDisplayFilters() {
+    if (this.onfilter) {
+      this.onfilter = false;
+    } else {
+      this.onfilter = true;
+    }
+  }
 
 }

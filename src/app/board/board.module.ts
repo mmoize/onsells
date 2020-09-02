@@ -7,13 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { BoardPageRoutingModule } from './board-routing.module';
 
 import { BoardPage } from './board.page';
+import { CategoryPickerComponent } from '../shared/pickers/category-picker/category-picker.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BoardPageRoutingModule
+    BoardPageRoutingModule,
   ],
   declarations: [BoardPage]
 })

@@ -16,8 +16,8 @@ ion-card {
     position: relative;
 }
 ion-label {
-    font-weight: bolder;
-    
+    font-weight: bold;
+ 
 }
 
 h3 {
@@ -73,4 +73,89 @@ ion-slide {
 #spinnerid {
     text-align: center;
     width: 100%;
+}
+
+
+ion-icon {
+    margin-right: 2px;
+}
+
+ion-content {
+    // overwrite inline styles
+    // --offset-bottom: auto !important; 
+    --overflow: hidden;
+    overflow: auto;
+  
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+
+ion-searchbar{
+    --icon-color: var (--ion-color-primary);
+    --box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+    ::ng-deep{
+        .searchbar-input-container{            
+            .searchbar-input{ 
+                border-radius: 20px;
+                //any style that you want to implement on your searchbar
+            }
+        }
+    }   
+}
+
+
+ion-item {
+    --background: transparent;
+
+}
+
+#divSpinner{
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+
+}
+
+#divToolBar {
+    display: flex;
+    text-align: center;
+
+}
+
+ion-title {
+    padding: 0px;
+    margin-right: 17%;
+    font-weight: bolder;
+
+}
+
+// #theTitle[_ngcontent-egt-c133] {
+//     padding: 0px;
+//     margin: 0px;
+// }
+
+
+
+
+input {
+    --border-radius: 25px;
+}
+
+#divsearchInput {
+    display: flex;
+    align-items: center;
+}
+
+
+#rowsearch {
+    display: flex;
+    align-items: center;
 }

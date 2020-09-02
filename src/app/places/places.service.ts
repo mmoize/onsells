@@ -1,4 +1,4 @@
-import { PlaceLocation } from './location.model';
+import { PlaceLocation } from '../location.model';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Place } from 'src/app/places/place.model';
