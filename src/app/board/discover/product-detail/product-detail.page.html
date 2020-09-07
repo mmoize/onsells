@@ -15,7 +15,7 @@
   </div>
   <ion-grid no-padding *ngIf="!isLoading">
     <ion-row>
-      <ion-col size ="12" size-sm="8" offset-sm ="2" >
+      <ion-col size ="12" size-sm="6" offset-sm ="3" >
         <ion-card id="imgslidediv">
               <ion-slides pager="true" [options]="slideOpts" >
                 <ion-slide  *ngFor="let item of post?.product[0].productimage_set">
@@ -27,24 +27,23 @@
                 </ion-slide> 
               </ion-slides>
           </ion-card>    
-        <ion-card> 
+        <div> 
           <ion-card-content>
             <ion-item lines="none">
-              <ion-label id="avatarNname" >
-                <!-- <h2 >
-                  {{ post.product[0].title }}
-                </h2> -->
+              <!-- <ion-label id="avatarNname" >
   
+
+              </ion-label > -->
                 <ion-avatar slot="start">
                   <ion-img [src]="post?.owner.image"></ion-img>
                 </ion-avatar>
-              </ion-label >
               <ion-label (click)="openModal()" >
                   <h3>{{ post?.owner.username }}</h3>
               </ion-label>
               
-              <ion-label >
-                <h3>Price: {{ post?.product[0].price |currency }}</h3>
+              <ion-label id="pricetag"  >
+                <h4> {{ post?.product[0].price |currency }}</h4>
+                
               </ion-label >
               <ion-icon (click)="openMessageModal()" slot="end" color="primary" name="chatbox-ellipses-outline"></ion-icon>
             </ion-item>
@@ -53,11 +52,11 @@
             </ion-label>
   
           </ion-card-content>
-      </ion-card>
+      </div>
       </ion-col>
     </ion-row>
   </ion-grid>
-
+ 
 </ion-content>
 
 

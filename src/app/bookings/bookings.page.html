@@ -1,71 +1,15 @@
-<ion-header>
-
+ <ion-header>
   <ion-toolbar>
-    <ion-title> Deals</ion-title>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button  (click)="onclick()">{{ closeButtonText }}</ion-button>
+    </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
-
 <ion-content>
-
-  <ion-fab right top edge (click)="openCart()">
-    <button ion-fab color="danger"><ion-icon name="cart"></ion-icon></button>
-  </ion-fab>
-
-  <ion-card>
-    <ion-slides autoplay="3000" loop="true">
-      <ion-slide *ngFor="let image of product.images">
-        <img [src]="image.src" />
-      </ion-slide>
-    </ion-slides>
-
-    <ion-card-content>
-      <ion-card-title>
-        {{ product.title }} &nbsp;
-        <ion-chip style="margin-left: 5px;">
-          <ion-label color="danger"> catt </ion-label>
-          <ion-label color="danger"> catt </ion-label>
-        </ion-chip>
-      </ion-card-title>
-
-
-
-    </ion-card-content>
-
-
-  </ion-card>
-
-
-
-  <ion-card >
-    <!-- <ion-card-content>
-      <ion-card-title>
-        Specifications
-      </ion-card-title>
-
-      <ion-grid>
-        <ion-row *ngFor="let att of product.attributes">
-          <ion-col col-4>
-            {{ att.name}}
-          </ion-col>
-          <ion-col col-8>
-            <span *ngFor="let option of att.options"> {{ option }}</span>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-    </ion-card-content> -->
-  </ion-card>
-
-  
-
+  <div class="map" #map>
+    
+  </div>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <button ion-button icon-left block outline color="danger" (click)="addToCart(product)">
-      <ion-icon name="basket"></ion-icon> {{ requireOptions ? 'Select Product Options' : 'Add to Cart for ' + '$' + ' ' + productPrice}}
-    </button>
-  </ion-toolbar>
-</ion-footer>

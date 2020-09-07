@@ -222,7 +222,7 @@ export class CategoyService {
       }
 
       getHobbiesCategory() {
-        return this.categoryList;
+        return this.hobbiesCategoryList;
       }
 
 

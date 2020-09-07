@@ -39,9 +39,14 @@ interface ProductData {
   providedIn: 'root'
 })
 export class PostService {
+
   public items: any = [];
   latitude;
   longitude;
+
+  category;
+  filtminPrice;
+  filtmaxPrice;
 
   get posts() {
     console.log('its main db', this._posts);
@@ -63,7 +68,7 @@ export class PostService {
   private _posts = new BehaviorSubject<Post[]>([]);
   private _products = new BehaviorSubject<Product[]>([]);
 
-  postsUrl = 'https://sellet.herokuapp.com/api/postviewvialocation/';
+  postsUrl = 'https://sellet.herokuapp.com/api/postlocationview/';
   postDetailUrl = 'https://sellet.herokuapp.com/api/postdetail/';
   postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/';
   userPostsUrl = 'https://sellet.herokuapp.com/api/userpostview/';
@@ -81,12 +86,18 @@ export class PostService {
 
 
   getPosts(id: string) {
-  return this.fetchPosts().pipe( () => {
       return this._posts.asObservable().pipe(tap(resData => {
         console.log('post data', resData);
         return {...resData.find(p => p.id === id )};
       }));
-    });
+
+
+    // return this.fetchPosts(this.latitude, this.longitude, this.usertoken).pipe( () => {
+    //   return this._posts.asObservable().pipe(tap(resData => {
+    //     console.log('post data', resData);
+    //     return {...resData.find(p => p.id === id )};
+    //   }));
+    // });
   }
 
   filterItems(searchTerm) {
@@ -155,7 +166,32 @@ export class PostService {
   }
 
 
-  fetchPosts(lat, lng, tokenStr) {
+  fetchPosts(dicParam) {
+
+    const lat = dicParam.lat;
+    const lng = dicParam.lng;
+    const tokenStr = dicParam.usertoken;
+    let minPrice = dicParam.minPrice;
+    let maxPrice = dicParam.maxPrice;
+    
+    if (dicParam.category === undefined) {
+      this.category = 'None';
+    } else {
+      this.category = dicParam.category;
+    }
+
+    if (dicParam.minPrice === undefined) {
+       this.filtminPrice = 'None';
+    } else {
+      this.filtminPrice = dicParam.minPrice;
+    }
+
+    
+    if (dicParam.maxPrice === undefined) {
+      this.filtmaxPrice = 'None';
+   } else {
+     this.filtmaxPrice = dicParam.maxPrice;
+   }
     
     this.locateUser();
     return this.authService.userToken.pipe(switchMap(token => {
@@ -164,7 +200,10 @@ export class PostService {
         this.locateUser();
       }
       this.usertoken = token;
-      return this.httpService.get<{[Key: string]: PostData}>( `${this.postsUrl}?latitude=${lat}&longitude=${lng}`, {
+      return this.httpService.get<{[Key: string]: PostData}>(
+         // tslint:disable-next-line: max-line-length
+         `${this.postsUrl}?latitude=${lat}&category__exact=${this.category}&longitude=${lng}&price__lt=${this.filtmaxPrice}&price__gt=${this.filtminPrice}`
+         , {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Token ' + tokenStr,

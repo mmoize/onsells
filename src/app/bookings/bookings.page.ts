@@ -1,140 +1,170 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BookingService } from './booking.service';
-import { Booking } from './booking.model';
-import { IonItemSliding, LoadingController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2, OnDestroy, Input } from '@angular/core';
+import { ModalController, AlertController } from '@ionic/angular';
+import { Plugins, Capacitor } from '@capacitor/core';
+import { PlaceLocation, Coordinates } from '../location.model';
+
+
 
 @Component({
   selector: 'app-bookings',
   templateUrl: './bookings.page.html',
   styleUrls: ['./bookings.page.scss'],
 })
-export class BookingsPage implements OnInit, OnDestroy {
-  loadedBookings: Booking[];
-  isLoading = false;
-  private bookingsSub: Subscription;
+export class BookingsPage implements OnInit, OnDestroy, AfterViewInit {
 
+  address:string;
+  lat;
+  long;  
+  autocomplete: { input: string; };
+  autocompleteItems: any[];
+  location: any;
+  placeid: any;
+  GoogleAutocomplete: any;
+  map: any;
+  
+  @Input() center: {lat:-33.881840181840495, lng: 151.20684653014064};
+  @Input() selectable = true;
+  @Input() closeButtonText = 'cancel';
+  @Input() title = 'Pick Location';
+  cords;
 
-   slideOpts = {
-    slidesPerView: 3,
-    coverflowEffect: {
-      rotate: 50,
-      stretch: 0,
-      depth: 100,
-      modifier: 1,
-      slideShadows: true,
-    },
-    on: {
-      beforeInit() {
-        const swiper = this;
-  
-        swiper.classNames.push(`${swiper.params.containerModifierClass}coverflow`);
-        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
-  
-        swiper.params.watchSlidesProgress = true;
-        swiper.originalParams.watchSlidesProgress = true;
-      },
-      setTranslate() {
-        const swiper = this;
-        const {
-          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid, $
-        } = swiper;
-        const params = swiper.params.coverflowEffect;
-        const isHorizontal = swiper.isHorizontal();
-        const transform$$1 = swiper.translate;
-        const center = isHorizontal ? -transform$$1 + (swiperWidth / 2) : -transform$$1 + (swiperHeight / 2);
-        const rotate = isHorizontal ? params.rotate : -params.rotate;
-        const translate = params.depth;
-        // Each slide offset from center
-        for (let i = 0, length = slides.length; i < length; i += 1) {
-          const $slideEl = slides.eq(i);
-          const slideSize = slidesSizesGrid[i];
-          const slideOffset = $slideEl[0].swiperSlideOffset;
-          const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
-  
-           let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
-          let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
-          // var rotateZ = 0
-          let translateZ = -translate * Math.abs(offsetMultiplier);
-  
-           let translateY = isHorizontal ? 0 : params.stretch * (offsetMultiplier);
-          let translateX = isHorizontal ? params.stretch * (offsetMultiplier) : 0;
-  
-           // Fix for ultra small values
-          if (Math.abs(translateX) < 0.001) translateX = 0;
-          if (Math.abs(translateY) < 0.001) translateY = 0;
-          if (Math.abs(translateZ) < 0.001) translateZ = 0;
-          if (Math.abs(rotateY) < 0.001) rotateY = 0;
-          if (Math.abs(rotateX) < 0.001) rotateX = 0;
-  
-           const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  
-           $slideEl.transform(slideTransform);
-          $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
-          if (params.slideShadows) {
-            // Set shadows
-            let $shadowBeforeEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-left') : $slideEl.find('.swiper-slide-shadow-top');
-            let $shadowAfterEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-right') : $slideEl.find('.swiper-slide-shadow-bottom');
-            if ($shadowBeforeEl.length === 0) {
-              $shadowBeforeEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'left' : 'top'}"></div>`);
-              $slideEl.append($shadowBeforeEl);
-            }
-            if ($shadowAfterEl.length === 0) {
-              $shadowAfterEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'right' : 'bottom'}"></div>`);
-              $slideEl.append($shadowAfterEl);
-            }
-            if ($shadowBeforeEl.length) $shadowBeforeEl[0].style.opacity = offsetMultiplier > 0 ? offsetMultiplier : 0;
-            if ($shadowAfterEl.length) $shadowAfterEl[0].style.opacity = (-offsetMultiplier) > 0 ? -offsetMultiplier : 0;
-          }
-        }
-  
-         // Set correct perspective for IE10
-        if (swiper.support.pointerEvents || swiper.support.prefixedPointerEvents) {
-          const ws = $wrapperEl[0].style;
-          ws.perspectiveOrigin = `${center}px 50%`;
-        }
-      },
-      setTransition(duration) {
-        const swiper = this;
-        swiper.slides
-          .transition(duration)
-          .find('.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left')
-          .transition(duration);
-      }
-    }
-  }
+  clickListener: any;
 
-  constructor(private bookingService: BookingService, private loadingCtrl: LoadingController) { }
+  googleMaps: any;
+
+  @ViewChild('map', {static: true}) mapElementRef: ElementRef;
+
+  constructor(private modalCtrl: ModalController,
+              private alertCtrl: AlertController,
+              private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.bookingsSub = this.bookingService.bookings.subscribe(bookings => {
-      this.loadedBookings = bookings;
-    });
-  }
 
-  ionViewWillEnter() {
-    this.isLoading = true;
-    this.bookingService.fetchBookings().subscribe(() => {
-     this.isLoading = false;
-   });
-  }
-
-  onCancelBooking(bookingId: string) {
-    this.loadingCtrl.create({
-      message: 'Deleting your the Booking'
-    }).then(loadingEl => {
-      loadingEl.present();
-      this.bookingService.cancelBooking(bookingId).subscribe(() => {
-        loadingEl.dismiss();
-      });
-    });
 
   }
 
+
+
+  ngAfterViewInit() {
+    
+  }
 
   ngOnDestroy() {
-    if (this.bookingsSub) {
-       this.bookingsSub.unsubscribe();
-    }
+    //  if (this.clickListener) {
+    //   this.googleMaps.event.removeListener(this.clickListener);
+    //  }
   }
+
+  onclick() {
+
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+      this.showErrorAlert();
+      return;
+    }
+
+    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+      const coordinates: Coordinates = {
+        lat: geoPosition.coords.latitude,
+        lng: geoPosition.coords.longitude
+      };
+      this.lat = geoPosition.coords.latitude;
+    }).catch(err => {
+      console.log(err);
+      this.showErrorAlert();
+    });
+
+    this.getGoogleMaps().then(googleMaps => {
+      this.googleMaps = googleMaps;
+      const mapEl = this.mapElementRef.nativeElement;
+      const map = new googleMaps.Map(mapEl, {
+        center: {lat: -33.881840181840495, lng: 151.20684653014064},
+        zoom: 18
+      });
+      this.renderer.addClass(mapEl, 'visible');
+      const marker =  new googleMaps.Marker({
+        position: this.center,
+        map: map,
+        title: 'Hello World!'
+      });
+      if (this.selectable) {
+        this.clickListener = map.addListener('click', event => {
+          const selectedCoords = {
+           lat: event.latLng.lat(),
+           lng: event.latLng.lng()
+          };
+          this.cords = selectedCoords;
+          console.log('this is cords', selectedCoords);
+          const marker = new googleMaps.Circle({
+            //position: this.cords,
+            // tslint:disable-next-line: object-literal-shorthand
+            map: map,
+            title: 'Picked Location',
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            center: this.cords,
+            radius: 47000
+          });
+          marker.setMap(map);
+
+        });
+      } else {
+        console.log('this one');
+        const marker = new googleMaps.Marker({
+          position: this.center,
+          // tslint:disable-next-line: object-literal-shorthand
+          map: map,
+          title: 'Picked Location'
+        });
+        marker.setMap(map);
+      }
+      }).catch( error => {
+        console.log(error);
+      });
+
+  }
+
+  private showErrorAlert() {
+    this.alertCtrl.create({
+      header: 'Could not fetch location',
+      message: 'Please use the map to pick a location'
+    }).then(alertEl => {
+      alertEl.present();
+    });
+  }
+
+
+
+  onCancel() {
+    this.modalCtrl.dismiss();
+  }
+
+  private getGoogleMaps() {
+    const win = window as any;
+    const googleModule = win.google;
+    if (googleModule && googleModule.maps) {
+      return Promise.resolve(googleModule.maps);
+    }
+    
+
+    return new Promise ((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + environment.googleMapsApiKey;
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+      script.onload = () => {
+        const loadedGoogleModule = win.google;
+        if (loadedGoogleModule && loadedGoogleModule.maps) {
+          resolve(loadedGoogleModule.maps);
+        } else {
+          reject('Google maps SDK not available');
+        }
+      };
+    });
+  }
+
 }

@@ -1,3 +1,4 @@
+import { MainFilterComponent } from './../../shared/filters/main-filter/main-filter.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +17,6 @@ import { DiscoverPage } from './discover.page';
     ReactiveFormsModule,
     DiscoverPageRoutingModule
   ],
-  declarations: [DiscoverPage]
+  declarations: [DiscoverPage, MainFilterComponent]
 })
 export class DiscoverPageModule {}

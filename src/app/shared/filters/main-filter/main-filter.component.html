@@ -1,0 +1,33 @@
+    <ion-row>
+      <ion-col size ="12" size-sm="8" offset-sm ="2">
+        <ion-label>
+          <h2 *ngIf="selectedCategory"  style="font-weight: bolder; font-size:xx-large "> {{ selectedCategory.name}}</h2>
+        </ion-label>
+      </ion-col>
+    </ion-row>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <ion-label>Min {{minimumPrice | currency}}  </ion-label>
+            <ion-range max="1000" [(ngModel)]="selectedPrice" (ngModelChange)="onChange($event)"  dual-knobs pin="true |currency" color="dark">
+              
+              
+            </ion-range>
+            <ion-label>Max {{maximumPrice | currency}} </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
+        <ion-button (click)="onExit()">
+          see listings
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

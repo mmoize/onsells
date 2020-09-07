@@ -23,7 +23,7 @@ ion-label {
 h3 {
     background-color: rgb(35, 43, 39, 0.5);
     font-weight: bolder;
-    color: rgb(19, 224, 122, 0.8);
+    color: rgba(6, 124, 65, 0.8);
     border-radius: 5px;
 }
 #toplay{
@@ -80,21 +80,21 @@ ion-icon {
     margin-right: 2px;
 }
 
-ion-content {
-    // overwrite inline styles
-    // --offset-bottom: auto !important; 
-    --overflow: hidden;
-    overflow: auto;
+// ion-content {
+//     // overwrite inline styles
+//     // --offset-bottom: auto !important; 
+//     --overflow: hidden;
+//     overflow: auto;
   
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+//     &::-webkit-scrollbar {
+//       display: none;
+//     }
+//   }
 
 
-*::-webkit-scrollbar {
-    display: none;
-}
+// *::-webkit-scrollbar {
+//     display: none;
+// }
 
 
 ion-searchbar{
@@ -158,4 +158,5 @@ input {
 #rowsearch {
     display: flex;
     align-items: center;
+    margin-top: 10px;
 }

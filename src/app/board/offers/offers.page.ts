@@ -139,18 +139,17 @@ export class OffersPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillEnter() {
-     this.isLoading = true;
-     this.postservice.fetchPosts().subscribe(() => {
-       this.isLoading = false;
-     });
+     
+
 
     ////////////////////--product--///////////////////////////////////
 
      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
      const dic = JSON.parse(value);
      const dicToken = dic.token;
-
+     this.isLoading = true;
      this.postservice.fetchProducts(dicToken).subscribe( data => {
+      this.isLoading = false;
       // this.postservice.getProducts.subscribe(data => {
       //   if (!this.loadedProducts) {
       //       this.loadedProducts = data;
@@ -188,10 +187,12 @@ export class OffersPage implements OnInit, OnDestroy {
               console.log('my others azx', itshere);
               if (itshere) {
                   console.log('yes its in here',prodData[key].id);
+                  this.isLoading = false;
               } else  {
                 let b = this.loadedProducts.filter(b => b.id !== this.loadedProducts[key].id);
 
                 this.loadedProducts = b;
+                this.isLoading = false;
                   //this.loadedProducts .push(prodData[key]);
               }
             }
@@ -204,10 +205,12 @@ export class OffersPage implements OnInit, OnDestroy {
               const itshere = checkRoleExistencepost(this.loadingProduct[key].id);
               if (itshere) {
                 console.log('its here', );
+                this.isLoading = false;
               } else {
                 //console.log('its not here', this.loadingPosts[key]);
                 // this.listedLoadedPosts.push(this.loadingPosts[key]);
                 this.loadedProducts.unshift(this.loadingProduct[key]);
+                this.isLoading = false;
               }
             }
           }

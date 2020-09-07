@@ -9,9 +9,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
+import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
 
 @Component({
   selector: 'app-discover',
@@ -35,10 +36,14 @@ export class DiscoverPage implements OnInit {
   searching: any = false;
   searchTerm: string = '';
   searchControl: FormControl;
+
   latitude;
   longitude;
   onfilter = false;
-
+  categorySelected = false;
+  Selectedcategory;
+  minFilterPrice;
+  maxFilterPrice;
 
   categoryList = [
     new Category(
@@ -48,7 +53,7 @@ export class DiscoverPage implements OnInit {
     ),
     new Category(
       '1',
-      'Home ',
+      'Home & Garden ',
       'assets/icons/homeandgarden.svg'
     ),
     new Category(
@@ -154,13 +159,13 @@ export class DiscoverPage implements OnInit {
 constructor(public postservice: PostService,
             private authservice: AuthService,
             private routes: Router,
-            private platForm: Platform
-              // private fcm: FcmService
+            private platForm: Platform,
+            private modalCtrl: ModalController,
 
               ) {
                 this.searchControl = new FormControl();
                }
-  
+
 checkRoleExistence(id: string):boolean {
     return this.loadedPosts.some(r => r.id === id);
   }
@@ -170,19 +175,24 @@ checkRoleExistence(id: string):boolean {
 
 
    ngOnInit() {
-  
+
+    if (!this.Selectedcategory) {
+      this.Selectedcategory = this.categoryList[0];
+      console.log(this.Selectedcategory);
+    }
+
     setTimeout(() => {
 
       this.postsSub = this.postservice.postRes.subscribe(postData => {
         this.loadingPosts = postData;
-  
+
        // console.log('second resultsaa', checkRoleExistence(postData[key].id));
         console.log('my others azx', this.loadingPosts );
         if (!this.loaded) {
           this.listedLoadedPosts = postData;
           this.loaded =true;
         } else {
-          
+
           for (const key in this.listedLoadedPosts) {
             if (this.listedLoadedPosts.hasOwnProperty(key)) {
               const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
@@ -192,16 +202,16 @@ checkRoleExistence(id: string):boolean {
                   console.log('yes its in here', this.listedLoadedPosts[key].id);
               } else  {
                 let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
-  
+
                 this.listedLoadedPosts = b;
-  
+
                 console.log('its the AList', this.listedLoadedPosts);
                 this.listedLoadedPosts.push(postData[key]);
               }
             }
           }
           console.log('my others azx', this.listedLoadedPosts);
-  
+
           for (const key in this.loadingPosts) {
             if (this.loadingPosts.hasOwnProperty(key)) {
               const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
@@ -215,10 +225,10 @@ checkRoleExistence(id: string):boolean {
               }
             }
           }
-  
-  
+
+
         }
-  
+
       });
       // this.postsSub = this.postservice.posts.subscribe(resultData => {
       //   this.loadedPosts = resultData; // data from post service.
@@ -226,7 +236,7 @@ checkRoleExistence(id: string):boolean {
       //   this.listedLoadedPosts = this.relevantPosts.slice(1);
       //   console.log('data postservice',resultData);
       // });
-    }, 1000);
+    }, 400);
 
 
   }
@@ -235,8 +245,8 @@ onSearch() {
     this.listedLoadedPosts = this.items;
   }
 
-  async ionViewDidEnter(){
-   
+  async ionViewDidEnter() {
+
 
 
   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
@@ -291,32 +301,68 @@ setFilteredItems() {
 
 
 
-  async onClickedCategory(category_id) {
+  async onClickedCategory(category) {
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
     console.log('for auth token', dicToken);
 
+    const category_id = category.id;
+    console.log('this is category', category.id);
+    const dicParam = {};
+    dicParam['lat']= this.latitude;
+    dicParam['lng'] = this.longitude;
+    dicParam['usertoken'] = dicToken;
+    dicParam['category'] = category_id ;
+    if (this.minFilterPrice) {
+      dicParam['minPrice'] = this.minFilterPrice;
+    }
+    if (this.maxFilterPrice) {
+      dicParam['maxPrice'] = this.maxFilterPrice;
+    }
+
+    this.Selectedcategory = category;
+    
     if (category_id !=='0') {
+      this.categorySelected = true;
       this.isLoading = true;
-      this.postservice.fetchPostCategory(category_id, dicToken).subscribe(data => {
+      
+      // this.postservice.fetchPostCategory(category_id, dicToken).subscribe(data => {
+      //   console.log('this is category data', data);
+      //   this.listedLoadedPosts = data;
+      //   this.isLoading = false;
+      // });
+      this.postservice.fetchPosts(dicParam).subscribe(data => {
         console.log('this is category data', data);
         this.listedLoadedPosts = data;
         this.isLoading = false;
       });
+      setTimeout(() => {
+        this.onfilter = false;
+        this.categorySelected = false;
+      },15500);
     } else {
-      this.postservice.fetchPosts(this.latitude, this.longitude, dicToken).subscribe(result => {
+      
+ 
+      this.categorySelected = true;
+      const allCategoryDicParam = {};
+      dicParam['category'] = 'None';
+      this.postservice.fetchPosts(dicParam).subscribe(result => {
         this.postsSub = this.postservice.postRes.subscribe(postData => {
           console.log('its coming', postData);
           this.listedLoadedPosts = postData;
         });
       });
+      setTimeout(() => {
+        this.categorySelected = false;
+        this.onfilter = false;
+      },15500);
 
     }
 
 
   }
-  
+
   private locateUser() {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
        ///
@@ -343,14 +389,24 @@ setFilteredItems() {
   const dicToken = dic.token;
   console.log('for auth token', dicToken);
   if (this.listedLoadedPosts === undefined) {
-    this.isLoading= true;
+    this.isLoading = true;
   }
 
   this.locateUser()
 
 
   setTimeout(() => {
-    this.postservice.fetchPosts(this.latitude, this.longitude, dicToken).subscribe(result => {
+    const dicParam = {};
+    dicParam['lat']= this.latitude;
+    dicParam['lng'] = this.longitude;
+    dicParam['usertoken'] = dicToken
+    if (this.minFilterPrice) {
+      dicParam['minPrice'] = this.minFilterPrice;
+    }
+    if (this.maxFilterPrice) {
+      dicParam['maxPrice'] = this.maxFilterPrice;
+    }
+    this.postservice.fetchPosts(dicParam).subscribe(result => {
       this.isLoading = false;
     });
     // this.postsSub = this.postservice.postRes.subscribe(postData => {
@@ -362,7 +418,7 @@ setFilteredItems() {
     //     this.listedLoadedPosts = postData;
     //     this.loaded =true;
     //   } else {
-        
+
     //     for (const key in this.listedLoadedPosts) {
     //       if (this.listedLoadedPosts.hasOwnProperty(key)) {
     //         const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
@@ -406,14 +462,27 @@ setFilteredItems() {
     //   this.listedLoadedPosts = this.relevantPosts.slice(1);
     //   console.log('data postservice',resultData);
     // });
-  }, 2000);
+  }, 650);
 
 }
 
 
+onOpenFiltersModal(){
+  this.modalCtrl.create({
+    component: MainFilterComponent,
+    componentProps: {'selectedCategory': this.Selectedcategory}
+  }).then(modalEl => {
+    modalEl.present();
+    return modalEl.onDidDismiss().then(data => {
+       console.log('filters results',  data.data.max);
+       this.maxFilterPrice = data.data.max;
+       this.minFilterPrice =  data.data.min;
+       this.onClickedCategory(this.Selectedcategory);
+    });
+  });
+}
 
 
-  
 
 
   onDetail(id) {
@@ -421,7 +490,7 @@ setFilteredItems() {
   }
 
   ngOnDestroy() {
-    if (this.postsSub) {
+    if (!this.postsSub) {
       this.postsSub.unsubscribe();
     }
   }
@@ -431,6 +500,7 @@ setFilteredItems() {
       this.onfilter = false;
     } else {
       this.onfilter = true;
+
     }
   }
 

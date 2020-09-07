@@ -37,6 +37,7 @@ export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.googleMaps.event.addListenerOnce(map, 'idle', () => {
         this.renderer.addClass(mapEl, 'visible');
       });
+
       if (this.selectable) {
         this.clickListener = map.addListener('click', event => {
           const selectedCoords = {
@@ -77,6 +78,7 @@ export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
     if (googleModule && googleModule.maps) {
       return Promise.resolve(googleModule.maps);
     }
+    
 
     return new Promise ((resolve, reject) => {
       const script = document.createElement('script');
@@ -94,5 +96,7 @@ export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
       };
     });
   }
+
+
 
 }
