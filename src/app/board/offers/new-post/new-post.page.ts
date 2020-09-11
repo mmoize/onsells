@@ -133,6 +133,9 @@ export class NewPostPage implements OnInit {
    });
   }
 
+  onNewProduct() {
+    this.routes.navigateByUrl(`/board/offers/new-product`);
+  }
 
 
 

@@ -13,6 +13,7 @@ import { Platform, ModalController } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
+import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
 
 @Component({
   selector: 'app-discover',
@@ -36,7 +37,8 @@ export class DiscoverPage implements OnInit {
   searching: any = false;
   searchTerm: string = '';
   searchControl: FormControl;
-
+  
+  currentAreaLocationName;
   latitude;
   longitude;
   onfilter = false;
@@ -294,10 +296,18 @@ onSearchInput(ev){
     }
 }
 
-setFilteredItems() {
-  this.items = this.postservice.filterItems(this.searchTerm);
-  console.log('here is items', this.searchTerm);
-}
+  setFilteredItems() {
+    this.items = this.postservice.filterItems(this.searchTerm);
+    console.log('here is items', this.searchTerm);
+  }
+
+
+    
+  resetCategoryFilters(category) {
+    this.minFilterPrice=undefined;
+    this.maxFilterPrice=undefined;
+    this.onClickedCategory(category);
+  }
 
 
 
@@ -482,6 +492,28 @@ onOpenFiltersModal(){
   });
 }
 
+
+onOpenMapFiltersModal() {
+
+  const center = {};
+  center['lat']=this.latitude;
+  center['lng'] = this.longitude;
+
+  this.modalCtrl.create({
+    component: MapFilterModalComponent,
+    componentProps: {'center': center}
+  }).then(modalEl => {
+    modalEl.present();
+    return modalEl.onDidDismiss().then(data => {
+       console.log('filters results',  data.data);
+       this.latitude = data.data.lat;
+       this.longitude = data.data.lng;
+       this.currentAreaLocationName = data.data.area_name;
+       this.onClickedCategory(this.Selectedcategory);
+
+    });
+  });
+}
 
 
 

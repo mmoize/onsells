@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { DiscoverPageRoutingModule } from './discover-routing.module';
 
 import { DiscoverPage } from './discover.page';
+import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { DiscoverPage } from './discover.page';
     ReactiveFormsModule,
     DiscoverPageRoutingModule
   ],
-  declarations: [DiscoverPage, MainFilterComponent]
+  declarations: [DiscoverPage, MapFilterModalComponent, MainFilterComponent]
 })
 export class DiscoverPageModule {}

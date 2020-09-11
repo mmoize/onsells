@@ -14,6 +14,10 @@ import { Plugins } from '@capacitor/core';
 })
 export class OffersPage implements OnInit, OnDestroy {
 
+  userHasLoadedItem = true;
+  userHasLoadedListings = true;
+  
+
   private postSub: Subscription;
   private prodSub: Subscription;
   isLoading = false;
@@ -25,6 +29,10 @@ export class OffersPage implements OnInit, OnDestroy {
   ClickedProdImage = false;
   productPhotoCount;
   loaded = false;
+  
+
+
+  
 
 
   slideOpts = {
@@ -127,8 +135,28 @@ export class OffersPage implements OnInit, OnDestroy {
               ) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      if(this.loadedProducts.length > 0) {
+        this.userHasLoadedItem = true;
+        
+      } else if (this.loadedProducts.length <= 0) {
+        this.userHasLoadedItem = false;
+      }
+    }, 3000);
+
+
+    setTimeout(() => {
+      if(this.loadedUserPosts.length > 0) {
+        this.userHasLoadedListings = true;
+        
+      } else if (this.loadedUserPosts.length  <= 0) {
+        this.userHasLoadedListings  = false;
+      }
+    }, 3000);
+
 
   }
+
 
   checkRoleExistenceProduct(id: string):boolean {
     return this.loadedProducts.some(r => r.id === id);
@@ -140,7 +168,7 @@ export class OffersPage implements OnInit, OnDestroy {
 
   async ionViewWillEnter() {
      
-
+    
 
     ////////////////////--product--///////////////////////////////////
 
@@ -293,6 +321,12 @@ export class OffersPage implements OnInit, OnDestroy {
 
       setTimeout(() => {
        loadingEl.dismiss();
+       if(this.loadedProducts.length > 0) {
+        this.userHasLoadedItem = true;
+        
+      } else if (this.loadedProducts.length <= 0) {
+        this.userHasLoadedItem = false;
+      }
      }, 2000);
     });
 
@@ -340,11 +374,20 @@ export class OffersPage implements OnInit, OnDestroy {
   }
 
   onDeleteListing(id) {
-    let c = this.loadedUserPosts.filter(b => b.id !== id);
-    this.loadedUserPosts = c;
-    console.log('this is usersDEEEEEEl', c);
 
-    this.postservice.onPostDelete(id).then(() => {
+      if(this.loadedUserPosts.length > 0) {
+        this.userHasLoadedListings = true;
+        
+      } else if (this.loadedUserPosts.length  <= 0) {
+        this.userHasLoadedListings  = false;
+      }
+ 
+
+      let c = this.loadedUserPosts.filter(b => b.id !== id);
+      this.loadedUserPosts = c;
+      console.log('this is usersDEEEEEEl', c);
+
+      this.postservice.onPostDelete(id).then(() => {
         // this.ionViewWillEnter();
       });
   }

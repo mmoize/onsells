@@ -9,15 +9,26 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col text-center>
         <ion-list>
+          <ion-list-header>
+            <ion-label>Price Range</ion-label>
+          </ion-list-header>
+          <ion-item lines="none">
+            <ion-item lines="none">
+              <ion-label slot='start'>Minimum</ion-label>
+              <ion-input [(ngModel)]="selectedMinPrice" (ngModelChange)="onInputMinChange($event)" ></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label  slot='start'>Maximum</ion-label>
+               <ion-input [(ngModel)]="selectedMaxPrice" (ngModelChange)="onInputMaxChange($event)" ></ion-input>
+            </ion-item>
+          </ion-item>
           <ion-item>
-            <ion-label>Min {{minimumPrice | currency}}  </ion-label>
-            <ion-range max="1000" [(ngModel)]="selectedPrice" (ngModelChange)="onChange($event)"  dual-knobs pin="true |currency" color="dark">
-              
-              
+            <ion-label [(ngModel)]="minimumPrice" > {{minimumPrice | currency}}  </ion-label>
+            <ion-range color="primary" max="1000" [(ngModel)]="selectedPrice" (ngModelChange)="onChange($event)"  dual-knobs pin="true |currency" color="dark">
             </ion-range>
-            <ion-label>Max {{maximumPrice | currency}} </ion-label>
+            <ion-label [(ngModel)]="maximumPrice">{{maximumPrice | currency}} </ion-label>
           </ion-item>
         </ion-list>
       </ion-col>

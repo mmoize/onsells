@@ -32,23 +32,28 @@
 
     <ion-row>
       <ion-col size ="12" size-sm="8" offset-sm ="2">
-        <ion-label>
-          <h2 *ngIf="Selectedcategory"  style="font-weight: bolder; font-size:xx-large ">{{ Selectedcategory.name }}</h2>
-        </ion-label>
+        <div >
+          <h2  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large ">{{ Selectedcategory.name }}</h2>
+        </div>
       </ion-col>
     </ion-row>
+
 
     <ion-row>
       <ion-col  size ="12" size-sm="8" offset-sm ="2">
         <ion-item lines="none">
           <ion-buttons slot="start">
-            <ion-note (click)="onDisplayFilters()" >category</ion-note>
+            <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note>
             <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
             <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon>
           </ion-buttons>
-          <ion-buttons (click)="onOpenFiltersModal()"  slot="end">
+          <ion-item (click)="onOpenMapFiltersModal()" slot="end"lines="none">
+            <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon>
+            <h4   style="margin-top: 10px" style="font-weight: bold;" >{{ currentAreaLocationName}}</h4>
+          </ion-item>
+          <ion-buttons (click)="onOpenFiltersModal()"  >
             <ion-icon color="primary" name="settings-outline"></ion-icon>
-            <ion-note  >filters</ion-note>
+            <ion-note style="font-weight: bold;"  >filters</ion-note>
           </ion-buttons>
         </ion-item>
           <!-- <ion-note (click)="onDisplayFilters()" >filters</ion-note>
@@ -87,7 +92,7 @@
       <ion-col size ="12" size-sm="8" offset-sm ="2" >
        <ion-slides [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
           <ion-slide *ngFor="let category of categoryList"  >
-            <ion-item  (click)="onClickedCategory(category)" lines="none">
+            <ion-item class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
               <ion-icon slot="start" [src]="category.icon"></ion-icon>
               <ion-label>{{ category.name }}</ion-label>
             </ion-item>

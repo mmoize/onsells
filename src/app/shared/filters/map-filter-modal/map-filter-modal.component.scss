@@ -1,0 +1,29 @@
+.map {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  
+    background-color: transparent;
+  
+    opacity: 0;
+    transition: opacity 150ms ease-in;
+  }
+  
+  
+  .map.visible {
+    opacity: 1;
+  }
+
+  ion-searchbar{
+    --icon-color: var (--ion-color-primary);
+    --box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+    ::ng-deep{
+        .searchbar-input-container{            
+            .searchbar-input{ 
+                border-radius: 20px;
+                //any style that you want to implement on your searchbar
+            }
+        }
+    }   
+}

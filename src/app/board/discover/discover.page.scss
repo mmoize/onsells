@@ -21,9 +21,9 @@ ion-label {
 }
 
 h3 {
-    background-color: rgb(35, 43, 39, 0.5);
+    background-color: rgb(35, 43, 39, 0.9);
     font-weight: bolder;
-    color: rgba(6, 124, 65, 0.8);
+    color: rgba(9, 192, 100, 0.8);
     border-radius: 5px;
 }
 #toplay{
@@ -55,12 +55,12 @@ img {
 
 .pin {
     display: inline-block;
-    margin: 0 2px 10px;
+    margin: 0 5px 5px;
     padding: 5px;
   }
   
   .pins {
-    column-count: 3;
+    column-count: 4;
     margin-top: 5px;
   }
 
@@ -99,13 +99,15 @@ ion-icon {
 
 ion-searchbar{
     --icon-color: var (--ion-color-primary);
-    --box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
 
     ::ng-deep{
         .searchbar-input-container{            
             .searchbar-input{ 
                 border-radius: 20px;
                 //any style that you want to implement on your searchbar
+                //box-shadow: rgb(44, 41, 41);
+                //box-shadow: 5px 10px red;
             }
         }
     }   
@@ -159,4 +161,18 @@ input {
     display: flex;
     align-items: center;
     margin-top: 10px;
+}
+
+#mapModal {
+    flex-direction: row;
+}
+
+#categoryItems{
+    --box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+.diplayedCategory {
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    border-radius: 5px;
 }

@@ -134,6 +134,11 @@ export class NewProductPage implements OnInit {
             
 
   ngOnInit() {
+
+    console.log('this is string', this.makeString());
+
+
+
     this.form = new FormGroup({
       title: new FormControl(null, {
         updateOn: 'blur',
@@ -362,7 +367,7 @@ export class NewProductPage implements OnInit {
       data.append('title', this.form.value.title);
       data.append('description', this.form.value.description);
       data.append('price', this.form.value.price);
-      data.append('slug', this.form.value.slug);
+      data.append('slug', this.form.value.title+'-'+this.makeString());
       data.append('barcode', barcode);
       data.append('category_name', this.form.value.category_name);
       data.append('category_slug', this.form.value.category_slug);
@@ -383,6 +388,21 @@ export class NewProductPage implements OnInit {
     });
 
   }
+
+  makeString(): string {
+    let outString: string = '';
+    let inOptions: string = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < 32; i++) {
+
+      outString += inOptions.charAt(Math.floor(Math.random() * inOptions.length));
+
+    }
+
+    return outString;
+  }
+
+  
 
 
   private showAlert() {
