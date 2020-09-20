@@ -1,4 +1,4 @@
-h3 {
+.selectItem {
     background-color: rgb(35, 43, 39, 0.5);
     font-weight: bolder;
     color: rgb(19, 224, 122, 0.8);
@@ -10,10 +10,131 @@ h3 {
     font-size: larger;
 }
 
-img {
-    object-fit: cover;
-}
+// img {
+//     object-fit: cover;
+// }
+
+// ion-card {
+//     align-items: center;
+// }
+
+
+
 
 ion-card {
+
+    padding: 0px;
+    margin: 0px;
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+
+
+}
+
+#imgslidediv {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+ion-card-content {
+    margin-top: 10px;
+    border-top: none;
+}
+
+ion-img {
+    object-fit: inherit;
+    width: 100%;
+    height: 100%;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    //max-height: 70vh;
+    //max-width: 70vw;
+    //min-height: 60vh;
+    //min-width: 60vw;
+}
+
+ion-col{
+    padding: 0px;
     align-items: center;
+}
+
+// .ionSlides {
+// max-height: 50vh;
+// }
+
+// ion-slide {
+//     padding: 0px;
+//     margin: 0px;
+//     margin: 0px;
+//     height: 100%;
+//     width: 100%;
+//     border: red;
+// }
+
+#avatarNname {
+   margin-left: 0px;
+   padding-left: 0px;
+   font-weight: bolder;
+}
+h4 {
+    font-weight: bolder;
+    font-family:  sans-serif;
+    font-size: 30px;
+    font-weight: bolder;
+    font-family: 'Gill Sans',  sans-serif;
+}
+
+// h3 {
+//     font-weight: bold;
+//     //font-family: Arial, Helvetica, sans-serif;
+//     font-size: 30px;
+//     font-family: Georgia;
+//     color: inherit;
+// }
+p {
+    font-weight: bolder;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.itemLabels {
+   
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 35px;
+    color: #474747  ;
+}
+
+#labelDescription {
+    margin-top: 100px;
+}
+
+#pricetag {
+    color: rgb(19, 224, 122, 0.8);
+
+    
+}
+
+
+ion-toolbar {
+    border: 0px;
+    --box-shadow: 0 0px 0px rgb(235, 23, 23);
+
+}
+
+.avatarItem {
+    margin-top: 20px;
+}
+
+.tagsRow {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.itemDescription {
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }

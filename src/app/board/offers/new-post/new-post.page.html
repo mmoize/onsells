@@ -4,10 +4,7 @@
       <ion-buttons *ngIf="selectedProduct" slot='start'>
         <ion-menu-button menu="m1"></ion-menu-button>
       </ion-buttons>  
-
-        <ion-title>new Listing</ion-title>
-
-      <ion-buttons *ngIf="selectedProduct" >
+      <ion-buttons *ngIf="selectedProduct" slot="end" >
         <ion-button (click)="onItemsSelect()">
           <ion-icon name="arrow-back-outline"></ion-icon>
         </ion-button>
@@ -21,7 +18,7 @@
 </ion-header>
 
 <ion-content>
-   <ion-grid *ngIf="!selectedProduct">
+   <ion-grid style="border: 5px;" *ngIf="!selectedProduct">
     <ion-row>
       <ion-col size ="12" size-sm="6" offset-sm ="3" >
         <ion-item lines="none">
@@ -37,16 +34,16 @@
    </ion-row>
     <ion-row>
       <ion-col size ="12" size-sm="6" offset-sm ="3">
-       <ion-slides  [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+       <ion-slides  [options]="{ slidesPerView: 'auto', zoom: true, grabCursor: true }">
          <ion-slide *ngFor="let product of loadedProducts" style="width: 150px; height: 200px; border: 2px solid #f8f8f8">
              <ion-card (click)="onselectItem(product)">
                 <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
                 <img id="touched" [src]="product.productimage_set[0].image"/>
                 <ion-card-content>
-                              <ion-label>{{ product.title }}</ion-label>
+                              <ion-label >{{ product.title }}</ion-label>
                               <ion-label >
-                               <h3 >{{ product.price |currency }}</h3>
-                           </ion-label>
+                               <h3 class="selectItem" >{{ product.price |currency }}</h3>
+                              </ion-label>                              
                 </ion-card-content>
              </ion-card>
          </ion-slide>
@@ -54,11 +51,13 @@
       </ion-col>
     </ion-row>
    </ion-grid>
-   <ion-grid *ngIf="selectedProduct" >
+
+          <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
+   <!-- <ion-grid *ngIf="selectedProduct" >
      <ion-row>
        <ion-col  size ="12" size-sm="6" offset-sm ="3">
         <ion-card >
-          <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
+
           <img id="touched" [src]="selectedProduct.productimage_set[0].image"/>
           <ion-card-content>
                         <ion-label>{{selectedProduct.title }}</ion-label>
@@ -71,7 +70,68 @@
      </ion-row>
      <ion-row>
      </ion-row>  
-   </ion-grid> 
+   </ion-grid>  -->
+
+    <ion-grid  *ngIf="selectedProduct" class="ion-no-padding">
+      <ion-row>
+        <ion-col sty size ="12" size-sm="4" offset-sm ="4">
+          <!-- <ion-card id="imgslidediv">
+  
+        </ion-card>   -->
+        <ion-slides class="ionSlides" pager="true" [options]="slideOpts" >
+          <ion-slide  *ngFor="let item of selectedProduct?.productimage_set">
+  
+             <!-- <img  [src]="item.image"/> -->
+             <ion-img style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;" [src]="item.image"></ion-img>
+            <!-- <ion-item lines="none" text-center>
+                  <ion-img  [src]="item.image"></ion-img>
+            </ion-item> -->
+          </ion-slide> 
+        </ion-slides>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin: 10px;">
+        <ion-col size ="12" size-sm="4" offset-sm ="4">
+           <ion-label class="itemLabels">{{ selectedProduct?.title }}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row  style="margin: 10px;" >
+        <ion-col 
+        style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;"
+         size ="12" size-sm="4" offset-sm ="4">
+           <ion-label style="border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;"  class="itemLabels">{{selectedProduct?.price |currency }}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col style="margin-top: 10px;" size ="12" size-sm="4" offset-sm ="4">
+            <ion-label  style="font-weight: bold;font-family: 'Gill Sans',  sans-serif;margin-top: 10px;">
+              Description
+            </ion-label>
+            <ion-item lines="none">
+              <p slot="start">{{ selectedProduct?.description }}</p>
+            </ion-item>
+
+        </ion-col>
+      </ion-row>
+      <ion-row class="tagsRow">
+        <ion-col size ="12" size-sm="4" offset-sm ="4"> 
+          <ion-item lines="none">
+            <ion-label style="font-weight: bold;" >
+              Tags
+            </ion-label>
+            <ion-button *ngFor="let tag of selectedProduct?.taggit" shape="round" fill="outline">
+              {{ tag }}
+            </ion-button>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+
 
    <form [formGroup]="form">
    <ion-grid *ngIf="selectedProduct" fixed>
@@ -88,20 +148,22 @@
         </ion-item>
       </ion-col> -->
       <ion-row>
-        <ion-col size ="12" size-sm="6" offset-sm ="3">
+        <ion-col size ="12" size-sm="4" offset-sm ="4">
          <app-location-picker (locationPick)="onLocationPicked($event)"></app-location-picker>
         </ion-col>
       </ion-row>
    </ion-grid> 
 
    <ion-grid>
-    <ion-row>
-      <ion-col size ="12" size-sm="6" offset-sm ="3">
+    <ion-row style="margin-top: 30px">
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
       <ion-button
       [disabled]="!form.valid"
       (click)="onCreatePostListing()"
       color="primary" 
-      expand="block" 
+      shape="round"
+      expand="block"
+      fill="outline" 
       type="submit" >
        Post Listing
       </ion-button>
@@ -110,3 +172,5 @@
    </ion-grid>
    </form>
 </ion-content>
+
+<!-- <ion-slides  [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }"> -->

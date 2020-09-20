@@ -8,6 +8,7 @@ export class Post {
         public location: ProductLocation,
         public created_at: Date,
         public updated_at: Date,
+        public viewcount: string,
 
 
     ) {}

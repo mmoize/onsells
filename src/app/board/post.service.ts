@@ -19,6 +19,7 @@ interface PostData {
   // productimages: [];
   created_at: Date;
   updated_at: Date;
+  viewcount: string;
 }
 
 interface ProductData {
@@ -47,6 +48,8 @@ export class PostService {
   category;
   filtminPrice;
   filtmaxPrice;
+  searchTerm;
+  taggit;
 
   get posts() {
     console.log('its main db', this._posts);
@@ -59,7 +62,6 @@ export class PostService {
 
   get postRes() {
     return this._posts.asObservable().pipe(tap(resData => {
-      console.log('post data', resData);
     }));
   }
   usertoken;
@@ -80,7 +82,6 @@ export class PostService {
   productCreateUrl = 'https://sellet.herokuapp.com/api/products/';
   productsFetchUrl = 'https://sellet.herokuapp.com/api/userproductview/';
   productDeleteUrl = 'https://sellet.herokuapp.com/api/userdeleteproductview/';
-  
 
 
 
@@ -127,43 +128,44 @@ export class PostService {
   }
 
 
-  fetchPostSearch(searchTerm, dicToken) {
+  // fetchPostSearch(searchTerm, dicToken) {
     
-    return this.authService.userToken.pipe(switchMap(token => {
-      this.usertoken = token;
-      return this.httpService.get<{[Key: string]:  PostData}>(`${this.postSearchUrl}${searchTerm}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Token ' + dicToken,
-        }
-      });
+  //   return this.authService.userToken.pipe(switchMap(token => {
+  //     this.usertoken = token;
+  //     return this.httpService.get<{[Key: string]:  PostData}>(`${this.postSearchUrl}${searchTerm}`, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: 'Token ' + dicToken,
+  //       }
+  //     });
 
-    })).pipe(map(resultData => {
+  //   })).pipe(map(resultData => {
 
-      const posts = [];
-      // tslint:disable-next-line: forin
-      for (const key in resultData) {
-        if (resultData.hasOwnProperty(key)) {
+  //     const posts = [];
+  //     // tslint:disable-next-line: forin
+  //     for (const key in resultData) {
+  //       if (resultData.hasOwnProperty(key)) {
          
-          posts.push(new Post (
-              resultData[key].id,
-              resultData[key].product,
-              resultData[key].owner,
-              resultData[key].location,
-              resultData[key].created_at,
-              resultData[key].updated_at
-            )
-          );
-        }
-      }
-      return posts;
-    }),
-    tap(resData => {
-      this._posts.next(resData);
-      console.log('asa for post', resData);
-    })
-    );
-  }
+  //         posts.push(new Post (
+  //             resultData[key].id,
+  //             resultData[key].product,
+  //             resultData[key].owner,
+  //             resultData[key].location,
+  //             resultData[key].created_at,
+  //             resultData[key].updated_at,
+  //             resultData[key].viewcount,
+  //           )
+  //         );
+  //       }
+  //     }
+  //     return posts;
+  //   }),
+  //   tap(resData => {
+  //     this._posts.next(resData);
+  //     console.log('asa for post', resData);
+  //   })
+  //   );
+  // }
 
 
   fetchPosts(dicParam) {
@@ -192,6 +194,20 @@ export class PostService {
    } else {
      this.filtmaxPrice = dicParam.maxPrice;
    }
+
+
+    if (dicParam.searchTerm === undefined) {
+        this.searchTerm = 'None';
+    } else {
+      this.searchTerm  = dicParam.searchTerm;
+    }
+
+    if (dicParam.taggit === undefined) {
+      this.taggit = 'None';
+  } else {
+    this.taggit  = dicParam.taggit;
+  }
+    
     
     this.locateUser();
     return this.authService.userToken.pipe(switchMap(token => {
@@ -202,7 +218,7 @@ export class PostService {
       this.usertoken = token;
       return this.httpService.get<{[Key: string]: PostData}>(
          // tslint:disable-next-line: max-line-length
-         `${this.postsUrl}?latitude=${lat}&category__exact=${this.category}&longitude=${lng}&price__lt=${this.filtmaxPrice}&price__gt=${this.filtminPrice}`
+         `${this.postsUrl}?latitude=${lat}&category__exact=${this.category}&longitude=${lng}&price__lt=${this.filtmaxPrice}&title__startswith=${this.searchTerm}&taggit__name__startswith=${this.taggit}&price__gt=${this.filtminPrice}`
          , {
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +239,8 @@ export class PostService {
               resultData[key].owner,
               resultData[key].location,
               resultData[key].created_at,
-              resultData[key].updated_at
+              resultData[key].updated_at,
+              resultData[key].viewcount,
             )
           );
         }
@@ -262,7 +279,8 @@ export class PostService {
               resultData[key].owner,
               resultData[key].location,
               resultData[key].created_at,
-              resultData[key].updated_at
+              resultData[key].updated_at,
+              resultData[key].viewcount,
             )
           );
         }
@@ -313,7 +331,8 @@ export class PostService {
         postData[0].owner,
         postData[0].location,
         postData[0].created_at,
-        postData[0].updated_at
+        postData[0].updated_at,
+        postData[0].viewcount,
       );
     }));
   }
@@ -353,6 +372,8 @@ export class PostService {
 
 
 
+
+
   fetchUserPosts(tokens) {
 
     return this.authService.userToken.pipe(switchMap(token => {
@@ -377,7 +398,8 @@ export class PostService {
               resultData[key].owner,
               resultData[key].location,
               resultData[key].created_at,
-              resultData[key].updated_at
+              resultData[key].updated_at,
+              resultData[key].viewcount,
             )
           );
         }

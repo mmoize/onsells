@@ -71,3 +71,39 @@ ion-button {
 #btmgrid {
     margin-top: 25px;
 }
+
+.pin {
+    display: inline-block;
+    margin: 0 5px 5px;
+    padding: 5px;
+  }
+  
+  .pins {
+    column-count: 2;
+    margin-top: 5px;
+  }
+
+
+  .firstlayer {
+      border: 4px;
+      border-color: darkviolet;
+      overflow: hidden;
+      text-align: center;
+      position: relative;
+  }
+
+  #toplay{
+    position: absolute;
+    top: 0;
+    margin: 0;
+    position: absolute;
+    //top: 78%;
+    //right: 50%;
+    //margin-right: -50%;
+    // transform: translate(-50%, -50%);  
+}
+
+.savebtnCol {
+    text-align: center;
+    align-items: center;
+}

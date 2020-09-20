@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
+import { Post } from '../board/post.model';
 
 export interface ProfileData {
   user_id: string;
@@ -21,11 +22,15 @@ export interface ProfileData {
 })
 export class ProfileService {
 
+  private _posts = new BehaviorSubject<Post[]>([]);
+
   private _userProfileData = new BehaviorSubject<userProfileData>(null);
   userresultData;
 
   baseUrl = 'https://sellet.herokuapp.com/api/profiles/';
   profileEditUrl = 'https://sellet.herokuapp.com/api/user/';
+
+  userProfileListingsUrl = 'https://sellet.herokuapp.com/api/getprofilepostlisting/';
 
   constructor(private http: HttpClient, ) { }
   
@@ -103,6 +108,58 @@ export class ProfileService {
     return xhr.send(data);
 
   }
+
+
+  // async UserProfileListings(id) {
+
+  //   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  //   const dic = JSON.parse(value);
+  //   const dicToken = dic.token;
+  //   console.log('for auth token', dicToken);
+  
+  //   return this.http.get(`${this.userProfileListingsUrl}${id}`, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // tslint:disable-next-line: max-line-length
+  //       Authorization: 'Token ' + dicToken ,
+  //     }
+  //   }).subscribe(resultData => {
+
+  //     const posts = [];
+  //     // tslint:disable-next-line: forin
+  //     for (const key in resultData) {
+  //       if (resultData.hasOwnProperty(key)) {
+         
+  //         posts.push(new Post (
+  //             resultData[key].id,
+  //             resultData[key].product,
+  //             resultData[key].owner,
+  //             resultData[key].location,
+  //             resultData[key].created_at,
+  //             resultData[key].updated_at,
+  //             resultData[key].viewcount,
+  //           )
+  //         );
+  //       }
+  //     }
+  //     return posts;
+  //   });
+  //  }
+
+  
+  UserProfileListings(id, token) {
+
+
+  
+    return this.http.get(`${this.userProfileListingsUrl}${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        // tslint:disable-next-line: max-line-length
+        Authorization: 'Token ' + token ,
+      }
+    });
+   }
+
 
 
 

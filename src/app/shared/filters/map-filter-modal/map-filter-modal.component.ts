@@ -49,24 +49,37 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
+    this.getGoogleMapsAutoComplete().then(googleMaps => {
+      this.GoogleAutocomplete = new googleMaps.places.AutocompleteService();
+      this.googleMaps = googleMaps;
+      const mapEl = this.mapElementRef.nativeElement;
+      this.map = new googleMaps.Map(mapEl, {
+        center: {lat: this.lat, lng: this.long},
+        zoom: 10
+      });
+
+      this.googleMaps.event.addListenerOnce(this.map, 'idle', () => {
+        this.renderer.addClass(mapEl, 'visible');
+      });
+    });
     }
 
-    ngAfterViewInit() {
-      this.getGoogleMapsAutoComplete().then(googleMaps => {
-        this.GoogleAutocomplete = new googleMaps.places.AutocompleteService();
-        this.googleMaps = googleMaps;
-        const mapEl = this.mapElementRef.nativeElement;
-        this.map = new googleMaps.Map(mapEl, {
-          center: {lat: this.lat, lng: this.long},
-          zoom: 10
-        });
+  //   ngAfterViewInit() {
+  //     this.getGoogleMapsAutoComplete().then(googleMaps => {
+  //       this.GoogleAutocomplete = new googleMaps.places.AutocompleteService();
+  //       this.googleMaps = googleMaps;
+  //       const mapEl = this.mapElementRef.nativeElement;
+  //       this.map = new googleMaps.Map(mapEl, {
+  //         center: {lat: this.lat, lng: this.long},
+  //         zoom: 10
+  //       });
 
-        this.googleMaps.event.addListenerOnce(this.map, 'idle', () => {
-          this.renderer.addClass(mapEl, 'visible');
-        });
-      }
-    );
-   }
+  //       this.googleMaps.event.addListenerOnce(this.map, 'idle', () => {
+  //         this.renderer.addClass(mapEl, 'visible');
+  //       });
+  //     }
+  //   );
+  //  }
 
 
 
@@ -100,7 +113,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.lat = geoPosition.coords.latitude;
         this.long = geoPosition.coords.longitude;
-        //this.getAddress(this.lat, this.long).subscribe(() => {});
+        // this.getAddress(this.lat, this.long).subscribe(() => {});
       }).catch(err => {
         console.log(err);
         this.showErrorAlert();
@@ -109,15 +122,20 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
       console.log('it was b');
       this.lat = this.center.lat;
       this.long = this.center.lng;
+      const mapEl = this.mapElementRef.nativeElement;
+      this.map = new this.googleMaps.Map(mapEl, {
+          center: {lat: this.lat, lng: this.long},
+          zoom: 10
+        });
     }
 
-    
-    //this.onclick();
+
+    // this.onclick();
 
   }
 
 
-  //initiates the google maps sdks:
+  // initiates the google maps sdks:
 
   // private getGoogleMaps() {
   //   const win = window as any;
@@ -199,7 +217,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   onClickclose() {
-    const locationData = {}
+    const locationData = {};
     locationData['lat']= this.lat;
     locationData['lng']= this.long;
     locationData['area_name']= this.areaName;
@@ -208,7 +226,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
 
   SelectSearchResult(item) {
     /// WE CAN CONFIGURE MORE COMPLEX FUNCTIONS SUCH AS UPLOAD DATA TO FIRESTORE OR LINK IT TO SOMETHING
-    //alert(JSON.stringify(item));
+    // alert(JSON.stringify(item));
     console.log('tthis is the results', item.structured_formatting.main_text);
     this.areaName = item.structured_formatting.main_text;
     this.placesId = item.place_id;
@@ -332,15 +350,15 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
       // }
       // }).catch( error => {
       //   console.log(error);
-    //});
+    // });
 
   }
 
 
   getnewClickCords() {
-    
 
-      
+
+
 
       const marker = new this.googleMaps.Marker({
         position: this.center,
@@ -350,7 +368,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
       });
       marker.setMap(this.map);
 
-    
+
 
   }
 
@@ -358,7 +376,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
   getNewsearchCord() {
 
         const geocoder = new this.googleMaps.Geocoder();
-        //const sarchedmarker = new googleMaps.Marker({ map: map });
+        // const sarchedmarker = new googleMaps.Marker({ map: map });
         const marker = new this.googleMaps.Marker({
           // position: this.cords,
           // tslint:disable-next-line: object-literal-shorthand
@@ -374,8 +392,8 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
         marker.setMap(this.map);
         let newCenter;
         geocoder.geocode({ placeId: this.placesId }, (results, status) => {
-          if (status !== "OK") {
-            window.alert("Geocoder failed due to: " + status);
+          if (status !== 'OK') {
+            window.alert('Geocoder failed due to: ' + status);
             return;
           }
           this.map.setCenter(results[0].geometry.location);
@@ -401,7 +419,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
           strokeWeight: 2,
           fillColor: '#FF0000',
           fillOpacity: 0.35,
-          center: {'lat': this.lat, 'lng':this.long},
+          center: {lat: this.lat, lng: this.long},
           radius: 47000
         });
         this.circle.setMap(this.map);
@@ -412,7 +430,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
   onChange(event) {
     console.log('this is change', event);
     console.log('this is circle', this.circle.radius);
-    this.circle.radius= event;
+    this.circle.radius = event;
     this.circle.setMap(this.map);
     this.circle.setVisible(true);
 
@@ -459,7 +477,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit
 
 
 
-  //}
+  // }
 
 
 

@@ -8,6 +8,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { PlaceLocation } from 'src/app/location.model';
+import { Key } from 'protractor';
 
 @Component({
   selector: 'app-new-product',
@@ -24,6 +25,11 @@ export class NewProductPage implements OnInit {
   form: FormGroup;
   addedImage = false;
   selectedCategory;
+
+  addedTags = [];
+  tagslist;
+  tag;
+  tagsTapped = false;
 
 
 
@@ -273,6 +279,33 @@ export class NewProductPage implements OnInit {
     });
   }
 
+  onTagsTapped() {
+    if (!this.tagsTapped) {
+      this.tagsTapped = true;
+    } else {
+      this.tagsTapped = false;
+    }
+    
+  }
+
+  onDeleteTag(id) {
+    let tag = this.addedTags.filter(tags => tags.id !== id);
+    this.addedTags = tag;
+  }
+
+
+  onInputTagChange(data) {
+    function getRandomArbitrary(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+  
+    const tag = {}
+    tag['id'] = getRandomArbitrary(1,1000);
+    tag['tagg']= data;
+    this.addedTags.push(tag);
+  }
+
 
   onClickProdImage() {
     if (this.ClickedProdImage) {
@@ -335,7 +368,7 @@ export class NewProductPage implements OnInit {
     }).then(modalEl => {
       modalEl.present();
       return modalEl.onDidDismiss().then(data => {
-        this.selectedCategory = data
+        this.selectedCategory = data;
         this.form.patchValue({category_name: this.selectedCategory.data.name});
         this.form.patchValue({category_slug: this.selectedCategory.data.slug});
         this.form.patchValue({category_parent: this.selectedCategory.data.parent});
@@ -344,9 +377,27 @@ export class NewProductPage implements OnInit {
     });
   }
 
+  getTagString() {
+    
+    // tslint:disable-next-line: forin
+
+    let tagsList=[];
+
+    for (const key in this.addedTags) {
+       if ( this.addedTags.hasOwnProperty(key)) {
+        console.log('this is tags id', this.addedTags[key].tagg);
+        const tags = `"${this.addedTags[key].tagg}"`
+        tagsList.push(tags);
+       }
+    }
+
+    console.log('taglist', tagsList);
+    this.tagslist = tagsList;
+  }
 
 
   createProduct() {
+    this.getTagString();
     this.loadingCtrl.create({keyboardClose:true, message: 'Creating your item..'})
     .then(loadingEl => {
       loadingEl.present();
@@ -358,6 +409,9 @@ export class NewProductPage implements OnInit {
         }
       }
 
+      
+
+
       function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
       }
@@ -367,11 +421,12 @@ export class NewProductPage implements OnInit {
       data.append('title', this.form.value.title);
       data.append('description', this.form.value.description);
       data.append('price', this.form.value.price);
-      data.append('slug', this.form.value.title+'-'+this.makeString());
+      data.append('slug', this.makeString());
       data.append('barcode', barcode);
       data.append('category_name', this.form.value.category_name);
       data.append('category_slug', this.form.value.category_slug);
       data.append('category_parent', this.form.value.category_parent);
+      data.append('taggit','['+this.tagslist+']');
 
       console.log('this is ur imagesasa',  data.get('image'));
       console.log('your new product', barcode);
@@ -383,7 +438,7 @@ export class NewProductPage implements OnInit {
       setTimeout(() => {
         loadingEl.dismiss();
         this.routes.navigateByUrl(`/board/offers`);
-      }, 2000);
+      }, 2000); 
 
     });
 

@@ -33,7 +33,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
     this.authService.UserId.pipe(take(1)).subscribe(userId => {
       console.log(event.detail);
-      if (event.detail.value === 'all') {
+      if (event.detail.value === '') {
         this.relevantPlaces = this.loadedPlaces;
         this.listedLoadedPlaces = this.relevantPlaces.slice(1);
       } else {

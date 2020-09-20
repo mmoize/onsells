@@ -146,12 +146,16 @@
 
               <div class="pins">
                 <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                        <img style="border-radius: 5px;" (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> 
+                         
+                        <ion-card>
+                          <img style="border-radius: 5px;" (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
+                        </ion-card>
                         <div id="toplay">
                           <ion-label >
                               <h3 >{{ post?.product[0].price  |currency }}</h3>
                           </ion-label>
                         </div>
+                        
         
                 </div>
               </div>

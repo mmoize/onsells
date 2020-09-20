@@ -157,9 +157,9 @@ export class AuthService  implements OnDestroy {
     );
   }
 
-  signup(username: string, email: string, password: string) {
+  signup(email: string, password: string, username: string ) {
      return this.http.post<AuthResponseData>
-     ('https://sellet.herokuapp.com/api/users/', {email, password, username}
+     ('https://sellet.herokuapp.com/api/users/', { email, password, username }
     ).pipe(tap(this.setUserData.bind(this)));
   }
 

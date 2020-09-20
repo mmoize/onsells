@@ -5,7 +5,7 @@ import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthService } from './../../auth/auth.service';
 import { PostService } from './../post.service';
 import { Post } from './../post.model';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
@@ -20,7 +20,7 @@ import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal
   templateUrl: './discover.page.html',
   styleUrls: ['./discover.page.scss'],
 })
-export class DiscoverPage implements OnInit {
+export class DiscoverPage implements OnInit, OnDestroy {
 
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
@@ -37,6 +37,7 @@ export class DiscoverPage implements OnInit {
   searching: any = false;
   searchTerm: string = '';
   searchControl: FormControl;
+  taggit;
   
   currentAreaLocationName;
   latitude;
@@ -189,7 +190,7 @@ checkRoleExistence(id: string):boolean {
         this.loadingPosts = postData;
 
        // console.log('second resultsaa', checkRoleExistence(postData[key].id));
-        console.log('my others azx', this.loadingPosts );
+
         if (!this.loaded) {
           this.listedLoadedPosts = postData;
           this.loaded =true;
@@ -199,29 +200,27 @@ checkRoleExistence(id: string):boolean {
             if (this.listedLoadedPosts.hasOwnProperty(key)) {
               const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
               const itshere = checkRoleExistence(this.listedLoadedPosts[key].id);
-              console.log('my others azx', itshere);
+
               if (itshere) {
-                  console.log('yes its in here', this.listedLoadedPosts[key].id);
+                  // console.log('yes its in here', this.listedLoadedPosts[key].id);
               } else  {
                 let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
 
                 this.listedLoadedPosts = b;
 
-                console.log('its the AList', this.listedLoadedPosts);
                 this.listedLoadedPosts.push(postData[key]);
               }
             }
           }
-          console.log('my others azx', this.listedLoadedPosts);
 
           for (const key in this.loadingPosts) {
             if (this.loadingPosts.hasOwnProperty(key)) {
               const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
               const itshere = checkRoleExistencepost(this.loadingPosts[key].id);
               if (itshere) {
-                console.log('its here', );
+                // console.log('its here', );
               } else {
-                console.log('its not here', this.loadingPosts[key]);
+                //console.log('its not here', this.loadingPosts[key]);
                 // this.listedLoadedPosts.push(this.loadingPosts[key]);
                 this.listedLoadedPosts.unshift(this.loadingPosts[key]);
               }
@@ -232,39 +231,48 @@ checkRoleExistence(id: string):boolean {
         }
 
       });
-      // this.postsSub = this.postservice.posts.subscribe(resultData => {
-      //   this.loadedPosts = resultData; // data from post service.
-      //   this.relevantPosts = this.loadedPosts;
-      //   this.listedLoadedPosts = this.relevantPosts.slice(1);
-      //   console.log('data postservice',resultData);
-      // });
+
     }, 400);
 
 
   }
 
-onSearch() {
-    this.listedLoadedPosts = this.items;
+  onSearch() {
+      this.listedLoadedPosts = this.items;
   }
 
   async ionViewDidEnter() {
 
 
-
   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
   const dic = JSON.parse(value);
   const dicToken = dic.token;
-  console.log('for auth token', dicToken);
+
   this.searchControl.valueChanges
+
  .pipe(
   filter(res => res.length > 2),
    debounceTime(700)
    )
  .subscribe(search => {
+  this.taggit = search;
+
+  const dicParam = {};
+  dicParam['lat']= this.latitude;
+  dicParam['lng'] = this.longitude;
+  dicParam['usertoken'] = dicToken;
+  dicParam['searchTerm'] = search;
+  dicParam['taggit'] = this.taggit;
+  if (this.categoryId === 0 || this.categoryId === undefined) {
+    dicParam['category'] = 'None';
+  } else {
+    dicParam['category'] = this.categoryId.id;
+  }
+
   this.searchTerm= search;
   console.log('this is search', search);
-   //this.setFilteredItems();
-  this.postservice.fetchPostSearch(search, dicToken).subscribe(resData => {
+   // this.setFilteredItems();
+  this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(resData => {
      console.log('this is there posts', resData);
      if (resData.length >= 0) {
       this.listedLoadedPosts = resData;
@@ -272,12 +280,12 @@ onSearch() {
      } else {
        // this code displayes data after user search returns '0 posts'
        this.searching = false;
-       setTimeout(() => {
-         const categoryId = 0
-         this.onClickedCategory(categoryId).then(resData => {
-           console.log('test if its working', resData);
-         });
-       }, 1000);
+      //  setTimeout(() => {
+      //    const categoryId = 0
+      //    this.onClickedCategory(categoryId).then(resData => {
+      //      console.log('test if its working', resData);
+      //    });
+      //  }, 1000);
      }
 
   });
@@ -285,21 +293,20 @@ onSearch() {
   }
 
 onSearchInput(ev){
-    this.searching = true;
-    console.log('this is search ev',ev.target.value);
+
+    // this.searching = true;
+
     if (ev.target.value.length <= 0) {
       this.searching = false;
-      console.log('this is search ev',ev.target.value);
     } else if (ev.target.value.length > 0) {
       this.searching = true;
-      console.log('this is search ev',ev.target.value);
     }
 }
 
-  setFilteredItems() {
-    this.items = this.postservice.filterItems(this.searchTerm);
-    console.log('here is items', this.searchTerm);
-  }
+  // setFilteredItems() {
+  //   this.items = this.postservice.filterItems(this.searchTerm);
+  //   console.log('here is items', this.searchTerm);
+  // }
 
 
     
@@ -315,7 +322,7 @@ onSearchInput(ev){
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
-    console.log('for auth token', dicToken);
+
 
     const category_id = category.id;
     console.log('this is category', category.id);
@@ -324,6 +331,7 @@ onSearchInput(ev){
     dicParam['lng'] = this.longitude;
     dicParam['usertoken'] = dicToken;
     dicParam['category'] = category_id ;
+
     if (this.minFilterPrice) {
       dicParam['minPrice'] = this.minFilterPrice;
     }
@@ -336,13 +344,8 @@ onSearchInput(ev){
     if (category_id !=='0') {
       this.categorySelected = true;
       this.isLoading = true;
-      
-      // this.postservice.fetchPostCategory(category_id, dicToken).subscribe(data => {
-      //   console.log('this is category data', data);
-      //   this.listedLoadedPosts = data;
-      //   this.isLoading = false;
-      // });
-      this.postservice.fetchPosts(dicParam).subscribe(data => {
+
+      this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(data => {
         console.log('this is category data', data);
         this.listedLoadedPosts = data;
         this.isLoading = false;
@@ -357,7 +360,7 @@ onSearchInput(ev){
       this.categorySelected = true;
       const allCategoryDicParam = {};
       dicParam['category'] = 'None';
-      this.postservice.fetchPosts(dicParam).subscribe(result => {
+      this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(result => {
         this.postsSub = this.postservice.postRes.subscribe(postData => {
           console.log('its coming', postData);
           this.listedLoadedPosts = postData;
@@ -394,29 +397,30 @@ onSearchInput(ev){
 
 
   async ionViewWillEnter() {
+
   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
   const dic = JSON.parse(value);
   const dicToken = dic.token;
-  console.log('for auth token', dicToken);
+
   if (this.listedLoadedPosts === undefined) {
     this.isLoading = true;
   }
 
-  this.locateUser()
+  this.locateUser();
 
 
   setTimeout(() => {
     const dicParam = {};
     dicParam['lat']= this.latitude;
     dicParam['lng'] = this.longitude;
-    dicParam['usertoken'] = dicToken
+    dicParam['usertoken'] = dicToken;
     if (this.minFilterPrice) {
       dicParam['minPrice'] = this.minFilterPrice;
     }
     if (this.maxFilterPrice) {
       dicParam['maxPrice'] = this.maxFilterPrice;
     }
-    this.postservice.fetchPosts(dicParam).subscribe(result => {
+    this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(result => {
       this.isLoading = false;
     });
     // this.postsSub = this.postservice.postRes.subscribe(postData => {
@@ -505,12 +509,18 @@ onOpenMapFiltersModal() {
   }).then(modalEl => {
     modalEl.present();
     return modalEl.onDidDismiss().then(data => {
-       console.log('filters results',  data.data);
+       console.log('filters results',  data.data );
        this.latitude = data.data.lat;
        this.longitude = data.data.lng;
        this.currentAreaLocationName = data.data.area_name;
+      //  if (data.data === undefined) {
+      //    //do nothing
+      //  } else if (!data.data) {
+      //   this.latitude = data.data.lat;
+      //   this.longitude = data.data.lng;
+      //   this.currentAreaLocationName = data.data.area_name;
+      //  }
        this.onClickedCategory(this.Selectedcategory);
-
     });
   });
 }
@@ -522,7 +532,7 @@ onOpenMapFiltersModal() {
   }
 
   ngOnDestroy() {
-    if (!this.postsSub) {
+    if (this.postsSub) {
       this.postsSub.unsubscribe();
     }
   }

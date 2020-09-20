@@ -107,12 +107,8 @@ export class ProductDetailPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/board/discover');
         return;
       }
-      this.postService.getPosts(don).subscribe(data => {
-
-        console.log('thisi data', data);
-      });
       this.isLoading = false;
-      (await this.postService.getPostDetail(paramMap.get('postId'))).subscribe(postDetail => {
+      this.aPostSub = ( await this.postService.getPostDetail(paramMap.get('postId'))).subscribe(postDetail => {
         this.post = postDetail;
         this.avatarImageStr = postDetail.owner['image'];
         console.log('this is postDetail', postDetail);

@@ -19,12 +19,12 @@
             <ion-card-header color="transparent" class="contact-card__header-image"> 
               <div class="contact-card__avatar" style="background: transparent;">
                   <img   style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  [src]="imagestring"/>
-                  <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img>
+                  <!-- <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img> -->
               </div>
             </ion-card-header>
-            <p class="contact-card__name">{{ userProfile?.username }}</p>
+            <p class="contact-card__name">{{ profilesData?.username }}</p>
             <div class="contact-card__footer">
-              <div class="contact-card__footer__core">
+              <!-- <div class="contact-card__footer__core">
               
                 <ion-card color="transparent"  class="contact-card__footer__core__email">
                   <ion-card-header>
@@ -59,10 +59,56 @@
                     {{selectedPost?.owner.country }}
                    </ion-card-content>
                 </ion-card>
-              </div>
+              </div> -->
             </div>
            </div>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row style="padding: 10px;">
+      <ion-col size="12" size-sm="8" offset-sm= "2">
+        <ion-segment (ionChange)="segmentChanged($event)" value="fleeks" color="primary" value="favorite">
+          <ion-segment-button value="listed">
+            <ion-label *ngIf="listedSeg"  style="font-weight: bold;" >Listed Items</ion-label>
+            <ion-icon src="assets/icons/marketplace.svg"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button value="fleeks">
+            <ion-label *ngIf="fleekSeg"  style="font-weight: bold;">Fleeks</ion-label>
+            <ion-icon name="heart"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button value="map">
+            <ion-label *ngIf="mapSeg"  style="font-weight: bold;">Map</ion-label>
+            <ion-icon name="pin"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+    <ion-row style="padding: 10px;">
+      <ion-col>
+        
+        <ion-virtual-scroll style="height: 20vh;" *ngIf="listedSeg"  [items]="userListedPost" approxItemHeight="70px">
+
+          <ion-card style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="recentCard" *virtualItem="let post" >
+
+            <ion-item-sliding (click)="onDetail(post.id)" style="margin: 10px;box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="item100">
+              <ion-item lines="none" >        <!--(click)="openViewImageModal(data)" -->
+                <ion-thumbnail style="border-radius: 15px" slot="start">
+                  <ion-img style="object-fit: cover;"  [src]="post.product[0].productimage_set[0].image"></ion-img>
+                </ion-thumbnail>
+                <ion-label style="margin-left: 10px;">
+                  <h2>{{ post.product[0].title }}</h2>
+                  <p>{{ post.product[0].description }}</p>
+                </ion-label>
+                <ion-note slot="end">
+                  {{ post.created_at |  date:'shortTime' }}
+                  {{post.created_at | date }}
+                </ion-note>
+            </ion-item> 
+            </ion-item-sliding>
+          </ion-card>
+
+         </ion-virtual-scroll>
+
       </ion-col>
     </ion-row>
   </ion-grid>
