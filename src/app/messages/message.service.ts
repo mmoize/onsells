@@ -4,6 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { switchMap, take } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
 
+export declare interface User {
+  token: string;
+  apiKey: string;
+  username: string;
+}
 
 
 
@@ -11,6 +16,8 @@ import { Plugins } from '@capacitor/core';
   providedIn: 'root'
 }) 
 export class MessageService {
+
+  private _user: User;
 
   constructor(private authService: AuthService,
               private httpService: HttpClient) { }
@@ -37,47 +44,17 @@ createNewMessageUrl = 'https://sellet.herokuapp.com/api/postmessagex/1';
 }
 
 
-  async fetchMessageDetail(id) {
-
-    return this.authService.returnUserToken().then(usertoken => {
-      console.log('new tokens', usertoken);
-      return this.httpService.get(`${this.messageRoomUrl}${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          // tslint:disable-next-line: max-line-length
-          Authorization: 'Token ' + usertoken
-          ,
-        }
-      });
-    });
+  get user(): User {
+    return this._user;
   }
 
-    
-
- sendExistMsgRoom(msgData) {
-
-    return this.authService.returnUserToken().then(usertoken => {
-      const xhr = new XMLHttpRequest();
-      const url = this.sendExistMsgRmUrl;
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader( 'Authorization', 'Token ' + usertoken);
-      xhr.withCredentials = true;
-      return xhr.send(msgData);
-    });
-
+  set user(user: User) {
+    this._user = user;
+    console.log('this msgservice user', this._user);
   }
 
-  createNewMessage(msgData) {
-    console.log('this new msg', msgData)
-    return this.authService.returnUserToken().then(usertoken => {
-      const xhr = new XMLHttpRequest();
-      const url = this.createNewMessageUrl;
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader( 'Authorization', 'Token ' + usertoken);
-      xhr.withCredentials = true;
-      return xhr.send(msgData);
-    });
-  }
+
+  
 
 
 }

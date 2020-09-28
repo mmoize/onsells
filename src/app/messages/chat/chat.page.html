@@ -1,0 +1,88 @@
+<!-- <ion-buttons slot="start" color="light">
+  <ion-icon color="light" style="size: 50px;" name="arrow-back-outline"></ion-icon>
+</ion-buttons> -->
+
+<!-- <ion-item style="--background: transparent;" lines="none">
+  <ion-item style="--background: transparent;" lines="none"  slot="start">
+    <ion-buttons  color="light">
+      <ion-back-button defaultHref="/messages" color="light"></ion-back-button>
+   </ion-buttons>
+  </ion-item>
+  <ion-item style="--background: transparent;" lines="none">
+    <ion-buttons  *ngIf="otherUserDp"   color="light">
+      <img [src]="otherUserDp" class="img-head"/>
+    </ion-buttons>
+    <ion-title color="light">{{ otherUsername }}</ion-title>
+  </ion-item>
+</ion-item> -->
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-item style="--background: transparent;" lines="none">
+      <ion-buttons *ngIf="otherUserDp"   color="light">
+        <img [src]="otherUserDp" class="img-head"/>
+      </ion-buttons>
+      <ion-title color="light">{{ otherUsername }}</ion-title>
+        <ion-buttons slot="end" color="light">
+          <ion-back-button defaultHref="/messages" color="light"></ion-back-button>
+       </ion-buttons>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding class="contentBg" #content id="chat-parent" overflow-scroll="true" (ionScrollStart)="logScrollStart()"
+  (ionScroll)="logScrolling($event)">
+  <ion-grid>
+    <ion-row>
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
+        <div>
+          <div id="chat-container">
+            <div class="message-wrap">
+              <div *ngFor="let msg of chats;let i = index; let first = first; let last = last" class="message">
+                <div class="message-left"  *ngIf="msg.userid != userid">
+                  <div class="msg-detail">
+                    <div class="msg-content">
+                      <p class="line-breaker ">{{msg.msg}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="message-right" *ngIf="msg.userid == userid" >
+                  <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
+                  <div class="msg-detail">
+                    <div class="msg-info">
+                    </div>
+                    <div class="msg-content">
+                      <p class="line-breaker  ">{{msg.msg}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<ion-row>
+  <ion-col size ="12" size-sm="4" offset-sm ="4">
+    <ion-footer class="footer">
+      <ion-toolbar class="footerSections">
+        <div class="containerFooter">
+          <ion-icon (click)="addFile()" size="large" color="medium" name="add-circle"></ion-icon>
+          <div class="inputConatiner">
+            <ion-input (keyup.enter)="send()"  class="placeholdertext inputMessage inputBg" type="text" placeholder="Type a message" [(ngModel)]="textMsg"
+              autofocus="true" padding-start></ion-input>
+          </div>
+          <div class="send-button-parent">
+            <ion-button  class="sendBtn" color="primary">
+              <ion-icon class="sendBtn-icon" name="send" color="light"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-col>
+</ion-row>
+

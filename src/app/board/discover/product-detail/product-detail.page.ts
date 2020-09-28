@@ -1,3 +1,4 @@
+import { ChatPage } from './../../../messages/chat/chat.page';
 import { NewMessageComponent } from './../../../shared/new-message/new-message.component';
 import { CreateMessagePage } from './../../../messages/create-message/create-message.page';
 import { UserprofileComponent } from './../../../shared/userprofile/userprofile.component';
@@ -136,6 +137,11 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     }
   }
 
+  ionViewDidEnter(){
+    sessionStorage.setItem('other_userid', this.post?.owner.id);
+    sessionStorage.setItem('other_username', this.post.owner.username);
+  }
+
   onback() {
     this.router.navigateByUrl('/board/discover');
   }
@@ -152,9 +158,11 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   }
 
   openMessageModal() {
+    this.openChatDetail()
+    console.log('senddd post', this.post.owner.username);
     this.modalCtrl.create({
-      component: NewMessageComponent,
-      componentProps: {seletedProfile: this.post}
+      component: ChatPage,
+      componentProps: {seletedpost: this.post}
     }).then(modalEl => {
       modalEl.present();
     });
@@ -162,7 +170,12 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   }
 
 
+  openChatDetail() {
+    console.log('this is postDetail', this.post);
+    sessionStorage.setItem('other_userid', this.post.owner.id);
+    sessionStorage.setItem('other_username', this.post.owner.username);
 
+  }
 
 
 

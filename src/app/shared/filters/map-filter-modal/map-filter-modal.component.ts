@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './map-filter-modal.component.html',
   styleUrls: ['./map-filter-modal.component.scss'],
 })
-export class MapFilterModalComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapFilterModalComponent implements OnInit, OnDestroy {
   map: any;
   address: string;
   placesId;

@@ -1,77 +1,84 @@
+<!-- <p>{{ channel.id }}</p> -->
+<!-- <div class="main">
+  <div class="chat-box">
+    <div class="message-area">
+      <header>
+        
+        <img src="https://randomuser.me/api/portraits/lego/8.jpg" alt="" />
+      </header>
+      <div
+        class="message"
+        *ngFor="let message of messages"
+        [ngClass]="getClasses(message.user.id)"
+      >
+        <p>{{ message.text }}</p>
+      </div>
+    </div>
+    <div class="input-area">
+      <form (submit)="sendMessage()" name="messageForm">
+        <button>
+          <span data-feather="smile"></span>
+        </button>
+        <input
+          placeholder="Type your message"
+          type="text"
+          name="message"
+          id="message"
+          [(ngModel)]="message"
+        />
+        <button class="send">
+          <span data-feather="send"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons   slot="start">
-		<ion-back-button  defaultHref="/messages"></ion-back-button>
-	  </ion-buttons>
-    <ion-title (click)="openModal()" >
-      <div class="Inline"><img src="{{topAvatar?.image || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}" class="circular"></div>
-	  <div class="Inline"><span style="padding:5px;" >{{topAvatar?.username}}</span></div>
-
-      <!-- <p style="margin: 0px; font-size: small; padding-bottom: 2px;">{{currentUserStatus}}</p> -->
-    </ion-title>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+   <ion-title>Chat</ion-title>
   </ion-toolbar>
-</ion-header> 
+</ion-header>
 
-<ion-content padding #content [scrollEvents]="true" (ionScrollStart)="logScrollStart()" (ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()">
-  <ion-grid>
-	  <ion-row>
-		  <ion-col size="12" size-sm="8" offset-sm= "2">
-			<ion-list id="parent" >	
-				<div *ngFor="let message of roomsMessages">
-					<div  class="chat">
-						<span  [class]="message?.data.msg_data.sender.username === currentUsername ? 'message me' : 'message you'">
-							{{message?.data.msg_data.message}}
-						</span>
-						<!-- <ion-card *ngIf="message?.data.msg_data.sender.username === currentUsername"  id='me'>
-							{{message?.data.msg_data.message}}
-						</ion-card>
-						<ion-card *ngIf="message?.data.msg_data.sender.username !== currentUsername" id='you'>
-							{{message?.data.msg_data.message}}
-						</ion-card> -->
-						<!-- <span [class]="message.sender.uid === currentData.uid ? 'message meMedia' : 'message youMedia'" *ngIf="message.type == 'image'">
-							<img src={{message.data.url}} style="height: 150px; width: 150px;" (click)="viewImage(message.data.url)">
-						</span>
-				
-						<span [class]="message.sender.uid === currentData.uid ? 'message meMedia' : 'message youMedia'" *ngIf="message.type == 'video'">
-							<video width="150px" height="150px" preload="auto" controls>
-								<source src={{message.data.url}}>
-							</video>
-						</span>
-				
-						<span [class]="message.sender.uid === currentData.uid ? 'message me' : 'message you'" *ngIf="message.type == 'file'">
-							{{message.sender.name}} has sent you a file, you can download it<span style="font-weight: bold; font-style: italic;" (click)="openLink(message.data.url)"> here.</span>
-						</span>	
-				
-						<span class="imgSpan">
-							<img src="{{(message.deliveredAt > 0) ? (message.readAt > 0) ? ('../assets/readAt.png') : ('../assets/deliveredAt.png') : (message.readAt) ? ('../assets/readAt.png') : 'https://2.bp.blogspot.com/-XItmlQeH_-4/Vj9iojIcOHI/AAAAAAAA-f8/mU7SLoGV8Lk/s320/Single%2BTick%2BCheck%2BMark%2BPHOTO.jpg'}}" [class]="message.sender.uid === currentData.uid ? 'hideTicks' : 'showTicks'" style="width: 11px; height: 11px; margin-bottom: -5px;">
-						</span> -->
-					</div>
-				</div>
-				</ion-list>
-		  </ion-col>
-	  </ion-row>
-  </ion-grid>
+<ion-content>
+  <div *ngFor="let chat of chats" >
+
+   <!-- others's chat -->
+   <ion-item lines="none" *ngIf="chat.userid != userid" >
+     <ion-label class="ion-text-left">
+      <p>{{ other_username }}</p>
+      <h2>
+        <b>
+          {{chat.msg}}
+        </b>
+      </h2>
+     </ion-label>
+
+   </ion-item>
+
+   <!-- my chat -->
+   <ion-item lines="none" *ngIf="chat.userid == userid" >
+    <ion-label class="ion-text-right">
+     <p>you</p>
+     <h2>
+       <b>
+         {{chat.msg}}
+       </b>
+     </h2>
+    </ion-label>
+
+  </ion-item>
+
+  </div>
 </ion-content>
-<ion-footer size="12" size-sm="8" offset-sm= "2" no-border>
-
-		<ion-toolbar>
-			<form [formGroup]="form">
-				<div class="bar bar-footer bar-balanced chat-box-container">
-					<ion-input class="chat-editor-box" placeholder="Type Your Message Here.." type="text" formControlName="message" ></ion-input>
-						<div class="btnSendChatView">
-						  <button item-right clear  class = "btnAttachMediaView">
-						  <ion-icon name="attach" class="btnAttachMedia"></ion-icon>
-						  </button>
-					  </div>
-					  <div class="btnSendChatView">
-						  <button item-right clear (click)='sendMessage()' class = "btnSendChatView">
-						  <ion-icon name="send" class="btnSendChat"></ion-icon>
-						  </button>
-					  </div>
-			  </div>
-			</form>
-		</ion-toolbar>
-
+<ion-footer>
+  <ion-toolbar>
+    <ion-item>
+      <ion-input [(ngModel)]="textMsg"placeholder="Type here.." (keyup.enter)="send()" ></ion-input>
+    </ion-item>
+  </ion-toolbar>
 </ion-footer>
-
-<!-- (ionBlur)="checkBlur()" (ionFocus)="checkFocus()" (ionInput)="checkInput()" -->

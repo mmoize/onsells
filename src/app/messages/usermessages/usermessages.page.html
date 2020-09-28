@@ -1,0 +1,30 @@
+<ion-content style="margin-top: 20px;" [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
+        <ion-list no-padding>
+          <ion-item *ngFor="let user of users" 
+          (click)="openChatDetail(user.userid, user.username)" routerDirection="forward" >
+            <ion-avatar class="chatImage" slot="start">
+              <ion-img [src]="user.userdp"></ion-img>
+            </ion-avatar>
+            <ion-label>
+              <div class="withcount">
+                <div class="nameAvatar">
+                  <h2 color="light">{{user.username}}
+                  </h2>
+                  <ion-avatar class="chatCount" *ngIf="user.count">{{user.count}}</ion-avatar>
+                </div>
+      
+                <div class="timeEnd">
+                  <ion-text slot="end" color="dark">{{user.time}}</ion-text>
+                </div>
+              </div>
+              <p class="widthHalf">{{user.description}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

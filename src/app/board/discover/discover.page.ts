@@ -292,7 +292,7 @@ checkRoleExistence(id: string):boolean {
  });
   }
 
-onSearchInput(ev){
+onSearchInput(ev) {
 
     // this.searching = true;
 
@@ -423,59 +423,7 @@ onSearchInput(ev){
     this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(result => {
       this.isLoading = false;
     });
-    // this.postsSub = this.postservice.postRes.subscribe(postData => {
-    //   this.loadingPosts = postData;
 
-    //  // console.log('second resultsaa', checkRoleExistence(postData[key].id));
-    //   console.log('my others azx', this.loadingPosts );
-    //   if (!this.loaded) {
-    //     this.listedLoadedPosts = postData;
-    //     this.loaded =true;
-    //   } else {
-
-    //     for (const key in this.listedLoadedPosts) {
-    //       if (this.listedLoadedPosts.hasOwnProperty(key)) {
-    //         const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
-    //         const itshere = checkRoleExistence(this.listedLoadedPosts[key].id);
-    //         console.log('my others azx', itshere);
-    //         if (itshere) {
-    //             console.log('yes its in here', this.listedLoadedPosts[key].id);
-    //         } else  {
-    //           let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
-
-    //           this.listedLoadedPosts = b;
-
-    //           console.log('its the AList', this.listedLoadedPosts);
-    //           this.listedLoadedPosts.push(postData[key]);
-    //         }
-    //       }
-    //     }
-    //     console.log('my others azx', this.listedLoadedPosts);
-
-    //     for (const key in this.loadingPosts) {
-    //       if (this.loadingPosts.hasOwnProperty(key)) {
-    //         const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
-    //         const itshere = checkRoleExistencepost(this.loadingPosts[key].id);
-    //         if (itshere) {
-    //           console.log('its here', );
-    //         } else {
-    //           console.log('its not here', this.loadingPosts[key]);
-    //           // this.listedLoadedPosts.push(this.loadingPosts[key]);
-    //           this.listedLoadedPosts.unshift(this.loadingPosts[key]);
-    //         }
-    //       }
-    //     }
-
-
-    //   }
-
-    // });
-    // this.postsSub = this.postservice.posts.subscribe(resultData => {
-    //   this.loadedPosts = resultData; // data from post service.
-    //   this.relevantPosts = this.loadedPosts;
-    //   this.listedLoadedPosts = this.relevantPosts.slice(1);
-    //   console.log('data postservice',resultData);
-    // });
   }, 650);
 
 }
@@ -513,13 +461,6 @@ onOpenMapFiltersModal() {
        this.latitude = data.data.lat;
        this.longitude = data.data.lng;
        this.currentAreaLocationName = data.data.area_name;
-      //  if (data.data === undefined) {
-      //    //do nothing
-      //  } else if (!data.data) {
-      //   this.latitude = data.data.lat;
-      //   this.longitude = data.data.lng;
-      //   this.currentAreaLocationName = data.data.area_name;
-      //  }
        this.onClickedCategory(this.Selectedcategory);
     });
   });

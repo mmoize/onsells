@@ -11,10 +11,10 @@ firebase.initializeApp({
   apiKey: 'AIzaSyCtn2LcGiGVNK0zao6E-qCU9GY9EjUsU28',
   authDomain: 'placebnb.firebaseapp.com',
   databaseURL: 'https://placebnb.firebaseio.com',
-  projectId: 'project-id',
-  storageBucket: 'project-id.appspot.com',
+  projectId: 'placebnb',
+  storageBucket: 'placebnb.appspot.com',
   messagingSenderId: '107154875684',
-//   appId: '',
+  appId: '1:107154875684:android:32737a1b7e9d2798de3fb1',
 //   measurementId: 'G-measurement-id',
 });
 

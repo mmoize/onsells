@@ -4,6 +4,7 @@ import { AuthService } from './auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Plugins, Capacitor } from '@capacitor/core';
 
+
 import { Platform } from '@ionic/angular';
 
 
@@ -38,12 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.ready().then(() => {
       if (Capacitor.isPluginAvailable('SplashScreen')) {
         Plugins.SplashScreen.hide();
-
-        
-
       }
-
     });
+
+
+
   }
 
   onLogout() {

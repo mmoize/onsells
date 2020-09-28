@@ -1,11 +1,22 @@
+import { SuperTabsConfig } from '@ionic-super-tabs/core';
+import { GroupsPage } from './../groups/groups.page';
+import { FollowersPage } from './../followers/followers.page';
+import { UsermessagesPage } from './../usermessages/usermessages.page';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from '../message.service';
 import { ActionSheetController, PopoverController, NavController, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
+import { StreamService } from '../stream.service';
+import { Channel, MessageResponse } from 'stream-chat';
+import * as firebase from 'firebase';
+import { SuperTabs } from '@ionic-super-tabs/angular';
+
+
+// declare const feather: any;
 
 @Component({
   selector: 'app-message-detail',
@@ -14,14 +25,18 @@ import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.com
 })
 export class MessageDetailPage implements OnInit {
 
-  roomsMessages;
-  topAvatar;
-  currentUsername;
-  currentUserId;
-  refPost;
-  roomId;
-  msgRecipient;
-  form: FormGroup;
+
+  chats = [];
+  textMsg;
+
+//other's data
+other_username;
+other_userid;
+
+//my data
+userid
+
+  
 
   constructor(private messageService: MessageService,
               public actionSheetController: ActionSheetController,
@@ -31,138 +46,65 @@ export class MessageDetailPage implements OnInit {
               private route: ActivatedRoute,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
-    ) { } 
+              public streamService: StreamService,
+    ) { 
+      this.other_username = sessionStorage.getItem('other_username');
+      this.other_userid = sessionStorage.getItem('other_userid'); 
+      // this.other_username = this.userid = JSON.stringify(sessionStorage.getItem('other_userid'));
+      this.getUserData();
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(async paramMap => {
-      console.log('this is the id',paramMap.get('roomId') );
-      if (!paramMap.has('roomId')) {
-        this.navCtrl.navigateBack('/messages');
-        return;
-      }
+      setTimeout(() => {
+        console.log('this is other', this.other_username);
+        firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).orderBy('time')
+        .onSnapshot(snapRes => {
+          console.log('this is other', snapRes);
+          this.chats = []; // clears the chats array for replacations error.
+          snapRes.forEach(child => {
+             this.chats.push(child.data());
+           });
+        });
+      }, 1000);
 
-      (await this.messageService.fetchMessageDetail(paramMap.get('roomId'))).subscribe(resData => {
-        let newData = null;
-        newData = resData;
-        newData.reverse();
-        console.log('this is newdata', newData);
-        this.roomsMessages = newData;
-        console.log('msg', this.roomsMessages);
-        console.log('this is room', this.roomsMessages[0].data.msg_data.recipient.id);
-        
-        this.msgRecipient = this.roomsMessages[0].data.msg_data.recipient.id;
-        if (this.roomsMessages[0].data.sent) {
-
-          this.topAvatar = this.roomsMessages[0].data.msg_data.recipient;
-          this.msgRecipient = this.roomsMessages[0].data.msg_data.recipient.id;
-          this.refPost = this.roomsMessages[0].data.msg_data.referenced_post.id;
-          this.roomId = this.roomsMessages[0].data.msg_data.room.id;
-          console.log('this is avatar', this.topAvatar);
-
-        } else if (this.roomsMessages[0].data.received) {
-
-          this.msgRecipient = this.roomsMessages[0].data.msg_data.sender.id;
-          this.topAvatar = this.roomsMessages[0].data.msg_data.sender;
-          this.refPost = this.roomsMessages[0].data.msg_data.referenced_post.id;
-          this.roomId = this.roomsMessages[0].data.msg_data.room.id;
-          console.log('this is avatar', this.topAvatar);
-          
-        }
-      });
-    });
-
-    this.form = new FormGroup({
-      message: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [Validators.required]
-      }),
-
-    });
-
-
-  }
-
-
-  async ionViewWillEnter(){
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicUsername = dic.username;
-    this.currentUsername = dicUsername;
-  }
-
-
-
-
-  logScrollStart() {
-    console.log('logScrollStart : When Scroll Starts');
-  }
-
-  logScrolling($event) {
-    console.log('logScrolling : When Scrolling ', $event.detail.scrollTop);
-    if ($event.detail.scrollTop === 0) {
-      console.log('scroll reached to top');
 
     }
+
+
+    async getUserData() {
+      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+      const userDicData = JSON.parse(value);
+      const dicToken = userDicData.token;
+      this.userid = JSON.stringify(userDicData.user_id);
+    
+    }
+
+
+  async ngOnInit() {
+
   }
 
-  logScrollEnd() {
-    console.log('logScrollEnd : When Scroll Ends');
-  }
+  send() {
 
 
-
-
-
-  sendMessage() {
-    const data = new FormData();
-    data.append('message', this.form.value.message);
-    data.append('recipient', this.msgRecipient);
-    data.append('id', this.roomId );
-    data.append('referenced_post', this.refPost);
-
-    this.messageService.sendExistMsgRoom(data).then(async () =>{
-      (await this.messageService.fetchMessageDetail(this.roomId)).subscribe(resData => {
-        let newData = null;
-        newData = resData;
-        newData.reverse();
-        this.roomsMessages = newData;
-        console.log('msg', this.roomsMessages);
-        console.log('this is room', this.roomsMessages[0].data.msg_data.recipient.id);
-        
-        this.msgRecipient = this.roomsMessages[0].data.msg_data.recipient.id;
-        if (this.roomsMessages[0].data.sent) {
-
-          this.topAvatar = this.roomsMessages[0].data.msg_data.recipient;
-          this.msgRecipient = this.roomsMessages[0].data.msg_data.recipient.id;
-          this.refPost = this.roomsMessages[0].data.msg_data.referenced_post.id;
-          this.roomId = this.roomsMessages[0].data.msg_data.room.id;
-          console.log('this is avatar', this.topAvatar);
-
-        } else if (this.roomsMessages[0].data.received) {
-
-          this.msgRecipient = this.roomsMessages[0].data.msg_data.sender.id;
-          this.topAvatar = this.roomsMessages[0].data.msg_data.sender;
-          this.refPost = this.roomsMessages[0].data.msg_data.referenced_post.id;
-          this.roomId = this.roomsMessages[0].data.msg_data.room.id;
-          console.log('this is avatar', this.topAvatar);
-          
-        }
-      });
+    //my chats collection
+    firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).add({
+      time:Date.now(),
+      userid: this.userid,
+      msg: this.textMsg
     });
 
-  }
 
-
-  openModal() {
-    this.modalCtrl.create({
-      component: UserprofileComponent,
-      componentProps: {selectedProfile: this.topAvatar}
-    }).then(modalEl => {
-      modalEl.present();
-      
+    //other's chats collection
+    firebase.firestore().collection('chats').doc(this.other_userid).collection(this.userid).add({
+      time:Date.now(),
+      userid: this.userid,
+      msg: this.textMsg
+    }).then(() => {
+      this.textMsg = '';
     });
+
+
+
   }
-  
 
 
 }

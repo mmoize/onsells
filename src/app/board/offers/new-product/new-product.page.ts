@@ -438,7 +438,7 @@ export class NewProductPage implements OnInit {
       setTimeout(() => {
         loadingEl.dismiss();
         this.routes.navigateByUrl(`/board/offers`);
-      }, 2000); 
+      }, 4000); 
 
     });
 

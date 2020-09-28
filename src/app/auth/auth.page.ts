@@ -4,6 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
+import { ProfileService } from '../accounts/profile.service';
+import * as firebase from 'firebase';
+
+
 
 
 
@@ -20,7 +24,8 @@ export class AuthPage implements OnInit {
   constructor(private authService: AuthService,
               private router: Router ,
               private loadingCtrl: LoadingController,
-              private alertCtrl: AlertController
+              private alertCtrl: AlertController,
+              private profileservice: ProfileService,
              ) { }
 
   ngOnInit() {

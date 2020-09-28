@@ -1,113 +1,93 @@
-
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title style="color: white;">Messages</ion-title>
-    <ion-buttons  fill="clear" slot="end" size="small" icon-only (click)="openMenu($event)">
-      <ion-menu-button menu="m1"></ion-menu-button>
-    </ion-buttons>
+<!-- <ion-header>
+  <ion-toolbar>
+   <ion-title>Chat</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-list-header>
+  Users
+</ion-list-header>
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-sm="8" offset-sm= "2">
-        <ion-card (click)="onClickDetail(user.msg.id)" id="recentCard" *ngFor="let user of inbox" >
-          <ion-item-sliding id="item100">
-            <ion-item >        <!--(click)="openViewImageModal(data)" -->
-              <img   slot="start"   src="{{user.avatar || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}" style="width: 42px; height: 42px; border-radius: 50%; ">
-            <ion-label>
-              <h2>{{user.msg.newest[0].recipient.first_name}}</h2>
-              <h4 *ngIf="user.recieved" id="ureadmsglist">{{user.msg.newest[0].message}} </h4>
-              <h4 *ngIf="user.sent" >{{user.msg.newest[0].message}} </h4>
-            </ion-label>
-            <ion-note color="success" slot="end">
-               <ion-icon *ngIf="user.unread"  name="ellipse"></ion-icon>
-            </ion-note>
-          </ion-item> 
-          <ion-item-options side="start">
-            <ion-item-option>
-              <ion-icon slot="icon-only" name="heart"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-      
-          <ion-item-options side="end">
-            <ion-item-option   color="danger">
-              <ion-icon *ngIf="user.recieved"  slot="icon-only" name="mail-open-outline"></ion-icon>
-              <ion-icon *ngIf="user.sent" slot="icon-only" name="mail-outline"></ion-icon>
-            </ion-item-option>
-            <!-- <ion-item-option>
-              <ion-icon slot="icon-only" name="star"></ion-icon>
-            </ion-item-option> -->
-          </ion-item-options>
-          </ion-item-sliding>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+  <ion-list>
+    Profile
+  </ion-list>
+  <ion-item>
+    <ion-avatar slot="start">
 
-  <!-- <ion-content color="mainColor" style="overflow: hidden;height: -webkit-fill-available;">
-    <ion-list style="border-top-left-radius: 20px; border-top-right-radius: 20px; overflow: auto; height: 97%; margin-left: 16px; margin-right: 16px; -webkit-margin-top-collapse: separate; margin-top: 16px;">
-      <div *ngFor="let user of inbox">
-        <div *ngIf="user">
-          <ion-row style="height: max-content;">
-            <ion-col col-12 col-md-6 col-lg-4>
-              <ion-item class="user" (click)="tappedOnMessage($event, user)">
-                <ion-row style="width: 100%">
-                  <ion-col style="max-width: max-content">
-                    <img src="{{user.msg.newest[0].recipient.image || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}" style="width: 42px; height: 42px; border-radius: 50%; ">
-                  </ion-col>
-                  <ion-col style="width: max-content">
-                    <ion-row>
-                        <span>
-                          {{user.msg.newest[0].recipient.first_name}}
-                        </span>
-                        <span *ngIf="user.blockedByMe" style="color: red; line-height: 22px; font-size: 14px; font-weight: bold;">
-                          blocked
-                        </span>
-                    </ion-row>
-                    <ion-row>
-                      <ion-label color="primary" *ngIf="user.recieved"  style="line-height: 22px; font-size: 14px; color: #9E9E9E;">
-                        {{user.msg.newest[0].message}} 
-                      </ion-label>
-                      <ion-label *ngIf="user.sent" style="line-height: 22px; font-size: 14px; color: #9E9E9E;">
-                        {{user.msg.newest[0].message}} a
-                      </ion-label>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col style="max-width: 24px; padding: 0px; margin-left: 10%;">
-                    <span *ngIf="user.unreadCount > 0" style="border-radius: 50%;width: 24px;height: 24px;padding-top: 6px;background-color: red;color: #fff;text-align: center;font-size: 12px; display: flex; justify-content: center; margin-top: 6px; position:absolute; right: 0px;">
-                      {{user.unreadCount}}
-                    </span>
-                  </ion-col>
-                  <ion-col style="max-width: 24px; padding: 0px; margin-left: 10%; margin-top: 2%;" (click)="presentActionSheet($event, user)">
-                    <ion-icon name="more" style="width: 24px; height: 24px;"></ion-icon>
-                  </ion-col>
-                </ion-row>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </div>
-      </div>
-      <ion-item lines="none" (click)="loadNextUsers($event)" class="loadButton">
-        <button style="margin: auto; background: white; border: 1px solid gray; padding: 5px;">
-          Load More User
-        </button>
-      </ion-item>
-    </ion-list>
-  </ion-content> -->
+    </ion-avatar>
+    <ion-label>
+      <h2>
+        <b>{{username}}</b>
+      </h2>
+      <p>
+        @{{ username }}
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" *ngFor="let user of users"  (click)="openChatDetail(user.userid, user.username)">
+    <ion-avatar slot="start">
+
+    </ion-avatar>
+    <ion-label>
+      <h2>
+        <b>{{ user.userid }}</b>
+      </h2>
+      <p>
+        @{{user.username}}
+      </p>
+    </ion-label>
+  </ion-item>
+</ion-content> -->
 
 
 
-<!-- 
-<ion-content>
+<ion-header>
+  <ion-toolbar *ngIf="!searchbar" color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons>
+    <ion-title color="light"><b>Fleeks</b></ion-title>
+    <ion-buttons slot="end">
+      <ion-icon color="light" size="large" name="search-sharp" (click)="searchbar = true"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-icon color="light" (click)="openProfile()" size="large" name="person-circle-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="searchbar">
+    <ion-searchbar placeholder="Search..."
+     (ionCancel)="searchbar = false" [debounce]="250" showCancelButton="always"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
 
-<ion-button (click)="onClick()">click me</ion-button>
-
-</ion-content>
- -->
 
 
+<super-tabs activeTabIndex="0" [config]="{ debug: true, sideMenu: 'left', allowElementScroll: true, nativeSmoothScroll: true }">
+  <super-tabs-toolbar color="primary" slot="top">
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">Chat</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">Followers
+      </ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">Group</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container autoScrollTop>
+    <super-tab>
+      <ion-nav [root]="tab1"></ion-nav>
+    </super-tab>
+    <super-tab>
+      <ion-nav [root]="tab2"></ion-nav>
+    </super-tab>
+    <super-tab>
+      <ion-nav [root]="tab3"></ion-nav>
+    </super-tab>
+  </super-tabs-container> 
+</super-tabs>
 
 
