@@ -54,7 +54,6 @@ export class PostService {
   get posts() {
     console.log('its main db', this._posts);
     return this._posts.asObservable();
-    
   }
 
   constructor(private authService: AuthService,
@@ -207,7 +206,6 @@ export class PostService {
   } else {
     this.taggit  = dicParam.taggit;
   }
-    
     
     this.locateUser();
     return this.authService.userToken.pipe(switchMap(token => {

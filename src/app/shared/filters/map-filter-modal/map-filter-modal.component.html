@@ -5,12 +5,12 @@
     <ion-row>
       <ion-col size="12" size-sm="8" offset-sm= "2">
         <ion-item lines="none">
-          <ion-label style="font-weight: bold;" slot=start>Distance: </ion-label>
+          <ion-label style="font-weight: bold;margin: 0px;padding:0px" slot=start>Distance: </ion-label>
 
           <ion-input placeholder="km" [ngModel]="distanceWithin" (ngModelChange) ="onChange($event)" type="number"></ion-input>
 
           <ion-button (click)="onclick()" shape="round" fill="outline">
-            <ion-icon slot="start" name="locate"></ion-icon>
+            <ion-icon name="locate"></ion-icon>
               Where I Am
           </ion-button>
           <ion-button   (click)="onClickclose()" shape="round" fill="outline">

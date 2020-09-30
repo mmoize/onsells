@@ -3,7 +3,7 @@ import { AuthService, AuthResponseData } from './auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ProfileService } from '../accounts/profile.service';
 import * as firebase from 'firebase';
 
@@ -17,7 +17,10 @@ import * as firebase from 'firebase';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
+  form;
   isLogin = true;
+  isPassReset = false;
+  ispassTokenInput= false;
 
   isLoading = false;
 
@@ -29,6 +32,21 @@ export class AuthPage implements OnInit {
              ) { }
 
   ngOnInit() {
+
+    this.form = new FormGroup({
+      email: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.required]
+      }),
+      password: new FormControl(null, {
+        updateOn: 'blur',
+        validators: []
+      }),
+      token: new FormControl(null, {
+        updateOn: 'blur',
+        validators: []
+      }),
+    });
   }
 
 
@@ -66,7 +84,33 @@ export class AuthPage implements OnInit {
     this.isLoading = true;
   }
 
+  onPasswordReset() {
 
+    const data = new FormData();
+    data.append('email', this.form.value.email);
+    console.log('this is reset email', this.form.value.email);
+
+    this.authService.onRequestPasswordReset(data);
+
+    setTimeout(() => {
+      this.ispassTokenInput = true;
+    }, 1000);
+
+  }
+
+  passwordOnTokenReset() {
+    const data = new FormData();
+    data.append('token', this.form.value.token);
+    data.append('password', this.form.value.password);
+
+
+    this.authService.onRequestNewPasswordReset(data);
+    
+    setTimeout(() => {
+      this.isPassReset= false;
+    }, 1000);
+
+  }
 
 
   onSubmit(form: NgForm) {
@@ -78,6 +122,7 @@ export class AuthPage implements OnInit {
     const username = form.value.username;
 
     this.authenticate(email,  password, username);
+    
   }
 
   onSwitchAuthMode() {
@@ -93,6 +138,10 @@ export class AuthPage implements OnInit {
     }).then(alertEl => {
       alertEl.present();
     });
+  }
+
+  onPassReset() {
+    this.isPassReset = true;
   }
 
 }

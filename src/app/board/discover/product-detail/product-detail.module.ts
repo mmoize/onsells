@@ -8,12 +8,16 @@ import { ProductDetailPageRoutingModule } from './product-detail-routing.module'
 
 import { ProductDetailPage } from './product-detail.page';
 
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ProductDetailPageRoutingModule
+    ProductDetailPageRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   declarations: [ProductDetailPage]
 })

@@ -162,7 +162,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     console.log('senddd post', this.post.owner.username);
     this.modalCtrl.create({
       component: ChatPage,
-      componentProps: {seletedpost: this.post}
+      componentProps: {'selectedpost': this.post}
     }).then(modalEl => {
       modalEl.present();
     });

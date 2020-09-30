@@ -1,3 +1,4 @@
+import { ProfileService } from './../accounts/profile.service';
 import { UserprofileComponent } from './../shared/userprofile/userprofile.component';
 import { MessageService } from './message.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -32,6 +33,9 @@ export class MessagesPage implements OnInit {
   tab3 = GroupsPage;
   searchbar = false;
   @ViewChild(SuperTabs) superTabs: SuperTabs;
+
+  currentuserdp;
+
   opts = {
     icon: false,
     label: true,
@@ -61,6 +65,7 @@ export class MessagesPage implements OnInit {
     private router: Router,
     private storage: AngularFireStorage,
     private navCtrl: NavController,
+    private profileservice: ProfileService,
 
   ) {
 
@@ -133,6 +138,20 @@ export class MessagesPage implements OnInit {
     sessionStorage.setItem('other_username', username);
     this.routes.navigateByUrl('messages/message-detail');
   }
+
+  async ionViewWillEnter(){
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const userid = dic.user_id;
+    this.profileservice.loadUserProfile(userid).subscribe(resData => {
+        this.currentuserdp = resData.image;
+     });
+  }
+
+  onCurrentUserProfile() {
+    this.routes.navigateByUrl('/accounts/profile');
+  }
+
 
 
 

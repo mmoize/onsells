@@ -114,20 +114,6 @@ export class UsermessagesPage implements OnInit {
               private profileService: ProfileService,
               private routes: Router,
               ) {
-                // firebase.firestore().collection('chats').doc(this.userid).collection(this.otherUserId).orderBy('time')
-                // .onSnapshot(snapRes => {
-          
-                //   const chats = []; // clears the chats array for replacations error.
-                //   snapRes.forEach(child => {
-                //     console.log('this is snap', child.data());
-                //     chats.push(child.data());
-                //    });
-                // });
-
-
-
-                
-
 
                 this.setCurrentUserDetails();
                 setTimeout(() => {
@@ -176,29 +162,17 @@ export class UsermessagesPage implements OnInit {
                     });
 
 
-                  // setTimeout(() => {
-                  //   firebase.firestore().collection('chats').doc(this.userid).collection(this.userid)
-                  //   .onSnapshot(snapRes => {
-                  //     console.log('this is snap1', snapRes);
-                  //     const chats = []; // clears the chats array for replacations error.
-                  //     snapRes.forEach(child => {
-                  //       console.log('this is snap2', child.data());
-                  //        chats.push(child.data());
-                  //      });
-                  //   });
-                  // }, 1000);
-
                   firebase.firestore().collection('chats').doc(this.userid).collection(this.userid).get().then(resData => {
                     
                     resData.forEach(childData => {
-                        if (childData.data()['userid'] != this.userid) {
-                          //this.users.push(childData.data());
+                        if (childData.data()['userid'] !== this.userid) {
+                          // this.users.push(childData.data());
                           console.log('user moses1', childData.data()['userid']);
                         }
                         console.log('user moses2', childData.data());
                       });
 
-                      console.log('user others moses', resData);
+                    console.log('user others moses', resData);
                   });
 
                  }, 1000);

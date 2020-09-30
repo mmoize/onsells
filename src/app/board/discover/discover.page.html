@@ -15,6 +15,10 @@
         <ion-buttons slot="start">
           <ion-menu-button menu="m1"></ion-menu-button>
         </ion-buttons>
+        <ion-img style="height:50px;width:180px" src="assets/fleekslogo.png"></ion-img>
+        <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
+          <img [src]="currentUserDP" class="img-head"/>
+        </ion-buttons>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -25,7 +29,7 @@
     <ion-row id="rowsearch">
       <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
         <div id="divsearchInput">
-          <ion-searchbar   (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
+          <ion-searchbar [(ngModel)]="searchtext"  (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
         </div>
       </ion-col>
     </ion-row>
@@ -33,7 +37,7 @@
     <ion-row>
       <ion-col size ="12" size-sm="8" offset-sm ="2">
         <div >
-          <h2  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large ">{{ Selectedcategory.name }}</h2>
+          <h2  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #474747  ; ">{{ Selectedcategory.name }}</h2>
         </div>
       </ion-col>
     </ion-row>

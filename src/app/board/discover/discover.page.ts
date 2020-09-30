@@ -1,3 +1,4 @@
+import { ProfileService } from './../../accounts/profile.service';
 import { Category } from './../category.model';
 import { FcmService } from './../../fcm.service';
 import { Router } from '@angular/router';
@@ -24,6 +25,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
+
+  currentUserDP;
+
   public items: any;
   isLoading = false;
   private postsSub: Subscription;
@@ -37,6 +41,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   searching: any = false;
   searchTerm: string = '';
   searchControl: FormControl;
+  searchtext;
   taggit;
   
   currentAreaLocationName;
@@ -160,48 +165,46 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
 
 constructor(public postservice: PostService,
-            private authservice: AuthService,
             private routes: Router,
-            private platForm: Platform,
+            private profileservice: ProfileService,
             private modalCtrl: ModalController,
 
               ) {
                 this.searchControl = new FormControl();
+                this.onSearchListings();
+                this.getCurrentUserProfile();
                }
 
-checkRoleExistence(id: string):boolean {
-    return this.loadedPosts.some(r => r.id === id);
-  }
-
-
-
+  // checks if new listings are already in display
+  checkRoleExistence(id: string):boolean {
+      return this.loadedPosts.some(r => r.id === id);
+    }
 
 
    ngOnInit() {
 
+    // When there's no selected category.
     if (!this.Selectedcategory) {
       this.Selectedcategory = this.categoryList[0];
-      console.log(this.Selectedcategory);
     }
 
+    // listings PostService call for listings.
     setTimeout(() => {
 
       this.postsSub = this.postservice.postRes.subscribe(postData => {
         this.loadingPosts = postData;
 
-       // console.log('second resultsaa', checkRoleExistence(postData[key].id));
-
         if (!this.loaded) {
           this.listedLoadedPosts = postData;
-          this.loaded =true;
+          this.loaded = true;
         } else {
 
           for (const key in this.listedLoadedPosts) {
             if (this.listedLoadedPosts.hasOwnProperty(key)) {
               const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
-              const itshere = checkRoleExistence(this.listedLoadedPosts[key].id);
+              const listingExists = checkRoleExistence(this.listedLoadedPosts[key].id);
 
-              if (itshere) {
+              if (listingExists) {
                   // console.log('yes its in here', this.listedLoadedPosts[key].id);
               } else  {
                 let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
@@ -216,17 +219,14 @@ checkRoleExistence(id: string):boolean {
           for (const key in this.loadingPosts) {
             if (this.loadingPosts.hasOwnProperty(key)) {
               const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
-              const itshere = checkRoleExistencepost(this.loadingPosts[key].id);
-              if (itshere) {
-                // console.log('its here', );
+              const listingExists = checkRoleExistencepost(this.loadingPosts[key].id);
+              if (listingExists) {
+                // Do nothing.
               } else {
-                //console.log('its not here', this.loadingPosts[key]);
-                // this.listedLoadedPosts.push(this.loadingPosts[key]);
                 this.listedLoadedPosts.unshift(this.loadingPosts[key]);
               }
             }
           }
-
 
         }
 
@@ -234,14 +234,13 @@ checkRoleExistence(id: string):boolean {
 
     }, 400);
 
-
   }
 
   onSearch() {
-      this.listedLoadedPosts = this.items;
+    this.listedLoadedPosts = this.items;
   }
 
-  async ionViewDidEnter() {
+  async onSearchListings() {
 
 
   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
@@ -263,56 +262,48 @@ checkRoleExistence(id: string):boolean {
   dicParam['usertoken'] = dicToken;
   dicParam['searchTerm'] = search;
   dicParam['taggit'] = this.taggit;
+
   if (this.categoryId === 0 || this.categoryId === undefined) {
-    dicParam['category'] = 'None';
+      dicParam['category'] = 'None';
   } else {
     dicParam['category'] = this.categoryId.id;
   }
+ 
+  this.searchTerm = search;
 
-  this.searchTerm= search;
-  console.log('this is search', search);
-   // this.setFilteredItems();
   this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(resData => {
-     console.log('this is there posts', resData);
-     if (resData.length >= 0) {
-      this.listedLoadedPosts = resData;
-      this.searching = false;
-     } else {
-       // this code displayes data after user search returns '0 posts'
-       this.searching = false;
-      //  setTimeout(() => {
-      //    const categoryId = 0
-      //    this.onClickedCategory(categoryId).then(resData => {
-      //      console.log('test if its working', resData);
-      //    });
-      //  }, 1000);
-     }
+        console.log('this is there posts', resData);
+        if (resData.length >= 0) {
+          this.postsSub = this.postservice.postRes.subscribe(postData => {
+            this.listedLoadedPosts = postData;
+            this.searching = false;
+            this.searchtext = '';
+          });
+        } else {
+          this.searching = false;
+        }
 
-  });
- });
+      });
+    });
   }
 
-onSearchInput(ev) {
+    onSearchInput(ev) {
 
-    // this.searching = true;
+      if (ev.target.value.length <= 1) {
+        this.searching = false;
+      } else if (ev.target.value.length > 1) {
+        this.searching = true;
+      }
 
-    if (ev.target.value.length <= 0) {
-      this.searching = false;
-    } else if (ev.target.value.length > 0) {
-      this.searching = true;
     }
-}
 
-  // setFilteredItems() {
-  //   this.items = this.postservice.filterItems(this.searchTerm);
-  //   console.log('here is items', this.searchTerm);
-  // }
+
 
 
     
   resetCategoryFilters(category) {
-    this.minFilterPrice=undefined;
-    this.maxFilterPrice=undefined;
+    this.minFilterPrice = undefined;
+    this.maxFilterPrice = undefined;
     this.onClickedCategory(category);
   }
 
@@ -394,7 +385,14 @@ onSearchInput(ev) {
     });
   }
 
-
+  async getCurrentUserProfile() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const userid = dic.user_id;
+    this.profileservice.loadUserProfile(userid).subscribe(resData => {
+      this.currentUserDP = resData.image;
+    });
+  }
 
   async ionViewWillEnter() {
 

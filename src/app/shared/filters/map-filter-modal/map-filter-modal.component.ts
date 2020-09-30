@@ -11,19 +11,21 @@ import { map } from 'rxjs/operators';
   templateUrl: './map-filter-modal.component.html',
   styleUrls: ['./map-filter-modal.component.scss'],
 })
-export class MapFilterModalComponent implements OnInit, OnDestroy {
+export class MapFilterModalComponent implements OnInit, AfterViewInit, OnDestroy {
   map: any;
   address: string;
   placesId;
   lat;
   long;
+  clickListener: any;
 
   autocomplete: { input: string; };
   autocompleteItems: any[];
   location = {};
   GoogleAutocomplete: any;
 
-  distanceWithin;
+
+  distanceWithin = 20000;
 
   @Input() center: {lat: -33.881840181840495, lng: 151.20684653014064};
   @Input() selectable = true;
@@ -33,7 +35,6 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
   circle;
   areaName;
 
-  clickListener: any;
 
   googleMaps: any;
 
@@ -46,7 +47,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
               public zone: NgZone,
               private alertCtrl: AlertController,
               private renderer: Renderer2) {
-
+    this.ngAfterViewInit();
     this.autocomplete = { input: '' };
     this.autocompleteItems = [];
     this.getGoogleMapsAutoComplete().then(googleMaps => {
@@ -64,24 +65,6 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
     });
     }
 
-  //   ngAfterViewInit() {
-  //     this.getGoogleMapsAutoComplete().then(googleMaps => {
-  //       this.GoogleAutocomplete = new googleMaps.places.AutocompleteService();
-  //       this.googleMaps = googleMaps;
-  //       const mapEl = this.mapElementRef.nativeElement;
-  //       this.map = new googleMaps.Map(mapEl, {
-  //         center: {lat: this.lat, lng: this.long},
-  //         zoom: 10
-  //       });
-
-  //       this.googleMaps.event.addListenerOnce(this.map, 'idle', () => {
-  //         this.renderer.addClass(mapEl, 'visible');
-  //       });
-  //     }
-  //   );
-  //  }
-
-
 
     ngOnDestroy() {
       //  if (this.clickListener) {
@@ -95,7 +78,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
 
   }
 
-  ionViewWillEnter() {
+  ngAfterViewInit() {
 
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       this.showErrorAlert();
@@ -127,10 +110,54 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
           center: {lat: this.lat, lng: this.long},
           zoom: 10
         });
-    }
+
+      this.googleMaps.event.addListenerOnce(map, 'idle', () => {
+          this.renderer.addClass(mapEl, 'visible');
+        });
+
+      if (this.selectable) {
+          this.clickListener = this.map.addListener('click', event => {
+            const selectedCoords = {
+             lat: event.latLng.lat(),
+             lng: event.latLng.lng()
+            };
+            this.lat = selectedCoords.lat;
+            this.long = selectedCoords.lng;
+            const marker = new this.googleMaps.Marker({
+              position: selectedCoords,
+              // tslint:disable-next-line: object-literal-shorthand
+              map: this.map,
+              title: 'Picked Location'
+            });
+            marker.setMap(this.map);
+
+            this.circle = new this.googleMaps.Circle({
+              // position: this.cords,
+              // tslint:disable-next-line: object-literal-shorthand
+              map: this.map,
+              title: 'Picked Location',
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35,
+              center: selectedCoords,
+              radius: this.distanceWithin
+            });
+            console.log('this is radi', this.distanceWithin);
+            this.circle.setMap(this.map);
+            this.circle.setVisible(true);
 
 
-    // this.onclick();
+
+
+
+
+          });
+        }
+
+
+      }
 
   }
 
@@ -216,7 +243,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
   }
 
 
-  onClickclose() {
+onClickclose() {
     const locationData = {};
     locationData['lat']= this.lat;
     locationData['lng']= this.long;
@@ -224,7 +251,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
     this.modalCtrl.dismiss(locationData);
   }
 
-  SelectSearchResult(item) {
+SelectSearchResult(item) {
     /// WE CAN CONFIGURE MORE COMPLEX FUNCTIONS SUCH AS UPLOAD DATA TO FIRESTORE OR LINK IT TO SOMETHING
     // alert(JSON.stringify(item));
     console.log('tthis is the results', item.structured_formatting.main_text);
@@ -238,7 +265,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
   }
 
 
-  UpdateSearchResults() {
+UpdateSearchResults() {
     if (this.autocomplete.input == '') {
       this.autocompleteItems = [];
       return;
@@ -254,7 +281,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  ClearAutocomplete() {
+ClearAutocomplete() {
     this.autocompleteItems = [];
     this.autocomplete.input = '';
   }
@@ -262,7 +289,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
 
 
 
-  onclick() {
+onclick() {
     // this.getGoogleMapsAutoComplete().then(googleMaps => {
     //   this.GoogleAutocomplete = new googleMaps.places.AutocompleteService();
     //   this.googleMaps = googleMaps;
@@ -355,7 +382,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
   }
 
 
-  getnewClickCords() {
+getnewClickCords() {
 
 
 
@@ -373,7 +400,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
   }
 
 
-  getNewsearchCord() {
+getNewsearchCord() {
 
         const geocoder = new this.googleMaps.Geocoder();
         // const sarchedmarker = new googleMaps.Marker({ map: map });
@@ -427,7 +454,7 @@ export class MapFilterModalComponent implements OnInit, OnDestroy {
 
   }
 
-  onChange(event) {
+onChange(event) {
     console.log('this is change', event);
     console.log('this is circle', this.circle.radius);
     this.circle.radius = event;

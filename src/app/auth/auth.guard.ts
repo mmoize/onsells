@@ -19,7 +19,6 @@ export class AuthGuard implements CanLoad  {
     switchMap(isAuthenticated => {
       if (!isAuthenticated) {
         return this.authService.autoLogin();
-        
       } else {
         return of(isAuthenticated);
       }

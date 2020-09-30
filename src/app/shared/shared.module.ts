@@ -9,7 +9,7 @@ import { ImagePickerComponent } from './pickers/image-picker/image-picker.compon
 import { MapFilterModalComponent } from './filters/map-filter-modal/map-filter-modal.component';
 
 @NgModule ({
-    declarations: [LocationPickerComponent,  UserprofileComponent, MapModalComponent, ImagePickerComponent],
+    declarations: [LocationPickerComponent, MapFilterModalComponent, UserprofileComponent, MapModalComponent, ImagePickerComponent],
     imports: [CommonModule, IonicModule],
     exports: [LocationPickerComponent, MapFilterModalComponent,  MapModalComponent, ImagePickerComponent, UserprofileComponent],
     entryComponents: [MapModalComponent, MapFilterModalComponent]

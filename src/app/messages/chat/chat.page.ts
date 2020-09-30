@@ -1,8 +1,8 @@
 import { ProfileService } from './../../accounts/profile.service';
 import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route } from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { ActionSheetController, IonContent } from '@ionic/angular';
+import { ActionSheetController, IonContent, ModalController } from '@ionic/angular';
 import * as firebase from 'firebase';
 import { Post } from 'src/app/board/post.model';
 
@@ -13,9 +13,11 @@ import { Post } from 'src/app/board/post.model';
 })
 export class ChatPage implements OnInit {
 
+  inModalmode = false;
+
   chats = [];
   textMsg;
-  @Input() selectedPost: Post;
+  @Input() selectedpost: Post;
 
   // Others data
   otherUsername;
@@ -120,13 +122,17 @@ export class ChatPage implements OnInit {
 
 
   ngOnInit() {
-    console.log('other users dpaaaaaaaaa', this.selectedPost);
+    console.log('other users dpaaaaaaaaa', this.selectedpost);
     const id = this.actRoute.snapshot.params.id;
     
+    if (this.selectedpost) {
+      this.inModalmode = true;
+    }
   }
 
   constructor(private actRoute: ActivatedRoute,
               public actionSheetController: ActionSheetController,
+              private modalCtrl: ModalController,
               private profileservice: ProfileService,
      ) {
 
@@ -301,7 +307,7 @@ export class ChatPage implements OnInit {
   }
 
 
-  ionViewDidLoad(){
+  ionViewDidLoad() {
     firebase.firestore().collection('currentChats').doc(this.userid).collection(this.otherUserId)
     .add({
       time: Date.now(),
@@ -346,8 +352,11 @@ export class ChatPage implements OnInit {
       this.textMsg = '';
     });
 
+  }
 
 
+  closeModal() {
+    this.modalCtrl.dismiss();
   }
 
 

@@ -18,19 +18,19 @@ const routes: Routes = [
   },
   {
     path: 'accounts',
-    loadChildren: () => import('./accounts/accounts.module').then( m => m.AccountsPageModule)
+    loadChildren: () => import('./accounts/accounts.module').then( m => m.AccountsPageModule), canLoad: [AuthGuard]
   },
   {
     path: 'board',
-    loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule)
+    loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule), canLoad: [AuthGuard]
   },
   {
     path: 'discover',
-    loadChildren: () => import('./board/discover/discover.module').then( m => m.DiscoverPageModule)
+    loadChildren: () => import('./board/discover/discover.module').then( m => m.DiscoverPageModule), canLoad: [AuthGuard]
   },
   {
     path: 'messages',
-    loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
+    loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule), canLoad: [AuthGuard]
   },
 ];
 

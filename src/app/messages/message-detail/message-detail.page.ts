@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
-import { StreamService } from '../stream.service';
+
 import { Channel, MessageResponse } from 'stream-chat';
 import * as firebase from 'firebase';
 import { SuperTabs } from '@ionic-super-tabs/angular';
@@ -46,7 +46,7 @@ userid
               private route: ActivatedRoute,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
-              public streamService: StreamService,
+
     ) { 
       this.other_username = sessionStorage.getItem('other_username');
       this.other_userid = sessionStorage.getItem('other_userid'); 

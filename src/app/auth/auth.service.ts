@@ -231,4 +231,27 @@ export class AuthService  implements OnDestroy {
     }
   }
 
+
+  onRequestPasswordReset(requestData) {
+    const passReqUrl = 'https://sellet.herokuapp.com/api/password_reset/'
+    
+
+    const data = requestData;
+    const xhr = new XMLHttpRequest();
+    const url = passReqUrl;
+    xhr.open('Post', url);
+    return xhr.send(data);
+  }
+
+  onRequestNewPasswordReset(requestData) {
+    const passReqUrl = 'https://sellet.herokuapp.com/api/password_reset/confirm/'
+    
+    const data = requestData;
+    const xhr = new XMLHttpRequest();
+    const url = passReqUrl;
+    xhr.open('Post', url);
+    return xhr.send(data);
+  }
+
+
 }

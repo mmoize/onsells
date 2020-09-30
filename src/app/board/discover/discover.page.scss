@@ -25,7 +25,7 @@ ion-label {
 h3 {
     background-color: rgb(35, 43, 39, 0.9);
     font-weight: bolder;
-    color: rgba(166, 36, 226, 1);
+    color: rgba(49, 175, 101, 0.87);
     border-radius: 5px;
 }
 #toplay{
@@ -46,7 +46,13 @@ h3 {
 //     margin: 0px;
 
 // }
-
+.img-head{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    // border: 3px solid  rgb(3, 212, 212);;
+    border: 3px solid  rgba(172, 5, 144, 0.699);;
+}
 
 img {
  

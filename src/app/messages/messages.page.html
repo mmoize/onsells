@@ -51,8 +51,11 @@
     <ion-buttons slot="end">
       <ion-icon color="light" size="large" name="search-sharp" (click)="searchbar = true"></ion-icon>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-icon color="light" (click)="openProfile()" size="large" name="person-circle-outline"></ion-icon>
+    <ion-buttons (click)="onCurrentUserProfile()" slot="end">
+      <ion-avatar  style="width: 35px;height: 35px">
+        <ion-img class="img-head" [src]="currentuserdp "></ion-img>
+      </ion-avatar>
+      <!-- <ion-icon color="light" (click)="openProfile()" size="large" name="person-circle-outline"></ion-icon> -->
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="searchbar">

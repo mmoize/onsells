@@ -34,10 +34,64 @@
    </ion-row>
     <ion-row>
       <ion-col size ="12" size-sm="6" offset-sm ="3">
-       <ion-slides  [options]="{ slidesPerView: 'auto', zoom: true, grabCursor: true }">
+      <ion-virtual-scroll style="height: 20vh;" *ngIf="loadedProducts"  [items]="loadedProducts" approxItemHeight="70px">
+
+        <ion-item (click)="onselectItem(product)" id="recentCard" *virtualItem="let product" >
+          <ion-item-sliding id="item100">
+            <ion-item>        <!--(click)="openViewImageModal(data)" -->
+              <ion-thumbnail slot="start">
+                <ion-img  [src]="product.productimage_set[0].image"></ion-img>
+              </ion-thumbnail>
+            <ion-label>
+              <h2>{{ product.title}}</h2>
+              <p>{{ product.description }}</p>
+            </ion-label>
+            <ion-note slot="end">
+              {{ product.created |  date:'shortTime' }}
+              {{ product.created |  date }}
+              <p>
+                  {{ product.price |currency }}
+              </p>
+            </ion-note>
+          </ion-item> 
+          <!-- <ion-item-options side="start">
+            <ion-item-option>
+              <ion-icon slot="icon-only" name="heart"></ion-icon>
+            </ion-item-option>
+          </ion-item-options> -->
+      
+          <ion-item-options side="end">
+            <ion-item-option   color="primary">
+              <h4 style="font-weight: bolder;">Remove</h4>
+              <!-- <ion-icon slot="icon-only" name="trash"></ion-icon> -->
+            </ion-item-option>
+            <!-- <ion-item-option>
+              <ion-icon slot="icon-only" name="star"></ion-icon>
+            </ion-item-option> -->
+          </ion-item-options>
+          </ion-item-sliding>
+        </ion-item>
+
+
+
+        <!-- <ion-item
+        *virtualItem="let post"
+         detail>
+          <ion-thumbnail slot="start">
+            <ion-img  [src]="post.product[0].productimage_set[0].image"></ion-img>
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ post.product[0].title }}</h2>
+            <p>{{ post.product[0].description }}</p>
+          </ion-label>
+        </ion-item> -->
+       </ion-virtual-scroll>
+    </ion-col>
+
+       <!-- <ion-slides  [options]="{ slidesPerView: 'auto', zoom: true, grabCursor: true }">
          <ion-slide *ngFor="let product of loadedProducts" style="width: 150px; height: 200px; border: 2px solid #f8f8f8">
              <ion-card (click)="onselectItem(product)">
-                <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
+             
                 <img id="touched" [src]="product.productimage_set[0].image"/>
                 <ion-card-content>
                               <ion-label >{{ product.title }}</ion-label>
@@ -47,8 +101,8 @@
                 </ion-card-content>
              </ion-card>
          </ion-slide>
-       </ion-slides>
-      </ion-col>
+       </ion-slides> -->
+
     </ion-row>
    </ion-grid>
 
@@ -131,7 +185,7 @@
 
 
 
-
+   <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
 
    <form [formGroup]="form">
    <ion-grid *ngIf="selectedProduct" fixed>

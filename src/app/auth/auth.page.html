@@ -1,10 +1,15 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ isLogin ? 'Login': 'Signup' }}</ion-title>
-  </ion-toolbar>
-</ion-header> -->
+<ion-grid style="height: 90px%; padding:0px">
+  <ion-col text-center style="text-align: center;" size ="12" size-sm="4" offset-sm ="4">
+    <div style="border: 2px green" >
+      <ion-img style="height:70px;width:180px" src="assets/fleekslogo.png"></ion-img>
+    </div>
+  </ion-col>
+</ion-grid>
 
-<ion-content >
+
+
+
+<ion-content *ngIf="!isPassReset"  >
   <form #log="ngForm" (ngSubmit)="onSubmit(log)" >
     <ion-grid *ngIf="isLogin" >
       <ion-row>
@@ -127,6 +132,82 @@
         type="submit" >
            {{ isLogin ? 'Login' : 'Signup' }}
         </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  
+  <ion-button
+  style="margin-top: 100%;"
+  color="primary"
+  type="button" 
+  expand="full"
+  fill="Clear"          
+ (click)="onPassReset()">
+  reset password </ion-button>
+</ion-content>
+
+<ion-content *ngIf="isPassReset"  >
+  <form [formGroup]="form" >
+    <ion-grid >
+      <ion-row>
+        <ion-col size-md="4" offset-md="4">
+          <ion-list style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+           margin-bottom: 20px;">
+            <ion-item *ngIf="!ispassTokenInput"  >
+                <ion-label position="floating">E-Mail</ion-label>
+                <ion-input
+                type="email"
+                formControlName="email"
+                ></ion-input>
+
+              <!-- <ion-item  *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
+                <ion-label >Should be a valid Email address.</ion-label>
+              </ion-item> -->
+            </ion-item>
+
+            <ion-item *ngIf="ispassTokenInput"  lines="none">
+              <ion-label position="floating">Token</ion-label>
+              <ion-input
+              type="text"
+              formControlName="token"
+              ></ion-input>
+              <!-- <ion-item *ngIf="!passToken.valid && passToken.touched" lines="none">
+                <ion-label >Should be a valid Token</ion-label>
+              </ion-item>-->
+             </ion-item > 
+
+             <ion-item *ngIf="ispassTokenInput"  lines="none">
+              <ion-label position="floating">New Password</ion-label>
+              <ion-input 
+                type="password"
+                formControlName="password">
+              </ion-input>
+            </ion-item>
+            <!-- <ion-item *ngIf="!passCtrl.valid && passCtrl.touched" lines="none">
+              <ion-label >Should be a valid Password.</ion-label>
+            </ion-item> -->
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="4" offset-md="4">
+          <ion-button
+          *ngIf="!ispassTokenInput" 
+          color="primary" 
+          expand="block" 
+          (click)="onPasswordReset()" >
+            Send Email
+          </ion-button>
+          <ion-button
+          *ngIf="ispassTokenInput" 
+          color="primary" 
+          expand="block" 
+          (click)="passwordOnTokenReset()" >
+            Reset Password
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

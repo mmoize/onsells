@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: AuthPage
+  },
+  {
+    path: 'passwordreset',
+    loadChildren: () => import('./passwordreset/passwordreset.module').then( m => m.PasswordresetPageModule)
   }
 ];
 
