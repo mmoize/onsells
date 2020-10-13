@@ -5,6 +5,9 @@ import { Plugins } from '@capacitor/core';
 import { ActionSheetController, IonContent, ModalController } from '@ionic/angular';
 import * as firebase from 'firebase';
 import { Post } from 'src/app/board/post.model';
+import { MessageService } from '../message.service';
+import { map } from 'rxjs/operators';
+import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 
 @Component({
   selector: 'app-chat',
@@ -12,6 +15,30 @@ import { Post } from 'src/app/board/post.model';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+
+  email;
+  username;
+  userid;
+  userdp;
+
+  testUsers = [];
+
+  chatuserListTest = [];
+
+
+  title: string = 'fleeks';
+
+  showFiller: boolean = false; //sidebar -toggler
+  users: Array<any>; // users list.
+  public messages: Array<any> = [] // messages array/
+  temp: any; // for handling temporory data from observables.
+  showMessages = false; //Toggle to select a conversation.
+  message: string = ''; // the  message to be sent
+
+  userFilter =  { username: ''};
+
+  showChat = true; 
+  private _scrollToService: ScrollToService;
 
   inModalmode = false;
 
@@ -23,9 +50,9 @@ export class ChatPage implements OnInit {
   otherUsername;
   otherUserId;
   otherUserDp;
+  otherUser;
 
-  // currentUser data
-  userid;
+
 
   @ViewChild('content') content: IonContent;
   @ViewChild('chat_input') messageInput: ElementRef;
@@ -132,15 +159,22 @@ export class ChatPage implements OnInit {
 
   constructor(private actRoute: ActivatedRoute,
               public actionSheetController: ActionSheetController,
+              public msgService: MessageService,
               private modalCtrl: ModalController,
               private profileservice: ProfileService,
-     ) {
+    ) {
 
 
 
     this.getCurrentUserData();
     this.otherUsername = sessionStorage.getItem('other_username');
     this.otherUserId = sessionStorage.getItem('other_userid');
+    const otherUserData = {};
+    otherUserData['userid'] = this.otherUserId;
+    otherUserData['username'] = this.otherUsername;
+    otherUserData['userdp'] = this.otherUserDp;
+    this.otherUser = otherUserData;
+
 
     
     setTimeout(() => {
@@ -148,103 +182,73 @@ export class ChatPage implements OnInit {
         console.log('this is other users profile', resData);
         this.otherUserDp = resData.image;
       });
-    }, 500);
+      this.getCurrentUserChats();
+    }, 400);
 
     setTimeout(() => {
-      this.profileservice.loadUserProfile(this.userid).subscribe(resData => {
-        console.log('this is other users profile', resData);
-        const ref = firebase.firestore().collection('chatUsers').doc(resData.user_id);
-        ref.set(
-          {userid: resData.user_id,
-          userdp: resData.image ,
-          username: resData.username},
-          {merge: true}
-        );
+      this.loadUsers(otherUserData);
+    }, 900);
 
+ 
+  }
+
+
+  getCurrentUserChats() {
+    console.log('imaaage', this.msgService.getDisplayP(this.userid));
+    this.msgService.setCurrentUser(this.userid); //setting up the uid in the service for easy access.
+    this.msgService.getUsers().pipe(map(actions => {
+      return actions.map(resData => {
+        const data = resData.payload.doc.data();
+        const id = resData.payload.doc.id;
+        return {...data};
       });
-    }, 500);
+    })
+  ).subscribe(data => {
+
+    console.log('data',  this.msgService.currentUser.conversations );
+    this.users = data.filter(item => {
+      const find  = this.msgService.currentUser.conversations.find(resElement => resElement.userid === item.userid);
+      console.log('data',  find  );
+      console.log('data1',  item );
+      if (!find) {
+        return item;
+      }
+    });
+    console.log('data users', this.users );
+  });
+}
 
 
-    setTimeout(() => {
-      firebase.firestore().collection('chats').doc(this.userid).collection(this.otherUserId).orderBy('time')
-      .onSnapshot(snapRes => {
+  loadUsers(user) {
+    console.log('this is resData chat', user);
+    if (this.msgService.currentUser.conversations === undefined) {
+      this.msgService.currentUser.conversations = [];
+    }
+  
+    const chats = [...this.msgService.currentUser.conversations];
+    const find = chats.find(resItem => resItem.userid === user.userid);
+    console.log('this is resData find', find);
+    if (find) {
+      this.msgService.getChat(find.chatid).subscribe(resData => {
+        this.temp = resData;
+       
+        this.msgService.chat = this.temp[0];
+        console.log('this is resData chat', this.msgService.chat);
 
-        this.chats = []; // clears the chats array for replacations error.
-        snapRes.forEach(child => {
-          console.log('this is snap', child.data());
-           this.chats.push(child.data());
-         });
+        this.messages = this.msgService.chat.messages === undefined ? [] : this.msgService.chat.messages;
+        this.showMessages = true;
+        console.log('this is resData chat', this.messages);
+        setTimeout(() => {
+          this.triggerScrollTo() //scroll to bottom
+        }, 1000);
+        return
       });
-    }, 1000);
-
-    this.msgList = [
-      {
-        userId: this.User,
-        userName: this.User,
-        userAvatar: 'assets/driver.jpeg',
-        time: '12:01 pm',
-        message: 'Hey, that\'s an awesome chat UI',
-        upertext: 'Hello'
-      },
-      {
-        userId: this.toUser,
-        userName: this.toUser,
-        userAvatar: 'assets/user.jpeg',
-        time: '12:01 pm',
-        message: 'Right, it totally blew my mind. They have other great apps and designs too!',
-        upertext: 'Hii'
-      },
-      {
-        userId: this.User,
-        userName: this.User,
-        userAvatar: 'assets/driver.jpeg',
-        time: '12:01 pm',
-        message: 'And it is free ?',
-        upertext: 'How r u '
-      },
-      {
-        userId: this.toUser,
-        userName: this.toUser,
-        userAvatar: 'assets/user.jpeg',
-        time: '12:01 pm',
-        message: 'Yes, totally free. Beat that !',
-        upertext: 'good'
-      },
-      {
-        userId: this.User,
-        userName: this.User,
-        userAvatar: 'assets/driver.jpeg',
-        time: '12:01 pm',
-        message: 'Wow, that\'s so cool. Hats off to the developers. This is gooood stuff',
-        upertext: 'How r u '
-      },
-      {
-        userId: this.toUser,
-        userName: this.toUser,
-        userAvatar: 'assets/user.jpeg',
-        time: '12:01 pm',
-        message: 'Check out their other designs.',
-        upertext: 'good'
-      },
-      {
-        userId: this.User,
-        userName: this.User,
-        userAvatar: 'assets/driver.jpeg',
-        time: '12:01 pm',
-        // tslint:disable-next-line:max-line-length
-        message: 'Have you seen their other apps ? They have a collection of ready-made apps for developers. This makes my life so easy. I love it! ',
-        upertext: 'How r u '
-      },
-      {
-        userId: this.toUser,
-        userName: this.toUser,
-        userAvatar: 'assets/user.jpeg',
-        time: '12:01 pm',
-        message: 'Well, good things come in small package after all',
-        upertext: 'good'
-      },
-    ];
-
+    } else {
+      this.msgService.addNewChat().then(async () => {
+        let resEl = await this.msgService.addChat(user);
+      });
+    }
+  
   }
 
   async getCurrentUserData() {
@@ -307,59 +311,89 @@ export class ChatPage implements OnInit {
   }
 
 
-  ionViewDidLoad() {
-    firebase.firestore().collection('currentChats').doc(this.userid).collection(this.otherUserId)
-    .add({
-      time: Date.now(),
-      userid: this.userid,
-      userdp: this.otherUserDp,
-      username: this.otherUsername
-    });
-  }
+  // ionViewDidLoad() {
+  //   firebase.firestore().collection('currentChats').doc(this.userid).collection(this.otherUserId)
+  //   .add({
+  //     time: Date.now(),
+  //     userid: this.userid,
+  //     userdp: this.otherUserDp,
+  //     username: this.otherUsername
+  //   });
+  // }
 
 
-  send() {
+  // send() {
 
 
 
-    const ref = firebase.firestore().collection('chats').doc(this.userid);
-    ref.set(
-      {userid: this.userid},
-      {merge: true}
-    );
+  //   const ref = firebase.firestore().collection('chats').doc(this.userid);
+  //   ref.set(
+  //     {userid: this.userid},
+  //     {merge: true}
+  //   );
 
 
-    // my chats collection
-    firebase.firestore().collection('chats').doc(this.userid).collection(this.otherUserId).add({
-      time: Date.now(),
-      userid: this.userid,
-      msg: this.textMsg
-    });
+  //   // my chats collection
+  //   firebase.firestore().collection('chats').doc(this.userid).collection(this.otherUserId).add({
+  //     time: Date.now(),
+  //     userid: this.userid,
+  //     msg: this.textMsg
+  //   });
 
 
-    // other's chats collection
-    const otheRef = firebase.firestore().collection('chats').doc( this.otherUserId);
-    otheRef.set(
-      {userid: this.otherUserId},
-      {merge: true}
-    );
+  //   // other's chats collection
+  //   const otheRef = firebase.firestore().collection('chats').doc( this.otherUserId);
+  //   otheRef.set(
+  //     {userid: this.otherUserId},
+  //     {merge: true}
+  //   );
 
-    firebase.firestore().collection('chats').doc(this.otherUserId).collection(this.userid).add({
-      time: Date.now(),
-      userid: this.userid,
-      msg: this.textMsg
-    }).then(() => {
-      this.textMsg = '';
-    });
+  //   firebase.firestore().collection('chats').doc(this.otherUserId).collection(this.userid).add({
+  //     time: Date.now(),
+  //     userid: this.userid,
+  //     msg: this.textMsg
+  //   }).then(() => {
+  //     this.textMsg = '';
+  //   });
 
-  }
+  // }
 
 
   closeModal() {
     this.modalCtrl.dismiss();
   }
 
+  sendMessage() {
+    // If message string is empty
+    if (this.message == '') {
+      alert('Enter message');
+      return;
+    }
 
+    const msg = {
+      senderid: this.msgService.currentUser.userid,
+      senderusername: this.msgService.currentUser.username,
+      timestamp: new Date(),
+      content: this.message
+    };
+
+    this.message = '';
+
+
+    this.messages.push(msg);
+    console.log('list', this.messages);
+    this.msgService.pushNewMessage(this.messages).then(() => {
+      console.log('sent');
+    });
+
+
+  }
+  public triggerScrollTo() {
+    const config: ScrollToConfigOptions = {
+      target: 'destination'
+    };
+    this._scrollToService.scrollTo(config);
+  }
 
 
 }

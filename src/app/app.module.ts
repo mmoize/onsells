@@ -20,7 +20,15 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
+import { VideoPlayer } from '@ionic-native/video-player/ngx';
 
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { File } from '@ionic-native/File/ngx';
+import { MediaCapture } from '@ionic-native/media-capture/ngx';
+import { Media } from '@ionic-native/media/ngx';
+import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,11 +43,20 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
             AngularFireModule.initializeApp(environment.firebaseConfig),
             AngularFireAuthModule,
             AngularFireDatabaseModule,
-            AngularFireStorageModule
+            AngularFireStorageModule,
+            NgxIonicImageViewerModule,
+
           ],
   providers: [
     StatusBar,
     SplashScreen,
+    VideoPlayer,
+    ImagePicker,
+    MediaCapture,
+    File,
+    Media,
+    StreamingMedia,
+    PhotoViewer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

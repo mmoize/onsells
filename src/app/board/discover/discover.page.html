@@ -15,7 +15,7 @@
         <ion-buttons slot="start">
           <ion-menu-button menu="m1"></ion-menu-button>
         </ion-buttons>
-        <ion-img style="height:50px;width:180px" src="assets/fleekslogo.png"></ion-img>
+        <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img>
         <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
           <img [src]="currentUserDP" class="img-head"/>
         </ion-buttons>
@@ -47,7 +47,7 @@
       <ion-col  size ="12" size-sm="8" offset-sm ="2">
         <ion-item lines="none">
           <ion-buttons slot="start">
-            <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note>
+            <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
             <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
             <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon>
           </ion-buttons>
@@ -57,7 +57,7 @@
           </ion-item>
           <ion-buttons (click)="onOpenFiltersModal()"  >
             <ion-icon color="primary" name="settings-outline"></ion-icon>
-            <ion-note style="font-weight: bold;"  >filters</ion-note>
+            <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
           </ion-buttons>
         </ion-item>
           <!-- <ion-note (click)="onDisplayFilters()" >filters</ion-note>
@@ -151,16 +151,24 @@
               <div class="pins">
                 <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
                          
-                        <ion-card>
-                          <img style="border-radius: 5px;" (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
-                        </ion-card>
+                      <ion-card    >
+                          <!-- <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img> -->
+                          <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
+                      </ion-card>
                         <div id="toplay">
                           <ion-label >
                               <h3 >{{ post?.product[0].price  |currency }}</h3>
                           </ion-label>
                         </div>
-                        
-        
+                        <!-- <div   id="divViews" >
+                          <ion-label >
+                              <ion-item lines="none">
+                                <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                                <h3 >{{ post?.viewcount}}</h3>
+                              </ion-item>
+                          </ion-label>
+                        </div> -->
+                    
                 </div>
               </div>
 

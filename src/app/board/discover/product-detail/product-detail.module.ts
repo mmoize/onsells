@@ -1,3 +1,4 @@
+import { SharedModule } from 'src/app/shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +11,8 @@ import { ProductDetailPage } from './product-detail.page';
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { ChatPageModule } from 'src/app/messages/chat/chat.module';
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
 
 @NgModule({
   imports: [
@@ -17,6 +20,9 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     IonicModule,
     ProductDetailPageRoutingModule,
+    SharedModule,
+    NgxIonicImageViewerModule,
+    ChatPageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   declarations: [ProductDetailPage]

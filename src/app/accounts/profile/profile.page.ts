@@ -34,9 +34,9 @@ export class ProfilePage implements OnInit {
 
     this.authService.returnUserId().then(resData => {
       this.userId = resData;
-      const tin = resData;
-      console.log('the issue', resData);
-      this.profileservice.loadUserProfile(tin).subscribe(resDatas => {
+      const userid = resData;
+
+      this.profileservice.loadUserProfile(userid).subscribe(resDatas => {
         this.userProfile = resDatas;
         this.imageString = this.userProfile.image;
         this.userProfileData.emit(resData);

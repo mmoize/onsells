@@ -144,7 +144,6 @@ export class OffersPage implements OnInit, OnDestroy {
       }
     }, 3000);
 
-
     setTimeout(() => {
       if(this.loadedUserPosts.length > 0) {
         this.userHasLoadedListings = true;
@@ -157,6 +156,15 @@ export class OffersPage implements OnInit, OnDestroy {
 
   }
 
+  doRefresh(event) {
+
+    this.ionViewWillEnter();
+    this.ngOnInit();
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
+  }
 
   checkRoleExistenceProduct(id: string):boolean {
     return this.loadedProducts.some(r => r.id === id);

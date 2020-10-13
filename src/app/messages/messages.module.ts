@@ -1,3 +1,4 @@
+import { UsermessagesPage } from './usermessages/usermessages.page';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +9,8 @@ import { MessagesPageRoutingModule } from './messages-routing.module';
 
 import { MessagesPage } from './messages.page';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
+import { UsermessagesPageModule } from './usermessages/usermessages.module';
+
 
 @NgModule({
   imports: [
@@ -15,8 +18,8 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
     FormsModule,
     IonicModule,
     SuperTabsModule.forRoot(),
-    MessagesPageRoutingModule
+    MessagesPageRoutingModule,
   ],
-  declarations: [MessagesPage]
+  declarations: [MessagesPage, UsermessagesPage]
 })
 export class MessagesPageModule {}

@@ -1,3 +1,4 @@
+import { userProfileData } from './../../accounts/profile/userProfileData.model';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { Subscription } from 'rxjs';
 import { ProfileService } from './../../accounts/profile.service';
@@ -18,8 +19,9 @@ export class UserprofileComponent implements OnInit {
   @Input() selectedPost: Post;
   @Input() selectedProfile;
 
-  imagestring;
+  theImageString;
   profilesData;
+  ownerImage
 
   listedSeg = false;
   fleekSeg = false;
@@ -38,10 +40,10 @@ export class UserprofileComponent implements OnInit {
     if (this.selectedPost) {
       console.log('user_post', this.selectedPost);
       this.profilesData = this.selectedPost.owner;
-      this.imagestring = this.profilesData.image;
+      this.theImageString = this.profilesData.image;
       console.log('user_post_iamge', this.selectedPost);
     } else if (this.selectedProfile) {
-      this.imagestring = this.selectedProfile.image;
+      this.theImageString = this.selectedProfile.image;
     }
 
 
@@ -50,8 +52,12 @@ export class UserprofileComponent implements OnInit {
       const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
       const dic = JSON.parse(value);
       const dicToken = dic.token;
-      
-      this.profileservice.UserProfileListings(this.selectedPost.owner.id, dicToken).subscribe(resData => {
+
+
+
+      const user = this.selectedPost.owner;
+      const userID = user['id'];
+      this.userListedSub = this.profileservice.UserProfileListings(userID , dicToken).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
@@ -69,9 +75,9 @@ export class UserprofileComponent implements OnInit {
 
     setTimeout(() => {
       console.log('user_post', this.selectedPost);
-      this.image_string = this.selectedPost.owner;
-      this.imagestring = this.image_string.image;
-      console.log('user_post_iamge', this.imagestring);
+      this.ownerImage = this.selectedPost.owner;
+      this.theImageString = this.ownerImage.image;
+      console.log('user_post_iamge', this.theImageString);
       event.target.complete();
     }, 2000);
   }
@@ -80,9 +86,10 @@ export class UserprofileComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnDestroy() {
-    if (this.userListedPost) {
-      this.userListedPost.unsubscribe();
+    if (this.userListedSub) {
+      this.userListedSub.unsubscribe();
     }
   }
 

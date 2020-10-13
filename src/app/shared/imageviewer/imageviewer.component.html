@@ -1,0 +1,27 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-slides class="image-slider" pager="true"  loop="true" sliderPerView="2">
+            <ion-slide style="border-top-right-radius: 10px;border-top-left-radius: 10px;" *ngFor="let item of post?.product[0].productimage_set">
+    
+               <!-- <img  [src]="item.image"/> -->
+               <ion-img   
+               title="post?.product[0].title" 
+               text="Directive" 
+               scheme="dark"  
+               class="thumb-img" 
+               [src]="item.image" 
+               ionImgViewer></ion-img>
+              <!-- <ion-item lines="none" text-center>
+                    <ion-img  [src]="item.image"></ion-img>
+              </ion-item> -->
+            </ion-slide> 
+          </ion-slides>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-button (click)="oncloseImgViewer()" >close</ion-button>

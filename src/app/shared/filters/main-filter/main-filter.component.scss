@@ -1,12 +1,23 @@
 ion-input {
-    border: 2px solid #9e387a;
+    border: 2px solid #522e4552;
     border-radius: 10px;
     align-items: center;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family:  sans-serif;
+    text-align: center;
+    font-weight: bold;
 }
 
 ion-label {
     align-items: center;
     font-weight: bold;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: sans-serif;
+    font-size: 25px;
+}
+
+.header-range {
+    margin-bottom: 0.5rem;
+}
+
+div > div.range-knob-handle.range-knob-b {
+    color: purple;
 }

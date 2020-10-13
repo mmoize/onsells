@@ -10,12 +10,17 @@ ion-card {
     position: relative;
     margin: 0px;
     padding: 0px;
+
+
+
 }
 
 #firstlayer {
     overflow: hidden;
     text-align: center;
     position: relative;
+    //margin-top: 5px;
+
 }
 ion-label {
     font-weight: bold;
@@ -39,6 +44,20 @@ h3 {
     // transform: translate(-50%, -50%);  
 }
 
+#divViews{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+    position: absolute;
+}
+#divViewsicon {
+    size: 50PX;
+    color:violet;
+    width: 25px;
+    height: 25px;
+}
+
 // ion-item {
 //     height: 200px;
 //     width: 100%;
@@ -54,11 +73,12 @@ h3 {
     border: 3px solid  rgba(172, 5, 144, 0.699);;
 }
 
-img {
+ion-img {
  
     object-fit: cover;
     height: 100%;
     width: 100%;
+    
 }
 
 .pin {

@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" group="android" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/android.iml" filepath="$PROJECT_DIR$/.idea/android.iml" group="android" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="android/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1448799282/capacitor-android.iml" filepath="$PROJECT_DIR$/.idea/modules/1448799282/capacitor-android.iml" group="android/capacitor-android" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1959148884/capacitor-community-camera-preview.iml" filepath="$PROJECT_DIR$/.idea/modules/1959148884/capacitor-community-camera-preview.iml" group="android/capacitor-community-camera-preview" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/capacitor-cordova-android-plugins/capacitor-cordova-android-plugins.iml" filepath="$PROJECT_DIR$/.idea/modules/capacitor-cordova-android-plugins/capacitor-cordova-android-plugins.iml" group="android/capacitor-cordova-android-plugins" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/386391579/capacitor-video-player.iml" filepath="$PROJECT_DIR$/.idea/modules/386391579/capacitor-video-player.iml" group="android/capacitor-video-player" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2035866693/jeepq-capacitor.iml" filepath="$PROJECT_DIR$/.idea/modules/-2035866693/jeepq-capacitor.iml" group="android/jeepq-capacitor" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,102 @@
+ion-slides {
+    height: 100%;
+   // overflow-y: scroll;  
+   overflow-y: auto;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ .swiper-slide {
+   overflow-y: scroll;
+   display: block;
+   }
+ 
+ 
+ 
+ .swiper-slide h2 {
+   margin-top: 2.8rem;
+ }
+ 
+ .swiper-slide img {
+   max-height: 50%;
+   max-width: 80%;
+   margin: 60px 0 40px;
+   pointer-events: none;
+   
+ }
+ 
+ b {
+   font-weight: 500;
+ }
+ 
+ p {
+   padding: 0 40px;
+   font-size: 14px;
+   line-height: 1.5;
+   color: var(--ion-color-step-600, #60646b);
+ }
+ 
+ p b {
+   color: var(--ion-text-color, #000000);
+ }
+
+
+ ion-card {
+    height: 100%;
+ }
+ 
+ video {
+    max-width: 100%;
+    //max-height: 100vh;
+    display: inline-block;
+    vertical-align: middle;
+    height: 95vh;
+    object-fit: cover;
+
+  }
+
+ion-card-content {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-top: 0px;
+  height: 100vh;
+
+}
+
+.bar {
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  transform: translate(0%, -100%);
+  background:  rgba(34, 32, 33, 0.226);
+}
+
+.sticky-video {
+  position: sticky;
+  bottom: 100px;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+
+  video {
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(36, 35, 36, 0.205);
+  }
+}
+
+
+.sticky-controls {
+  background:  rgba(43, 40, 42, 0.212);
+  position: absolute;
+  top: 0px;
+  z-index: 2;
+  widows: 100%;
+}
+
+ .ion-padding {
+    height: 100%;
+ }

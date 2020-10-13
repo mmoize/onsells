@@ -9,14 +9,6 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
   },
   {
-    path: 'places',
-    loadChildren: () => import('./places/places.module').then( m => m.PlacesPageModule), canLoad: [AuthGuard]
-  },
-  {
-    path: 'bookings',
-    loadChildren: () => import('./bookings/bookings.module').then( m => m.BookingsPageModule), canLoad: [AuthGuard]
-  },
-  {
     path: 'accounts',
     loadChildren: () => import('./accounts/accounts.module').then( m => m.AccountsPageModule), canLoad: [AuthGuard]
   },
@@ -31,6 +23,10 @@ const routes: Routes = [
   {
     path: 'messages',
     loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule), canLoad: [AuthGuard]
+  },
+  {
+    path: 'fleeks',
+    loadChildren: () => import('./fleeks/fleeks.module').then( m => m.FleeksPageModule), canLoad: [AuthGuard]
   },
 ];
 

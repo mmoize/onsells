@@ -27,7 +27,7 @@ export class MapFilterModalComponent implements OnInit, AfterViewInit, OnDestroy
 
   distanceWithin = 20000;
 
-  @Input() center: {lat: -33.881840181840495, lng: 151.20684653014064};
+  @Input() center;
   @Input() selectable = true;
   @Input() closeButtonText = 'cancel';
   @Input() title = 'Pick Location';

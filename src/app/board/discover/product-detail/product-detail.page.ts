@@ -1,3 +1,4 @@
+import { ImageviewerComponent } from './../../../shared/imageviewer/imageviewer.component';
 import { ChatPage } from './../../../messages/chat/chat.page';
 import { NewMessageComponent } from './../../../shared/new-message/new-message.component';
 import { CreateMessagePage } from './../../../messages/create-message/create-message.page';
@@ -10,6 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NavController, ModalController, ActionSheetController, LoadingController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import { take, map } from 'rxjs/operators';
+import { MessageService } from 'src/app/messages/message.service';
+import { Plugins } from '@capacitor/core';
 
 
 @Component({
@@ -24,8 +27,10 @@ export class ProductDetailPage implements OnInit, OnDestroy {
               private modalCtrl: ModalController,
               private postService: PostService,
               private route: ActivatedRoute,
+              public msgService: MessageService,
               private actionSheetCtrl: ActionSheetController,
               private loadingCtrl: LoadingController,
+              private routes: Router,
               private authService: AuthService,
               private alertCtrl: AlertController,
 ) { }
@@ -131,6 +136,15 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     });
   }
 
+  doRefresh(event) {
+
+    this.ngOnInit();
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
+  }
+
   ngOnDestroy() {
     if (this.aPostSub) {
       this.aPostSub.unsubscribe();
@@ -138,8 +152,8 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter(){
-    sessionStorage.setItem('other_userid', this.post?.owner.id);
-    sessionStorage.setItem('other_username', this.post.owner.username);
+    sessionStorage.setItem('other_userid', this.post?.owner['id']);
+    sessionStorage.setItem('other_username', this.post?.owner['username']);
   }
 
   onback() {
@@ -159,7 +173,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
   openMessageModal() {
     this.openChatDetail()
-    console.log('senddd post', this.post.owner.username);
+    console.log('senddd post', this.post.owner['username']);
     this.modalCtrl.create({
       component: ChatPage,
       componentProps: {'selectedpost': this.post}
@@ -169,13 +183,30 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
   }
 
+  openImageModal() {
 
-  openChatDetail() {
-    console.log('this is postDetail', this.post);
-    sessionStorage.setItem('other_userid', this.post.owner.id);
-    sessionStorage.setItem('other_username', this.post.owner.username);
+    this.modalCtrl.create({
+      component: ImageviewerComponent,
+      componentProps: {'post': this.post}
+    }).then(modalEl => {
+      modalEl.present();
+    });
 
   }
+
+
+  async openChatDetail() {
+
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const currentUserData = dic;
+
+    this.msgService.setCurrentUser(currentUserData.user_id);
+    console.log('this is postDetail', this.post);
+    sessionStorage.setItem('other_userid', this.post.owner['id']);
+    sessionStorage.setItem('other_username', this.post.owner['username']);
+     }
+
 
 
 

@@ -92,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
         alert('Push received: ' + JSON.stringify(notification));
         console.log('Push received: ', notification);
 
-        let alertRet = Modals.alert({
+        const alertRet = Modals.alert({
           title: notification.title,
           message: notification.body
         });

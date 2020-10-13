@@ -1,0 +1,81 @@
+
+
+<!-- <ion-content  [scrollEvents]="true" (ionScroll)="didScroll($event)">
+  <div class="ion-padding">
+    <ion-card *ngFor="let item of videos" >
+     <ion-card-header>
+       <ion-card-title>{{ item.title }}</ion-card-title>
+     </ion-card-header>
+
+     <ion-card-content>
+       {{ item.text }}
+       <div *ngIf="item.url" >
+         <video #player playsinline preload="auto">
+           <source [src]="item.url" type="video/mp4"/>
+         </video>
+         <div class="bar">
+          <ion-button (click)="openFullScreen(player)" color="primary" fill="clear">
+            <ion-icon slot="icon-only" name="easel"></ion-icon>
+          </ion-button>
+          <ion-button (click)="playOnSide(player)" color="primary" fill="clear">
+            <ion-icon slot="icon-only" name="open"></ion-icon>
+          </ion-button>
+         </div>
+       </div>
+     </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="sticky-video" #stickyplayer [hidden]="!stickyVideo">
+   <div class="sticky-controls" *ngIf="stickyVideo" >
+     <ion-row class="ion-no-padding" >
+       <ion-col size="4">
+         <ion-button size="small" (click)="closeSticky()" color="primary" fill="clear">
+           <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+         </ion-button>
+       </ion-col>
+       <ion-col size="4">
+        <ion-button size="small" (click)="playOrPauseSticky()" color="primary" fill="clear">
+          <ion-icon slot="icon-only" [name]="stickyPlaying ? 'pause' : 'play'"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button size="small" (click)="openFullScreen(stickyVideo)" color="primary" fill="clear">
+          <ion-icon slot="icon-only" name="easel"></ion-icon>
+        </ion-button>
+      </ion-col>
+     </ion-row>
+   </div>
+  </div>
+</ion-content> -->
+
+
+<!-- style="background: rgba(0, 0, 0, 0.603);" -->
+
+
+<super-tabs activeTabIndex="1" [config]="{ debug: true, sideMenu: 'left', allowElementScroll: true, nativeSmoothScroll: true }">
+  <super-tabs-toolbar color="primary" slot="top" hidden="true" >
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">Fleeks</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">MarketPlace
+      </ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label style="font-weight: bold;" color="light">Offers</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container autoScrollTop>
+    <super-tab>
+      <ion-nav [root]="tab1">
+      </ion-nav>
+    </super-tab>
+    <super-tab>
+      <ion-nav [root]="tab2"></ion-nav>
+    </super-tab>
+    <super-tab>
+      <ion-nav [root]="tab3"></ion-nav>
+    </super-tab>
+  </super-tabs-container> 
+</super-tabs>

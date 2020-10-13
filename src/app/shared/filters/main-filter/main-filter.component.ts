@@ -16,6 +16,11 @@ export class MainFilterComponent implements OnInit {
   selectedMaxPrice;
   minimumPrice;
   maximumPrice;
+  showRangeLabel = false;
+  fromLocationDistance = "200"
+
+  latitude;
+  longitude;
 
   constructor( 
     private modalCtrl: ModalController,
@@ -49,24 +54,25 @@ export class MainFilterComponent implements OnInit {
 
   onInputMinChange(data) {
     console.log('this is min and max', data);
+    
     this.selectedPrice.lower = data;
     if (!this.selectedPrice === undefined) {
-      this.selectedPrice.lower = data;
-      this.minimumPrice = data;
+      this.showRangeLabel = false;
     }
-    
+    this.showRangeLabel = true;
   }
   onInputMaxChange(data) {
     console.log('this is min and max', data);
     console.log('this is min and max', this.selectedPrice);
-    this.selectedPrice.upper = data;
+    this.selectedPrice['upper'] = data;
+    this.maximumPrice= this.selectedPrice.upper
     if (!this.selectedPrice === undefined) {
       this.selectedPrice.upper = data;
-      this.maximumPrice=data
+      this.maximumPrice= this.selectedPrice.upper
     }
   }
 
-  onExit() {
+  onsearch() {
     const searchData = {};
     if (this.selectedMaxPrice !== undefined && this.selectedMinPrice !== undefined){
       searchData['min'] = this.selectedMinPrice;
@@ -75,7 +81,14 @@ export class MainFilterComponent implements OnInit {
       searchData['min'] = this.minimumPrice;
       searchData['max'] = this.maximumPrice;
     }
-    
+
+
+    if (!this.latitude) {
+      // do nothing 
+    } else {
+      searchData['lat'] = this.latitude;
+      searchData['lng'] = this.longitude;
+    }
 
     searchData['category'] = this.selectedCategory;
 
@@ -83,6 +96,12 @@ export class MainFilterComponent implements OnInit {
     this.modalCtrl.dismiss(
       searchData
     );
+  }
+
+
+  onLocationPicked(data) {
+    this.latitude = data.lat;
+    this.longitude = data.lng;
   }
 
 }

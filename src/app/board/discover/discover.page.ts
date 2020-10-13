@@ -15,6 +15,8 @@ import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
 import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
+import { MessageService } from 'src/app/messages/message.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-discover',
@@ -25,6 +27,19 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
+
+  email;
+  username;
+  userid;
+  userdp;
+
+
+  testUsers = [];
+
+  chatuserListTest = [];
+  chatuserList;
+
+
 
   currentUserDP;
 
@@ -167,17 +182,134 @@ export class DiscoverPage implements OnInit, OnDestroy {
 constructor(public postservice: PostService,
             private routes: Router,
             private profileservice: ProfileService,
+            public msgService: MessageService,
             private modalCtrl: ModalController,
 
               ) {
                 this.searchControl = new FormControl();
                 this.onSearchListings();
                 this.getCurrentUserProfile();
+                this.setCurrentUserDetails();
+
+                setTimeout(() => {
+
+                  // Set firebase credentials.
+
+                  const users = [];
+                  firebase.firestore().collection('chatUsers').get().then(resData => {
+                    resData.forEach(childData => {
+                      users.push(childData.data());
+                      if (childData.data()['userid'] !== this.userid) {
+                        users.push(childData.data());
+                        this.testUsers.push(childData.data());
+                      }
+
+                    });
+                    this.chatuserListTest = users;
+
+
+                    const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
+                    const onexist = checkRoleExistence(this.userid);
+                    console.log(' does user exist', onexist);
+                    setTimeout(() => {
+                      if (!onexist) {
+                        // tslint:disable-next-line: no-unused-expression
+                        this.msgService.createUser(
+                          this.userid,
+                        {'username': this.username,
+                         'email': this.email,
+                         'userid': this.userid,
+                         'userdp': this.userdp,
+                        'conversations': []}
+                          ).then(() => {
+                            //do nothin for now..
+                          });  
+                      } else {
+                        this.setUpMsgService();
+                      }
+                    }, 500);
+                  });
+                }, 1000);
+
+
+                this.PreloadPost();
+
+
                }
+
+PreloadPost() {
+
+  this.postsSub = this.postservice.postRes.subscribe(postData => {
+    this.loadingPosts = postData;
+
+    if (!this.loaded) {
+      this.setUpListings();
+      setTimeout(() => {
+        this.listedLoadedPosts = postData;
+        this.loaded = true;
+      }, 400);
+    } else if (this.listedLoadedPosts && this.loaded) {
+
+      for (const key in this.listedLoadedPosts) {
+        if (this.listedLoadedPosts.hasOwnProperty(key)) {
+          const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
+          const listingExists = checkRoleExistence(this.listedLoadedPosts[key].id);
+
+          if (listingExists) {
+
+          } else  {
+            let findx = this.listedLoadedPosts.filter(x => x.id !== this.listedLoadedPosts[key].id);
+
+            this.listedLoadedPosts = findx;
+
+            this.listedLoadedPosts.push(postData[key]);
+          }
+        }
+      }
+
+      for (const key in this.loadingPosts) {
+        if (this.loadingPosts.hasOwnProperty(key)) {
+          const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+          const listingExists = checkRoleExistencepost(this.loadingPosts[key].id);
+          if (listingExists) {
+            // Do nothing.
+          } else {
+            this.listedLoadedPosts.unshift(this.loadingPosts[key]);
+          }
+        }
+      }
+
+     // this.loaded = true;
+
+    }
+
+  });
+
+}
+
+async setCurrentUserDetails() {
+  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const userDicData = JSON.parse(value);
+
+  this.email = userDicData.email;
+  this.username = userDicData.username;
+  this.userid = JSON.stringify(userDicData.user_id);
+
+
+  this.profileservice.loadUserProfile(this.userid).subscribe(res => {
+    this.userdp = JSON.stringify(res.image);
+  });
+
+
+}
 
   // checks if new listings are already in display
   checkRoleExistence(id: string):boolean {
       return this.loadedPosts.some(r => r.id === id);
+    }
+
+    setUpMsgService() {
+      this.msgService.setCurrentUser(this.userid);
     }
 
 
@@ -189,50 +321,50 @@ constructor(public postservice: PostService,
     }
 
     // listings PostService call for listings.
-    setTimeout(() => {
+    // setTimeout(() => {
 
-      this.postsSub = this.postservice.postRes.subscribe(postData => {
-        this.loadingPosts = postData;
+    //   this.postsSub = this.postservice.postRes.subscribe(postData => {
+    //     this.loadingPosts = postData;
 
-        if (!this.loaded) {
-          this.listedLoadedPosts = postData;
-          this.loaded = true;
-        } else {
+    //     if (!this.loaded) {
+    //       this.listedLoadedPosts = postData;
+    //       this.loaded = true;
+    //     } else {
 
-          for (const key in this.listedLoadedPosts) {
-            if (this.listedLoadedPosts.hasOwnProperty(key)) {
-              const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
-              const listingExists = checkRoleExistence(this.listedLoadedPosts[key].id);
+    //       for (const key in this.listedLoadedPosts) {
+    //         if (this.listedLoadedPosts.hasOwnProperty(key)) {
+    //           const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
+    //           const listingExists = checkRoleExistence(this.listedLoadedPosts[key].id);
 
-              if (listingExists) {
-                  // console.log('yes its in here', this.listedLoadedPosts[key].id);
-              } else  {
-                let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
+    //           if (listingExists) {
+    //               // console.log('yes its in here', this.listedLoadedPosts[key].id);
+    //           } else  {
+    //             let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
 
-                this.listedLoadedPosts = b;
+    //             this.listedLoadedPosts = b;
 
-                this.listedLoadedPosts.push(postData[key]);
-              }
-            }
-          }
+    //             this.listedLoadedPosts.push(postData[key]);
+    //           }
+    //         }
+    //       }
 
-          for (const key in this.loadingPosts) {
-            if (this.loadingPosts.hasOwnProperty(key)) {
-              const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
-              const listingExists = checkRoleExistencepost(this.loadingPosts[key].id);
-              if (listingExists) {
-                // Do nothing.
-              } else {
-                this.listedLoadedPosts.unshift(this.loadingPosts[key]);
-              }
-            }
-          }
+    //       for (const key in this.loadingPosts) {
+    //         if (this.loadingPosts.hasOwnProperty(key)) {
+    //           const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
+    //           const listingExists = checkRoleExistencepost(this.loadingPosts[key].id);
+    //           if (listingExists) {
+    //             // Do nothing.
+    //           } else {
+    //             this.listedLoadedPosts.unshift(this.loadingPosts[key]);
+    //           }
+    //         }
+    //       }
 
-        }
+    //     }
 
-      });
+    //   });
 
-    }, 400);
+    // }, 400);
 
   }
 
@@ -380,6 +512,7 @@ constructor(public postservice: PostService,
       };
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
+      console.log('hi people', Coordinates);
     }).catch(err => {
       console.log(err);
     });
@@ -396,38 +529,49 @@ constructor(public postservice: PostService,
 
   async ionViewWillEnter() {
 
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  const dic = JSON.parse(value);
-  const dicToken = dic.token;
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
 
-  if (this.listedLoadedPosts === undefined) {
-    this.isLoading = true;
+    if (this.listedLoadedPosts === undefined) {
+      this.isLoading = true;
+    }      
+
   }
 
-  this.locateUser();
+  async setUpListings() {
 
+    this.locateUser();
 
-  setTimeout(() => {
-    const dicParam = {};
-    dicParam['lat']= this.latitude;
-    dicParam['lng'] = this.longitude;
-    dicParam['usertoken'] = dicToken;
-    if (this.minFilterPrice) {
-      dicParam['minPrice'] = this.minFilterPrice;
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicToken = dic.token;
+
+    if (this.listedLoadedPosts === undefined) {
+      this.isLoading = true;
     }
-    if (this.maxFilterPrice) {
-      dicParam['maxPrice'] = this.maxFilterPrice;
-    }
-    this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(result => {
-      this.isLoading = false;
-    });
 
-  }, 650);
+    setTimeout(() => {
+        const dicParam = {};
+        dicParam['lat']= this.latitude;
+        dicParam['lng'] = this.longitude;
+        dicParam['usertoken'] = dicToken;
+        if (this.minFilterPrice) {
+          dicParam['minPrice'] = this.minFilterPrice;
+        }
+        if (this.maxFilterPrice) {
+          dicParam['maxPrice'] = this.maxFilterPrice;
+        }
+        this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(result => {
+          this.isLoading = false;
+        });
+  
+      }, 200);
 
-}
+  }
 
 
-onOpenFiltersModal(){
+onOpenFiltersModal() {
   this.modalCtrl.create({
     component: MainFilterComponent,
     componentProps: {'selectedCategory': this.Selectedcategory}
@@ -435,8 +579,15 @@ onOpenFiltersModal(){
     modalEl.present();
     return modalEl.onDidDismiss().then(data => {
        console.log('filters results',  data.data.max);
+       if (data.data.lat === undefined) {
+         // do nothing. Theres no cordinates passed.
+       } else {
+        this.latitude = data.data.lat;
+        this.longitude = data.data.lng;
+       }
        this.maxFilterPrice = data.data.max;
        this.minFilterPrice =  data.data.min;
+
        this.onClickedCategory(this.Selectedcategory);
     });
   });
@@ -464,10 +615,9 @@ onOpenMapFiltersModal() {
   });
 }
 
-
-
   onDetail(id) {
     this.routes.navigateByUrl(`/board/discover/post-detail/${id}`);
+    console.log('clickx', this.loaded);
   }
 
   ngOnDestroy() {
@@ -484,5 +634,9 @@ onOpenMapFiltersModal() {
 
     }
   }
+
+
+
+
 
 }

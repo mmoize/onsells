@@ -38,21 +38,21 @@
         <div>
           <div id="chat-container">
             <div class="message-wrap">
-              <div *ngFor="let msg of chats;let i = index; let first = first; let last = last" class="message">
-                <div class="message-left"  *ngIf="msg.userid != userid">
+              <div *ngFor="let msg of messages;let i = index; let first = first; let last = last" class="message">
+                <div class="message-left"  *ngIf="msg.senderid === otherUserId">
                   <div class="msg-detail">
                     <div class="msg-content">
-                      <p class="line-breaker ">{{msg.msg}}</p>
+                      <p class="line-breaker ">{{msg.content}}</p>
                     </div>
                   </div>
                 </div>
-                <div class="message-right" *ngIf="msg.userid == userid" >
+                <div class="message-right" *ngIf="msg.senderid !== otherUserId" >
                   <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
                   <div class="msg-detail">
                     <div class="msg-info">
                     </div>
                     <div class="msg-content">
-                      <p class="line-breaker  ">{{msg.msg}}</p>
+                      <p class="line-breaker  ">{{msg.content}}</p>
                     </div>
                   </div>
                 </div>
@@ -67,21 +67,21 @@
         <div>
           <div id="chat-container">
             <div class="message-wrap">
-              <div *ngFor="let msg of chats;let i = index; let first = first; let last = last" class="message">
-                <div class="message-left"  *ngIf="msg.userid != userid">
+              <div *ngFor="let msg of messages;let i = index; let first = first; let last = last" class="message">
+                <div class="message-left"  *ngIf="msg.senderid === otherUserId">
                   <div class="msg-detail">
                     <div class="msg-content">
-                      <p class="line-breaker ">{{msg.msg}}</p>
+                      <p class="line-breaker ">{{msg.content}}</p>
                     </div>
                   </div>
                 </div>
-                <div class="message-right" *ngIf="msg.userid == userid" >
+                <div class="message-right" *ngIf="msg.senderid !== otherUserId">
                   <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
                   <div class="msg-detail">
                     <div class="msg-info">
                     </div>
                     <div class="msg-content">
-                      <p class="line-breaker  ">{{msg.msg}}</p>
+                      <p class="line-breaker  ">{{msg.content}}</p>
                     </div>
                   </div>
                 </div>
@@ -102,9 +102,12 @@
     <ion-footer class="footer">
       <ion-toolbar class="footerSections">
         <div class="containerFooter">
-          <ion-icon (click)="addFile()" size="large" color="medium" name="add-circle"></ion-icon>
+          <ion-icon (click)="addFile()" size="large" color="primary" name="add-circle"></ion-icon>
           <div class="inputConatiner">
-            <ion-input (keyup.enter)="send()"  class="placeholdertext inputMessage inputBg" type="text" placeholder="Type a message" [(ngModel)]="textMsg"
+            <ion-input (keyup.enter)="sendMessage()"
+              class="placeholdertext inputMessage inputBg"
+              type="text" placeholder="Type a message"
+              [(ngModel)]="message"
               autofocus="true" padding-start></ion-input>
           </div>
           <div class="send-button-parent">
@@ -120,15 +123,20 @@
 
   <ion-col *ngIf="inModalmode" size ="12" size-sm="8" offset-sm ="2">
     <ion-footer class="footer">
-      <ion-toolbar class="footerSections">
+      <ion-toolbar class="footerSections" >
         <div class="containerFooter">
-          <ion-icon (click)="addFile()" size="large" color="medium" name="add-circle"></ion-icon>
+          <ion-icon (click)="addFile()" style="margin: 4px;" size="large" color="primary" name="add-circle"></ion-icon>
           <div class="inputConatiner">
-            <ion-input (keyup.enter)="send()"  class="placeholdertext inputMessage inputBg" type="text" placeholder="Type a message" [(ngModel)]="textMsg"
+            <ion-input
+             (keyup.enter)="sendMessage()"
+              class="placeholdertext inputMessage inputBg"
+              type="text" 
+              placeholder="Type a message" 
+              [(ngModel)]="message"
               autofocus="true" padding-start></ion-input>
           </div>
           <div class="send-button-parent">
-            <ion-button  class="sendBtn" color="primary">
+            <ion-button  (click)="sendMessage()"  class="sendBtn" color="primary">
               <ion-icon class="sendBtn-icon" name="send" color="light"></ion-icon>
             </ion-button>
           </div>

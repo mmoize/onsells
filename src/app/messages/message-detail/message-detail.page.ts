@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
 
-import { Channel, MessageResponse } from 'stream-chat';
+
 import * as firebase from 'firebase';
 import { SuperTabs } from '@ionic-super-tabs/angular';
 

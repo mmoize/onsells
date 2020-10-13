@@ -75,6 +75,9 @@
 
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size ="12" size-sm="4" offset-sm ="4">
@@ -85,7 +88,14 @@
         <ion-slide style="border-top-right-radius: 10px;border-top-left-radius: 10px;" *ngFor="let item of post?.product[0].productimage_set">
 
            <!-- <img  [src]="item.image"/> -->
-           <ion-img style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"  [src]="item.image"></ion-img>
+           <ion-img                
+           title="Fleeks" 
+           text="Listing image" 
+           scheme="dark"  
+           class="thumb-img"
+           ionImgViewer 
+           style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"
+           [src]="item.image"></ion-img>
           <!-- <ion-item lines="none" text-center>
                 <ion-img  [src]="item.image"></ion-img>
           </ion-item> -->
@@ -110,7 +120,7 @@
         <ion-item style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;" class="avatarItem" lines="none">
 
           <ion-avatar style="margin-top: 15px;" slot="start">
-            <ion-img [src]="post?.owner.image"></ion-img>
+            <ion-img  [src]="post?.owner.image"></ion-img>
           </ion-avatar>
           <ion-label (click)="openModal()" >
               <h5 >{{ post?.owner.username }}</h5>
