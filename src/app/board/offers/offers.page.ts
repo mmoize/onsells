@@ -4,8 +4,9 @@ import { PostService } from './../post.service';
 import { Post } from './../post.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IonItemSliding, NavController, LoadingController } from '@ionic/angular';
+import { IonItemSliding, NavController, LoadingController, AlertController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
+import { ItemSliding } from 'ionic-angular';
 
 @Component({
   selector: 'app-offers',
@@ -132,6 +133,7 @@ export class OffersPage implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private routes: Router,
               private loadingCtrl: LoadingController,
+              private alertController: AlertController,
               ) { }
 
   ngOnInit() {
@@ -381,7 +383,7 @@ export class OffersPage implements OnInit, OnDestroy {
 
   }
 
-  onDeleteListing(id) {
+  onDeleteListing(id, slidingItem: ItemSliding) {
 
       if(this.loadedUserPosts.length > 0) {
         this.userHasLoadedListings = true;
@@ -398,6 +400,8 @@ export class OffersPage implements OnInit, OnDestroy {
       this.postservice.onPostDelete(id).then(() => {
         // this.ionViewWillEnter();
       });
+
+      slidingItem.close();
   }
 
 
@@ -419,6 +423,45 @@ export class OffersPage implements OnInit, OnDestroy {
 
   onNewPostListing() {
     this.routes.navigateByUrl(`/board/offers/new-post`);
+  }
+
+
+  // async presentAlertMultipleButtons() {
+  //   const alert = await this.alertController.create({
+  //     cssClass: 'my-custom-class',
+  //     header: 'Delete Item',
+  //     subHeader: 'Are you sure want to delete.',
+  //     message: 'The current listing will be taken down.',
+  //     buttons: ['Cancel', 'Open Modal', 'Delete']
+  //   });
+
+  //   await alert.present();
+  // }
+
+
+  async presentAlertConfirm(postId: string, slidingitem: IonItemSliding) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Delete Item',
+      message: '<strong>Are you sure, this listing will be taken down</strong>!!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Delete',
+          handler: () => {
+            this.onDeleteListing(postId, slidingitem);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 

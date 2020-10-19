@@ -65,7 +65,7 @@ export class AuthPage implements OnInit {
         console.log(resData);
         this.isLoading = false;
         loadingEl.dismiss();
-        this.router.navigateByUrl('/board');
+        this.router.navigateByUrl('/board/discover');
       }, errRes => {
         loadingEl.dismiss();
         const code = errRes.error.error;
@@ -142,6 +142,11 @@ export class AuthPage implements OnInit {
 
   onPassReset() {
     this.isPassReset = true;
+  }
+
+
+  onCanclePassReset() {
+    this.isPassReset = false;
   }
 
 }

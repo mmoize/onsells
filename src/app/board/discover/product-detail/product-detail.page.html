@@ -12,67 +12,6 @@
   </ion-toolbar>
 </ion-header>
 
-  <!-- <ion-row  >
-    <ion-col >
-      <ion-item color="transparent"  lines="none">
-        <ion-buttons  color="transparent"  slot="start">
-          <ion-back-button  defaultHref="/board"></ion-back-button>
-        </ion-buttons>
-        <ion-item slot="end" color="transparent"  lines="none">
-          <ion-icon name="eye-outline"></ion-icon>
-          <ion-label style="margin-left: 6px;">{{ post?.viewcount }}</ion-label>
-        </ion-item>
-      </ion-item>
-    </ion-col>
-  </ion-row> -->
-
-
- <!-- <ion-content>
-   
-  <div text-center *ngIf="isLoading">
-    <ion-spinner color="primary"></ion-spinner>
-  </div>
-  <ion-grid no-padding *ngIf="!isLoading">
-    <ion-row>
-      <ion-col size ="12" size-sm="6" offset-sm ="3" >
-        <ion-card id="imgslidediv">
-              <ion-slides pager="true" [options]="slideOpts" >
-                <ion-slide  *ngFor="let item of post?.product[0].productimage_set">
-
-                   <img  [src]="item.image"/>
-
-                </ion-slide> 
-              </ion-slides>
-          </ion-card>    
-        <div> 
-          <ion-card-content>
-            <ion-item lines="none">
-
-                <ion-avatar slot="start">
-                  <ion-img [src]="post?.owner.image"></ion-img>
-                </ion-avatar>
-              <ion-label (click)="openModal()" >
-                  <h3>{{ post?.owner.username }}</h3>
-              </ion-label>
-              
-              <ion-label id="pricetag"  >
-                <h4> {{ post?.product[0].price |currency }}</h4>
-                
-              </ion-label >
-              <ion-icon (click)="openMessageModal()" slot="end" color="primary" name="chatbox-ellipses-outline"></ion-icon>
-            </ion-item>
-            <ion-label id="labelDescription">
-              <p>{{ post?.product[0].description }}</p>
-            </ion-label>
-  
-          </ion-card-content>
-      </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
- 
-</ion-content> -->
-
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -119,14 +58,19 @@
       border-bottom-left-radius: 10px;" size ="12" size-sm="4" offset-sm ="4">
         <ion-item style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;" class="avatarItem" lines="none">
 
-          <ion-avatar style="margin-top: 15px;" slot="start">
+          <ion-avatar (click)="openModal()" style="margin-top: 15px;" slot="start">
             <ion-img  [src]="post?.owner.image"></ion-img>
           </ion-avatar>
           <ion-label (click)="openModal()" >
-              <h5 >{{ post?.owner.username }}</h5>
+              <ion-buttons style="margin: 0px;padding:0px" shape="round" fill="none">
+                <h5  >{{ post?.owner.username }}</h5>
+              </ion-buttons>
           </ion-label>
+
+          <ion-button (click)="openMessageModal()" slot="end" style="margin: 0px;padding:0px" shape="round" fill="none">
+            <ion-icon   color="primary" name="chatbox-ellipses-outline"></ion-icon>
+          </ion-button>
           
-          <ion-icon (click)="openMessageModal()" slot="end" color="primary" name="chatbox-ellipses-outline"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -144,14 +88,22 @@
     </ion-row>
     <ion-row class="tagsRow">
       <ion-col size ="12" size-sm="4" offset-sm ="4"> 
-        <ion-item lines="none">
+      <ion-list>
+        <ion-list-header>
           <ion-label style="font-weight: bold;">
             Tags
           </ion-label>
-          <ion-button *ngFor="let tag of post?.product[0].taggit" shape="round" fill="outline">
-            {{ tag }}
-          </ion-button>
-        </ion-item>
+        </ion-list-header>
+        <ion-slides  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
+          <ion-slide *ngFor="let tag of post?.product[0].taggit" >
+            <ion-button  shape="round" fill="round">
+              <ion-label  style="font-weight: bold;color: #8d3185 ; font-family: sans-serif;font-size: 10px;">
+                {{ tag }}
+              </ion-label>
+            </ion-button>
+          </ion-slide>
+        </ion-slides>
+      </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>

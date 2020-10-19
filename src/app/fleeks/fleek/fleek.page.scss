@@ -1,0 +1,27 @@
+.containerFooter{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+
+
+.fleekInputcol {
+    
+    align-items: center;
+}
+
+
+.send-button-parent {
+    margin-right: -10%;
+}
+
+.img-head{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    // border: 3px solid  rgb(3, 212, 212);;
+    border: 3px solid  rgba(172, 5, 144, 0.699);;
+    overflow: hidden;
+}

@@ -8,6 +8,7 @@ import { Post } from 'src/app/board/post.model';
 import { MessageService } from '../message.service';
 import { map } from 'rxjs/operators';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
+import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
 
 @Component({
   selector: 'app-chat',
@@ -69,84 +70,8 @@ export class ChatPage implements OnInit {
     message: any,
     upertext: any;
   }>;
-  private events;
-  public count = 0;
-  public arr = [
-    {
-      messageId: '1',
-      userId: '140000198202211138',
-      userName: 'Luff',
-      userImgUrl: './assets/user.jpg',
-      toUserId: '210000198410281948',
-      toUserName: 'Hancock',
-      userAvatar: './assets/to-user.jpg',
-      time: 1488349800000,
-      message: 'Hey, that\'s an awesome chat UI',
-      status: 'success'
 
-    },
-    {
-      messageId: '2',
-      userId: '210000198410281948',
-      userName: 'Hancock',
-      userImgUrl: './assets/to-user.jpg',
-      toUserId: '140000198202211138',
-      toUserName: 'Luff',
-      userAvatar: './assets/user.jpg',
-      time: 1491034800000,
-      message: 'Right, it totally blew my mind. They have other great apps and designs too !',
-      status: 'success'
-    },
-    {
-      messageId: '3',
-      userId: '140000198202211138',
-      userName: 'Luff',
-      userImgUrl: './assets/user.jpg',
-      toUserId: '210000198410281948',
-      toUserName: 'Hancock',
-      userAvatar: './assets/to-user.jpg',
-      time: 1491034920000,
-      message: 'And it is free ?',
-      status: 'success'
-    },
-    {
-      messageId: '4',
-      userId: '210000198410281948',
-      userName: 'Hancock',
-      userImgUrl: './assets/to-user.jpg',
-      toUserId: '140000198202211138',
-      toUserName: 'Luff',
-      userAvatar: './assets/user.jpg',
-      time: 1491036720000,
-      message: 'Yes, totally free. Beat that ! ',
-      status: 'success'
-    },
-    {
-      messageId: '5',
-      userId: '210000198410281948',
-      userName: 'Hancock',
-      userImgUrl: './assets/to-user.jpg',
-      toUserId: '140000198202211138',
-      toUserName: 'Luff',
-      userAvatar: './assets/user.jpg',
-      time: 1491108720000,
-      message: 'Wow, that\'s so cool. Hats off to the developers. This is gooood stuff',
-      status: 'success'
-    },
-    {
-      messageId: '6',
-      userId: '140000198202211138',
-      userName: 'Luff',
-      userImgUrl: './assets/user.jpg',
-      toUserId: '210000198410281948',
-      toUserName: 'Hancock',
-      userAvatar: './assets/to-user.jpg',
-      time: 1491231120000,
-      message: 'Check out their other designs.',
-      status: 'success'
-    }
-  ];
-
+  
 
   ngOnInit() {
     console.log('other users dpaaaaaaaaa', this.selectedpost);
@@ -393,6 +318,18 @@ export class ChatPage implements OnInit {
       target: 'destination'
     };
     this._scrollToService.scrollTo(config);
+  }
+
+  // Opens Other-Userprofile Modal
+  openModal() {
+    this.modalCtrl.create({
+      component: UserprofileComponent,
+      componentProps: {userId: this.otherUserId}
+    }).then(modalEl => {
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    });
+
   }
 
 

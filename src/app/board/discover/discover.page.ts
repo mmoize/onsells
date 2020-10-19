@@ -320,52 +320,6 @@ async setCurrentUserDetails() {
       this.Selectedcategory = this.categoryList[0];
     }
 
-    // listings PostService call for listings.
-    // setTimeout(() => {
-
-    //   this.postsSub = this.postservice.postRes.subscribe(postData => {
-    //     this.loadingPosts = postData;
-
-    //     if (!this.loaded) {
-    //       this.listedLoadedPosts = postData;
-    //       this.loaded = true;
-    //     } else {
-
-    //       for (const key in this.listedLoadedPosts) {
-    //         if (this.listedLoadedPosts.hasOwnProperty(key)) {
-    //           const checkRoleExistence = roleParam => this.loadingPosts.some( data => data.id === roleParam );
-    //           const listingExists = checkRoleExistence(this.listedLoadedPosts[key].id);
-
-    //           if (listingExists) {
-    //               // console.log('yes its in here', this.listedLoadedPosts[key].id);
-    //           } else  {
-    //             let b = this.listedLoadedPosts.filter(b => b.id !== this.listedLoadedPosts[key].id);
-
-    //             this.listedLoadedPosts = b;
-
-    //             this.listedLoadedPosts.push(postData[key]);
-    //           }
-    //         }
-    //       }
-
-    //       for (const key in this.loadingPosts) {
-    //         if (this.loadingPosts.hasOwnProperty(key)) {
-    //           const checkRoleExistencepost = roleParam => this.listedLoadedPosts.some( data => data.id === roleParam );
-    //           const listingExists = checkRoleExistencepost(this.loadingPosts[key].id);
-    //           if (listingExists) {
-    //             // Do nothing.
-    //           } else {
-    //             this.listedLoadedPosts.unshift(this.loadingPosts[key]);
-    //           }
-    //         }
-    //       }
-
-    //     }
-
-    //   });
-
-    // }, 400);
-
   }
 
   onSearch() {

@@ -17,7 +17,7 @@
         </ion-buttons>
         <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img>
         <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
-          <img [src]="currentUserDP" class="img-head"/>
+          <ion-img [src]="currentUserDP" class="img-head"></ion-img>
         </ion-buttons>
       </ion-item>
     </ion-col>
@@ -52,7 +52,10 @@
             <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon>
           </ion-buttons>
           <ion-item (click)="onOpenMapFiltersModal()" slot="end"lines="none">
-            <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon>
+            <!-- <ion-buttons  *ngIf="currentUserDP"   color="success">
+              <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+            </ion-buttons> -->
+            <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
             <h4   style="margin-top: 10px" style="font-weight: bold;" >{{ currentAreaLocationName}}</h4>
           </ion-item>
           <ion-buttons (click)="onOpenFiltersModal()"  >

@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'fleekscamera',
     loadChildren: () => import('./fleekscamera/fleekscamera.module').then( m => m.FleekscameraPageModule)
+  },
+  {
+    path: 'fleek',
+    loadChildren: () => import('./fleek/fleek.module').then( m => m.FleekPageModule)
   }
 ];
 

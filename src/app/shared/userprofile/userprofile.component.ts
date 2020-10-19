@@ -18,6 +18,7 @@ export class UserprofileComponent implements OnInit {
   @ViewChild('mySlider') slider: IonSlide;
   @Input() selectedPost: Post;
   @Input() selectedProfile;
+  @Input() userId;
 
   theImageString;
   profilesData;
@@ -44,17 +45,31 @@ export class UserprofileComponent implements OnInit {
       console.log('user_post_iamge', this.selectedPost);
     } else if (this.selectedProfile) {
       this.theImageString = this.selectedProfile.image;
+    } else if (this.userId) {
+      //opening user-profile from chat-modal
+     this.getUserFromChat(this.userId);
+    }
     }
 
-
-    setTimeout(async () => {
-      
+    async getUserFromChat(userid) {
       const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
       const dic = JSON.parse(value);
       const dicToken = dic.token;
+      
+      this.userListedSub = this.profileservice.UserProfileListings(userid , dicToken).subscribe(resData => {
+        this.userListedPost = resData;
+        console.log('for res listed', resData);
+      });
+
+      this.userListedSub = this.profileservice.loadUserProfile(userid).subscribe(resData => {
+        console.log('Profile Data Results', resData);
+        this.theImageString = resData.image;
+        this.profilesData = resData;
+      });
 
 
-
+      setTimeout(async () => {
+  
       const user = this.selectedPost.owner;
       const userID = user['id'];
       this.userListedSub = this.profileservice.UserProfileListings(userID , dicToken).subscribe(resData => {
@@ -62,6 +77,9 @@ export class UserprofileComponent implements OnInit {
         console.log('for res listed', resData);
       });
     }, 1000);
+
+    // opens the user's current listed items seg
+      this.listedSeg = true;
 
   }
 

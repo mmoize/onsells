@@ -123,7 +123,7 @@
       <ion-virtual-scroll style="height: 20vh;" *ngIf="userHasLoadedListings"  [items]="loadedUserPosts" approxItemHeight="70px">
 
         <ion-card id="recentCard" *virtualItem="let post" >
-          <ion-item-sliding id="item100">
+          <ion-item-sliding #slidingItem id="item100">
             <ion-item (click)="openViewImageModal(data)">        <!--(click)="openViewImageModal(data)" -->
               <ion-thumbnail slot="start">
                 <ion-img  [src]="post.product[0].productimage_set[0].image"></ion-img>
@@ -148,8 +148,8 @@
           </ion-item-options> -->
       
           <ion-item-options side="end">
-            <ion-item-option (click)="onDeleteListing(post.id)"  color="danger">
-              <h4 style="font-weight: bolder;">Remove</h4>
+            <ion-item-option  (click)="presentAlertConfirm(post.id, slidingItem)"  color="danger">
+              <h4  style="font-weight: bolder;">Remove</h4>
               <!-- <ion-icon slot="icon-only" name="trash"></ion-icon> -->
             </ion-item-option>
             <!-- <ion-item-option>

@@ -1,25 +1,8 @@
-<!-- <ion-buttons slot="start" color="light">
-  <ion-icon color="light" style="size: 50px;" name="arrow-back-outline"></ion-icon>
-</ion-buttons> -->
-
-<!-- <ion-item style="--background: transparent;" lines="none">
-  <ion-item style="--background: transparent;" lines="none"  slot="start">
-    <ion-buttons  color="light">
-      <ion-back-button defaultHref="/messages" color="light"></ion-back-button>
-   </ion-buttons>
-  </ion-item>
-  <ion-item style="--background: transparent;" lines="none">
-    <ion-buttons  *ngIf="otherUserDp"   color="light">
-      <img [src]="otherUserDp" class="img-head"/>
-    </ion-buttons>
-    <ion-title color="light">{{ otherUsername }}</ion-title>
-  </ion-item>
-</ion-item> -->
 
 <ion-header>
   <ion-toolbar color="primary">
     <ion-item style="--background: transparent;" lines="none">
-      <ion-buttons *ngIf="otherUserDp"   color="light">
+      <ion-buttons (click)="openModal()" *ngIf="otherUserDp"   color="light">
         <img [src]="otherUserDp" class="img-head"/>
       </ion-buttons>
       <ion-title color="light">{{ otherUsername }}</ion-title>
@@ -30,6 +13,7 @@
     </ion-item>
   </ion-toolbar>
 </ion-header>
+
 <ion-content padding class="contentBg" #content id="chat-parent" overflow-scroll="true" (ionScrollStart)="logScrollStart()"
   (ionScroll)="logScrolling($event)">
   <ion-grid>

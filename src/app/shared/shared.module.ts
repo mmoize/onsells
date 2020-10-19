@@ -20,12 +20,10 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
     imports: [CommonModule, IonicModule, NgxIonicImageViewerModule],
     exports: [LocationPickerComponent,
               ImageviewerComponent,
-              //MapFilterModalComponent,
               MapModalComponent,
               ImagePickerComponent,
               UserprofileComponent],
     entryComponents: [MapModalComponent
-                     //,MapFilterModalComponent
                      ]
 })
 

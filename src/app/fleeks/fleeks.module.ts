@@ -10,6 +10,7 @@ import { FleeksPage } from './fleeks.page';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
 import { HomePageModule } from './home/home.module';
 import { FleekscameraPageModule } from './fleekscamera/fleekscamera.module';
+import { FleekPageModule } from './fleek/fleek.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { FleekscameraPageModule } from './fleekscamera/fleekscamera.module';
     IonicModule,
     FleeksPageRoutingModule,
     HomePageModule,
+    FleekPageModule,
     FleekscameraPageModule,
     SuperTabsModule.forRoot(),
   ],
