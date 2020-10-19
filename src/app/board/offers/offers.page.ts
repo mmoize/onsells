@@ -6,7 +6,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IonItemSliding, NavController, LoadingController, AlertController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
-import { ItemSliding } from 'ionic-angular';
+
 
 @Component({
   selector: 'app-offers',
