@@ -29,12 +29,16 @@ import { MediaCapture } from '@ionic-native/media-capture/ngx';
 import { Media } from '@ionic-native/media/ngx';
 import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { MomentModule } from 'ngx-moment';
+
+
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   // tslint:disable-next-line: max-line-length
   imports: [BrowserModule,
+            MomentModule,
             HttpClientModule,
             IonicModule.forRoot(),
             AppRoutingModule,
@@ -53,10 +57,10 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
     VideoPlayer,
     ImagePicker,
     MediaCapture,
-    File,
     Media,
     StreamingMedia,
     PhotoViewer,
+    File,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

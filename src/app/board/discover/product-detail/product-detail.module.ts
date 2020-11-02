@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProductDetailPageRoutingModule } from './product-detail-routing.module';
 
 import { ProductDetailPage } from './product-detail.page';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
@@ -25,6 +26,6 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
     ChatPageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
-  declarations: [ProductDetailPage]
+  declarations: [ProductDetailPage, TimeAgoPipe]
 })
 export class ProductDetailPageModule {}

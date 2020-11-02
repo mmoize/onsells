@@ -9,6 +9,8 @@ import { NewPostPageRoutingModule } from './new-post-routing.module';
 import { NewPostPage } from './new-post.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +18,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     ReactiveFormsModule,
     NewPostPageRoutingModule,
+    NgxIonicImageViewerModule,
     SharedModule,
   ],
   declarations: [NewPostPage]

@@ -1,18 +1,31 @@
 
 
-<ion-row>
+<!-- <ion-row>
   <ion-col size ="12" size-sm="4" offset-sm ="4">
 
       <ion-item lines="none">
         <ion-icon slot="start" (click)="openMarketplace()" style="margin: 4px;" size="large" color="primary" src="assets/icons/marketplace.svg"></ion-icon>
-       <!-- <ion-icon slot="start" (click)="addFile()" style="margin: 4px;" size="large" color="primary" name="add-circle"></ion-icon> -->
+       <ion-icon slot="start" (click)="addFile()" style="margin: 4px;" size="large" color="primary" name="add-circle"></ion-icon>
        <ion-buttons  slot="end" *ngIf="userdp"   color="success">
         <ion-img [src]="userdp" class="img-head"></ion-img>
       </ion-buttons>
       </ion-item>
 
   </ion-col>
-</ion-row>
+</ion-row> -->
+<ion-header>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-icon slot="start" (click)="openMarketplace()" style="margin: 4px;" size="large" color="primary" src="assets/icons/marketplace.svg"></ion-icon>
+     <!-- <ion-icon slot="start" (click)="addFile()" style="margin: 4px;" size="large" color="primary" name="add-circle"></ion-icon> -->
+     <ion-buttons  slot="end" *ngIf="userdp"   color="success">
+      <ion-img [src]="userdp" class="img-head"></ion-img>
+    </ion-buttons>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+
 
 
 
@@ -21,25 +34,98 @@
   <ion-grid>
     <ion-row style="margin-top: 20px;">
       <ion-col  size ="12" size-sm="4" offset-sm ="4">
-       <ion-card style="margin-bottom: 15px;" *ngFor="let item of fleeks" >
-         <ion-img [src]="item.userImgUrl"></ion-img>
-         <ion-card-content>
-           <ion-item lines="none">
-             <ion-avatar slot="start">
-               <ion-img [src]="item.userImgUrl"></ion-img>
-             </ion-avatar>
-             <ion-label>{{item.userName}}</ion-label>
-             <ion-label>
-               <ion-note>
-                 5 hours ago
-               </ion-note>
-             </ion-label>
-           </ion-item>
-         </ion-card-content>
-       </ion-card>
+        <ion-virtual-scroll [items]="listedLoadedPosts">
+          <ion-card *virtualItem="let post" style="margin-bottom: 40px;overflow:hidden"  >
+            <ion-slides class="ionSlides" pager="true" [options]="slideOpts" >
+              <ion-slide style="border-top-right-radius: 10px;border-top-left-radius: 10px;" *ngFor="let img of post?.product[0].productimage_set">
+      
+<!-- 
+                 <ion-img                
+                 title="Fleeks" 
+                 text="Listing image" 
+                 scheme="dark"  
+                 class="thumb-img"
+                 ionImgViewer 
+                 style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"
+                 [src]="img.image"></ion-img> -->
+
+                 <img                
+                 title="Fleeks" 
+                 text="Listing image" 
+                 scheme="dark"  
+                 class="thumb-img"
+                 ionImgViewer 
+                 style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"
+                 [src]="img.image"/>
+        
+              </ion-slide> 
+            </ion-slides>
+
+         
+            <ion-card-content>
+              <ion-item lines="none">
+                <ion-avatar slot="start">
+                  <ion-img [src]="post.owner.image"></ion-img>
+                </ion-avatar>
+                <ion-label>{{post.owner.username}}</ion-label>
+                <ion-label>
+                  <ion-note>
+                    5 hours ago
+                  </ion-note>
+                </ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+         </ion-virtual-scroll>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
 
 
+<!-- <ion-content>  
+  <ion-grid>
+    <ion-row style="margin-top: 20px;">
+      <ion-col  size ="12" size-sm="4" offset-sm ="4">
+        <ion-virtual-scroll *ngIf="loadingPosts"  [items]="loadingPosts" approxItemHeight="60%"> 
+          <ion-card *virtualItem="let post" style="margin-bottom: 40px;overflow:hidden"  >
+            <ion-slides class="ionSlides" pager="true" [options]="slideOpts" >
+              <ion-slide style="border-top-right-radius: 10px;border-top-left-radius: 10px;" *ngFor="let img of post?.product[0].productimage_set">
+      
+
+                 <ion-img                
+                 title="Fleeks" 
+                 text="Listing image" 
+                 scheme="dark"  
+                 class="thumb-img"
+                 ionImgViewer 
+                 style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"
+                 [src]="img.image"></ion-img>
+        
+              </ion-slide> 
+            </ion-slides>
+
+         
+            <ion-card-content>
+              <ion-item lines="none">
+                <ion-avatar slot="start">
+                  <ion-img [src]="post.owner.image"></ion-img>
+                </ion-avatar>
+                <ion-label>{{post.owner.username}}</ion-label>
+                <ion-label>
+                  <ion-note>
+                    5 hours ago
+                  </ion-note>
+                </ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+         </ion-virtual-scroll>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content> -->

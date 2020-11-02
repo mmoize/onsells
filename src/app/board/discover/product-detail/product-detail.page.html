@@ -2,7 +2,7 @@
   <ion-toolbar color="primary" >
       <ion-item color="transparent"  lines="none">
         <ion-buttons  color="transparent"  slot="start">
-          <ion-back-button  defaultHref="/board"></ion-back-button>
+          <ion-back-button  defaultHref="/board/discover"></ion-back-button>
         </ion-buttons>
         <ion-item slot="end" color="transparent"  lines="none">
           <ion-icon name="eye-outline"></ion-icon>
@@ -28,8 +28,8 @@
 
            <!-- <img  [src]="item.image"/> -->
            <ion-img                
-           title="Fleeks" 
-           text="Listing image" 
+           [title]="post?.product[0].title" 
+           [text]="post?.owner.username" 
            scheme="dark"  
            class="thumb-img"
            ionImgViewer 
@@ -40,6 +40,16 @@
           </ion-item> -->
         </ion-slide> 
       </ion-slides>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
+        <ion-item lines="none">
+           <ion-label></ion-label>
+          <ion-note style="font-weight: bold;">
+           {{ post?.created_at | timeAgo }}
+          </ion-note>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -94,7 +104,7 @@
             Tags
           </ion-label>
         </ion-list-header>
-        <ion-slides  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
+        <ion-slides  [options]="{ slidesPerView: '4', zoom: true, grabCursor: false }">
           <ion-slide *ngFor="let tag of post?.product[0].taggit" >
             <ion-button  shape="round" fill="round">
               <ion-label  style="font-weight: bold;color: #8d3185 ; font-family: sans-serif;font-size: 10px;">

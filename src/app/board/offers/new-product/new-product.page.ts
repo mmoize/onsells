@@ -472,30 +472,17 @@ export class NewProductPage implements OnInit {
   }
 
 
-  // ionViewWillLeave() {
-  //  this.showAlert();
-  // }
+
 
   onPostProduct() {
     this.createProduct();
     setTimeout(() => {
-      this.routes.navigateByUrl(`/board/offers/new-post`);
-    },2500);
+      this.routes.navigateByUrl('/board/offers/new-post');
+    }, 3500);
 
   }
 
 
-  // onClick() {
-  //   this.modalCtrl.create({component: CategoryPickerComponent}).then(modelEl => {
-  //     modelEl.onDidDismiss().then(modalData => {
-  //       if (!modalData.data) {
-  //         return;
-  //       }
-
-  //     });
-  //     modelEl.present();
-  //   });
-  // }
 
 
 

@@ -19,11 +19,11 @@
             <ion-card-header color="transparent" class="contact-card__header-image"> 
               <div class="contact-card__avatar" style="background: transparent;">
               <img                
-              title="Fleeks" 
-               text="Profile" 
-               scheme="dark"  
-               class="thumb-img" 
-               ionImgViewer  style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  [src]="theImageString"/>
+                title="Fleeks" 
+                [text]="profilesData?.username" 
+                scheme="dark"  
+                class="thumb-img" 
+                ionImgViewer  style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  [src]="theImageString"/>
                   <!-- <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img> -->
               </div>
             </ion-card-header>

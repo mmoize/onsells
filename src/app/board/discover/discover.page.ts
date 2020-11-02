@@ -18,6 +18,7 @@ import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal
 import { MessageService } from 'src/app/messages/message.service';
 import * as firebase from 'firebase';
 
+
 @Component({
   selector: 'app-discover',
   templateUrl: './discover.page.html',
@@ -52,6 +53,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   loadingPosts: Post[];
   loaded = false;
   isCategory = false;
+  allCategory = false;
   categoryId;
   searching: any = false;
   searchTerm: string = '';
@@ -68,6 +70,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   minFilterPrice;
   maxFilterPrice;
 
+  // Category List-items: Displayed by a click event.
   categoryList = [
     new Category(
       '0',
@@ -102,11 +105,11 @@ export class DiscoverPage implements OnInit, OnDestroy {
       'assets/icons/clothingandaccessories.svg'
 
     ),
-    new Category(
-      '5',
-      'Classifieds',
-      'assets/icons/classifieds.svg'
-    ),
+    // new Category(
+    //   '5',
+    //   'Classifieds',
+    //   'assets/icons/classifieds.svg'
+    // ),
     new Category(
       '6',
       'Hobbies',
@@ -116,6 +119,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   ];
 
 
+  // control's the category list slider.
 
   slideOpts = {
     on: {
@@ -222,7 +226,7 @@ constructor(public postservice: PostService,
                          'userdp': this.userdp,
                         'conversations': []}
                           ).then(() => {
-                            //do nothin for now..
+                            // do nothing for now..
                           });  
                       } else {
                         this.setUpMsgService();
@@ -263,6 +267,7 @@ PreloadPost() {
             this.listedLoadedPosts = findx;
 
             this.listedLoadedPosts.push(postData[key]);
+            this.searching = false;
           }
         }
       }
@@ -275,6 +280,7 @@ PreloadPost() {
             // Do nothing.
           } else {
             this.listedLoadedPosts.unshift(this.loadingPosts[key]);
+            this.searching = false;
           }
         }
       }
@@ -286,6 +292,15 @@ PreloadPost() {
   });
 
 }
+
+  doRefresh(event) {
+    this.onSearchListings().then(() => {
+      this.PreloadPost();
+    });
+    setTimeout(() => {
+      event.target.complete();
+    }, 5000);
+  }
 
 async setCurrentUserDetails() {
   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
@@ -340,37 +355,37 @@ async setCurrentUserDetails() {
    debounceTime(700)
    )
  .subscribe(search => {
-  this.taggit = search;
+    this.taggit = search;
 
-  const dicParam = {};
-  dicParam['lat']= this.latitude;
-  dicParam['lng'] = this.longitude;
-  dicParam['usertoken'] = dicToken;
-  dicParam['searchTerm'] = search;
-  dicParam['taggit'] = this.taggit;
+    const dicParam = {};
+    dicParam['lat']= this.latitude;
+    dicParam['lng'] = this.longitude;
+    dicParam['usertoken'] = dicToken;
+    dicParam['searchTerm'] = search;
+    dicParam['taggit'] = this.taggit;
 
-  if (this.categoryId === 0 || this.categoryId === undefined) {
-      dicParam['category'] = 'None';
-  } else {
-    dicParam['category'] = this.categoryId.id;
-  }
- 
-  this.searchTerm = search;
+    if (this.categoryId === 0 || this.categoryId === undefined) {
+        dicParam['category'] = 'None';
+    } else {
+      dicParam['category'] = this.categoryId.id;
+    }
+  
+    this.searchTerm = search;
 
-  this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(resData => {
-        console.log('this is there posts', resData);
-        if (resData.length >= 0) {
-          this.postsSub = this.postservice.postRes.subscribe(postData => {
-            this.listedLoadedPosts = postData;
+    this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(resData => {
+          console.log('this is there posts', resData);
+          if (resData.length >= 0) {
+            this.postsSub = this.postservice.postRes.subscribe(postData => {
+              this.listedLoadedPosts = postData;
+              this.searching = false;
+              this.searchtext = '';
+            });
+          } else {
             this.searching = false;
-            this.searchtext = '';
-          });
-        } else {
-          this.searching = false;
-        }
+          }
 
+        });
       });
-    });
   }
 
     onSearchInput(ev) {
@@ -394,8 +409,9 @@ async setCurrentUserDetails() {
   }
 
 
-
+  // Sets the filters that fetches current listed Post within the user's radius.
   async onClickedCategory(category) {
+    this.searching = true;
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
@@ -419,6 +435,7 @@ async setCurrentUserDetails() {
     this.Selectedcategory = category;
     
     if (category_id !=='0') {
+      this.allCategory = true;
       this.categorySelected = true;
       this.isLoading = true;
 
@@ -426,14 +443,18 @@ async setCurrentUserDetails() {
         console.log('this is category data', data);
         this.listedLoadedPosts = data;
         this.isLoading = false;
+        this.searching = false;
       });
+      // Closes the category slider after 15 seconds from opening it.
       setTimeout(() => {
         this.onfilter = false;
         this.categorySelected = false;
-      },15500);
+      }, 15500);
+
+    // Else none of the offered categories are selected other than 'All'.
     } else {
-      
- 
+      this.searching = true;
+      this.allCategory = true;
       this.categorySelected = true;
       const allCategoryDicParam = {};
       dicParam['category'] = 'None';
@@ -441,18 +462,21 @@ async setCurrentUserDetails() {
         this.postsSub = this.postservice.postRes.subscribe(postData => {
           console.log('its coming', postData);
           this.listedLoadedPosts = postData;
+          this.searching = false;
         });
       });
+      // Closes the category slider after 15 seconds from opening it.
       setTimeout(() => {
         this.categorySelected = false;
         this.onfilter = false;
-      },15500);
+        this.allCategory = false;
+      },10500);
 
     }
 
 
   }
-
+  // Locates the user's Locations by returning Both the Latitude and Longitude.
   private locateUser() {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
        ///
@@ -466,9 +490,9 @@ async setCurrentUserDetails() {
       };
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
-      console.log('hi people', Coordinates);
+
     }).catch(err => {
-      console.log(err);
+      console.log('Error Locating the user', err);
     });
   }
 
@@ -489,7 +513,10 @@ async setCurrentUserDetails() {
 
     if (this.listedLoadedPosts === undefined) {
       this.isLoading = true;
-    }      
+      this.searching = true;
+    } else if (this.listedLoadedPosts !== undefined)  {
+      this.searching =false;
+    }   
 
   }
 

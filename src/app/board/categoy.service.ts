@@ -43,11 +43,11 @@ export class CategoyService {
       'assets/icons/clothingandaccessories.svg'
 
     ),
-    new Category(
-      '5',
-      'Classifieds',
-      'assets/icons/classifieds.svg'
-    ),
+    // new Category(
+    //   '5',
+    //   'Classifieds',
+    //   'assets/icons/classifieds.svg'
+    // ),
     new Category(
       '6',
       'Hobbies',

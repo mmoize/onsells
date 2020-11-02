@@ -14,6 +14,8 @@ import {
   PushNotificationActionPerformed
 } from '@capacitor/core';
 
+
+
 const { PushNotifications, Modals } = Plugins;
 
 
@@ -40,6 +42,8 @@ export class AppComponent implements OnInit, OnDestroy {
       if (Capacitor.isPluginAvailable('SplashScreen')) {
         Plugins.SplashScreen.hide();
       }
+
+    
     });
 
 

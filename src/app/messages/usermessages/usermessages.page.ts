@@ -258,11 +258,11 @@ loadUsers(user) {
     this.message = '';
 
 
-    this.messages.push(msg);
-    console.log('list', this.messages);
-    this.msgService.pushNewMessage(this.messages).then(() => {
-      console.log('sent');
-    });
+    // this.messages.push(msg);
+    // console.log('list', this.messages);
+    // this.msgService.pushNewMessage(this.messages).then(() => {
+    //   console.log('sent');
+    // });
 
 
   }

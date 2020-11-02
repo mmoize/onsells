@@ -383,7 +383,7 @@ export class OffersPage implements OnInit, OnDestroy {
 
   }
 
-  onDeleteListing(id, slidingItem: ItemSliding) {
+  onDeleteListing(id, slidingItem: IonItemSliding) {
 
       if(this.loadedUserPosts.length > 0) {
         this.userHasLoadedListings = true;

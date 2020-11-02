@@ -13,6 +13,7 @@ import { DiscoverPage } from './discover.page';
 import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
 import { ProductDetailPageModule } from './product-detail/product-detail.module';
 
+
 @NgModule({
   imports: [
     CommonModule,

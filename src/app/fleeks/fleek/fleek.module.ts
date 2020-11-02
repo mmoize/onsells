@@ -8,12 +8,16 @@ import { FleekPageRoutingModule } from './fleek-routing.module';
 
 import { FleekPage } from './fleek.page';
 
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FleekPageRoutingModule
+    FleekPageRoutingModule,
+    NgxIonicImageViewerModule,
+    
   ],
   declarations: [FleekPage]
 })

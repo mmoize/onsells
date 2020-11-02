@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'board', pathMatch: 'full' },
+  { path: '', redirectTo: 'board/discover', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
@@ -17,7 +17,7 @@ const routes: Routes = [
     loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule), canLoad: [AuthGuard]
   },
   {
-    path: 'discover',
+    path: 'board/discover',
     loadChildren: () => import('./board/discover/discover.module').then( m => m.DiscoverPageModule), canLoad: [AuthGuard]
   },
   {

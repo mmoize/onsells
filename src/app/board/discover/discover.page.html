@@ -1,16 +1,31 @@
-<!-- <ion-header>
-    <ion-toolbar color="transparent">
-      <ion-buttons slot='start'>
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-item lines="none">
+        <ion-buttons slot="start">
+          <ion-menu-button menu="m1"></ion-menu-button>
+        </ion-buttons>
+        <!-- <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img> -->
+        <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+          <div id="divsearchInput">
+            <ion-searchbar [(ngModel)]="searchtext"  (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
+          </div>
+        </ion-col>
+        <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
+          <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+        </ion-buttons>
+      </ion-item>
+      <!-- <ion-buttons slot='start'>
         <ion-menu-button menu="m1"></ion-menu-button>
       </ion-buttons> 
       <div id="divToolBar">
-        <ion-title id="theTitle" > MarketPlace </ion-title>
+        <ion-title id="theTitle" > Fleeks </ion-title>
 
-      </div>
+      </div> -->
     </ion-toolbar>
-  </ion-header> -->
-  <ion-row>
-    <ion-col>
+  </ion-header>
+
+  <!-- <ion-row>
+    <ion-col>   
       <ion-item lines="none">
         <ion-buttons slot="start">
           <ion-menu-button menu="m1"></ion-menu-button>
@@ -21,22 +36,25 @@
         </ion-buttons>
       </ion-item>
     </ion-col>
-  </ion-row>
+  </ion-row> -->
   
   
   <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-    <ion-row id="rowsearch">
+    <!-- <ion-row id="rowsearch">
       <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
         <div id="divsearchInput">
           <ion-searchbar [(ngModel)]="searchtext"  (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
         </div>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
     <ion-row>
       <ion-col size ="12" size-sm="8" offset-sm ="2">
-        <div >
+        <div *ngIf="allCategory"   >
           <h2  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #474747  ; ">{{ Selectedcategory.name }}</h2>
         </div>
       </ion-col>
@@ -71,28 +89,7 @@
     <div id="divSpinner" *ngIf="searching" class="spinner-container">
       <ion-spinner color="primary" ></ion-spinner>
     </div>
-    <!-- <ion-list>
-      <ion-item *ngFor="let item of items">
-        <ion-label (click)="onSearch()">
-          {{ item.product[0].title }}
-        </ion-label>
-      </ion-item>
-    </ion-list> -->
 
-    <!-- <ion-segment 
-    color="primary" 
-    scrollable="true"
-    [(ngModel)]="segmentModel" 
-    (ionChange)="segmentChanged($event)">
-
-    <ion-segment-button  *ngFor="let category of categoryList" value="all">
-      <ion-item (click)="onClickedCategory(category.id)" lines="none">
-        <ion-icon slot="start" [src]="category.icon"></ion-icon>
-        <ion-label>{{ category.name }}</ion-label>
-      </ion-item>
-    </ion-segment-button>
-
-    </ion-segment> -->
 
 
     <ion-row *ngIf="onfilter" >
@@ -108,7 +105,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-grid *ngIf="isLoading">
+    <!-- <ion-grid *ngIf="isLoading">
       <ion-row > 
         <ion-col  size ="12" size-sm="8" offset-sm ="2" text-center>
             <div id="spinnerid">
@@ -116,7 +113,7 @@
             </div>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid> -->
     <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
       <ion-row>
         <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
@@ -128,22 +125,6 @@
 
       <ion-row>
         <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-         <!-- <ion-virtual-scroll [items]="listedLoadedPosts" approxItemHeight="70px">
-          <ion-item
-          lines="none"
-          *virtualItem="let post"
-           detail>
-            
-            <ion-thumbnail slot="start">
-              <ion-img src="assets/img/Drone2.jpg"></ion-img>
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{ post.product[0].title }}</h2>
-              <p>{{ post.product[0].description }}</p>
-            </ion-label>
-          </ion-item> 
-         </ion-virtual-scroll> -->
-  
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -179,34 +160,7 @@
         </ion-row>
     </ion-grid>
   </ion-content>
-  <!-- [routerLink]="['/','places','discover', place.id]" -->
-  
-
-  <!-- <ion-grid *ngIf="!isLoading &&  relevantPosts.length > 0">
-    <ion-row>
-      <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>{{ relevantPosts[0].product[0]['title']}}</ion-card-title>
-            <ion-card-subtitle>{{ relevantPosts[0].product[0]['price ']| currency }} / Night</ion-card-subtitle>
-          </ion-card-header>
-          <ion-img src="assets/img/receipts.jpg"></ion-img>
-          <ion-card-content>
-            <p> <ion-label color="danger"> {{ relevantPosts[0].product[0]['description'] }} </ion-label></p>
-                        
-            <div>
-              <ion-button fill="clear" color="primary"
-               routerDirection="forward"
-               [routerLink]="['/','places','discover',relevantPlaces[0].id]">
-                More
-              </ion-button>
-            </div>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  
-  </ion-grid> -->
+ 
 
 
 
@@ -215,27 +169,3 @@
 
 
 
-
-
-  <!-- <ion-row *ngIf="!isLoading &&  relevantPosts.length > 0">
-    <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-      <ion-card>
-        <ion-card-header>
-          <ion-item lines="none">
-            <ion-card-title slot="start">{{ relevantPosts[0].product[0]['title']}}</ion-card-title>
-            <ion-card-subtitle slot="end">{{ relevantPosts[0].product[0]['price'] | currency }} </ion-card-subtitle>
-          </ion-item>
-        </ion-card-header>
-        <ion-img src="assets/img/popular3.png"></ion-img>
-        <ion-card-content>
-          <ion-item lines="none">
-            <p slot='start'> <ion-label color="danger"> {{ relevantPosts[0].product[0]['description'] }} </ion-label></p>
-            <ion-button slot="end" fill="clear" color="primary"
-            routerDirection="forward">
-              More
-            </ion-button>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row> -->

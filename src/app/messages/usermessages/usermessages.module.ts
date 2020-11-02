@@ -9,12 +9,14 @@ import { UsermessagesPageRoutingModule } from './usermessages-routing.module';
 
 import { UsermessagesPage } from './usermessages.page';
 import { VideoPlayer } from '@ionic-native/video-player/ngx';
+import { MomentModule } from 'ngx-moment';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    MomentModule,
     UsermessagesPageRoutingModule
   ],
   providers: [

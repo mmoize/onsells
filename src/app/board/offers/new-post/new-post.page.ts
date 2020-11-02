@@ -272,7 +272,7 @@ export class NewPostPage implements OnInit {
   onCreatePostListing(data) {
    this.loadingCtrl.create({keyboardClose: true, message: 'Creating your item for listing'})
    .then(loadingEl => {
-     loadingEl.present()
+     loadingEl.present();
      const ProductData = new FormData();
      ProductData.append('title', this.selectedProduct.title);
      ProductData.append('slug', this.selectedProduct.slug);

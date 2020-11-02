@@ -10,7 +10,7 @@
         </ion-button>
       </ion-buttons>
       <ion-buttons *ngIf="!selectedProduct"  slot="start">
-        <ion-back-button  defaultHref="/board"></ion-back-button>
+        <ion-back-button  defaultHref="/board/offers"></ion-back-button>
       </ion-buttons>
     </ion-item>
 
@@ -136,7 +136,14 @@
           <ion-slide  *ngFor="let item of selectedProduct?.productimage_set">
   
              <!-- <img  [src]="item.image"/> -->
-             <ion-img style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;" [src]="item.image"></ion-img>
+             <ion-img
+              title="Fleeks" 
+              [text]="selectedProduct?.user.username" 
+              scheme="dark"  
+              class="thumb-img"
+              ionImgViewer 
+              style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;"
+              [src]="item.image"></ion-img>
             <!-- <ion-item lines="none" text-center>
                   <ion-img  [src]="item.image"></ion-img>
             </ion-item> -->

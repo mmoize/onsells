@@ -302,13 +302,14 @@ export class ChatPage implements OnInit {
       content: this.message
     };
 
-    this.message = '';
+    
 
 
     this.messages.push(msg);
     console.log('list', this.messages);
-    this.msgService.pushNewMessage(this.messages).then(() => {
-      console.log('sent');
+    this.msgService.pushNewMessage(this.messages, this.message, this.otherUserId).then(() => {
+      console.log('sent ids', this.otherUserId);
+      this.message = '';
     });
 
 

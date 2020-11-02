@@ -1,9 +1,11 @@
+import { element } from 'protractor';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, take } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import * as firebase from 'firebase';
 
 export interface Video {
   title: string;
@@ -220,8 +222,67 @@ addNewChat() {
 }
 
 
-pushNewMessage(list) {
+pushNewMessage(list, msg, OtherUserId) {
+
+  const myReference = this.afs.doc('chatUsers/' + this.currentUser.userid);
+  const otherReference = this.afs.doc('chatUsers/' + OtherUserId);
+
+  myReference.get().subscribe(resData => {
+    const capturedData = resData.data();
+    
+    capturedData.conversations.forEach(element => {
+      //console.log('capturedData', element);
+      if ( element.chatid === this.chat.chatid) {
+        if (element.inbox) {
+          element.inbox = false;
+          element.outbox = true;
+          element.content = msg;
+          element.timestamp = new Date();
+          console.log('capturedData aq', element);
+        } else if (!element.inbox) {
+            element.inbox = false;
+            element.outbox = true;
+            element.content = msg;
+            element.timestamp = new Date();
+            console.log('capturedData', element);
+        }
+
+        myReference.update({conversations: capturedData.conversations});
+        console.log('capturedData a', capturedData.conversations);
+      }
+    });
+    
+  });
+
+  otherReference.get().subscribe(resData => {
+    const capturedData = resData.data();
+    
+    capturedData.conversations.forEach(element => {
+      //console.log('capturedData', element);
+      if ( element.chatid === this.chat.chatid) {
+        if (element.inbox) {
+          element.inbox = true;
+          element.outbox = false;
+          element.content = msg;
+          element.timestamp = new Date();
+          console.log('capturedData aq other', element);
+        } else if (!element.inbox) {
+            element.inbox = true;
+            element.outbox = false;
+            element.content = msg;
+            element.timestamp = new Date();
+            console.log('capturedData', element);
+        }
+
+        otherReference.update({conversations: capturedData.conversations});
+        console.log('capturedData a other', capturedData.conversations);
+      }
+    });
+    
+  });
+
   console.log('this-chat-x-x-x-x-x-x-', this.chat);
+
   return this.afs.doc('conversations/' + this.chat.chatid).update(
     {messages: list}
   );
