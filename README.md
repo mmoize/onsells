@@ -1,5 +1,5 @@
 # Fleeks
-Fleeks is a cross platform local based Marketplace, utilizing ionic  and angular for the FrontEnd and Django python for Back end`````````````````````````````````````````````                                            
+Fleeks is a cross platform local based Marketplace, utilizing ionic  and angular for the FrontEnd and Django python for Back end  `````````````````````````````````````````````                                            
 live test---------
 Email: tilo@gmail.com
 Password: anothertilo
