@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+// import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { UsermessagesPageRoutingModule } from './usermessages-routing.module';
 
@@ -22,6 +23,6 @@ import { MomentModule } from 'ngx-moment';
   providers: [
     VideoPlayer],
 
-  declarations: [UsermessagesPage]
+  declarations: [UsermessagesPage, ]
 })
 export class UsermessagesPageModule {}

@@ -3,28 +3,6 @@
     <ion-row>
       <ion-col size ="12" size-sm="4" offset-sm ="4">
         <ion-list  no-padding>
-          <!-- <ion-item *ngFor="let user of imgString"
-          (click)="openChatDetail(user)" routerDirection="forward" >
-            <ion-avatar class="chatImage" slot="start">
-              <ion-img [src]="user.userdp"></ion-img>
-            </ion-avatar>
-            <ion-label>
-              <div class="withcount">
-                <div class="nameAvatar">
-                  <h2 color="light">{{user.username}}
-                  </h2>
-                  <ion-note>
-                    {{ user.content }}
-                  </ion-note>
-                </div>
-      
-                <div class="timeEnd">
-                  <ion-text slot="end" color="dark">{{user.timestamp | date }}</ion-text>
-                </div>
-              </div>
-              <p class="widthHalf">{{user.description}}</p>
-            </ion-label>
-          </ion-item> -->
 
           <ion-card  id="recentCard" *ngFor="let user of imgString"  (click)="openChatDetail(user)" routerDirection="forward" >
             <ion-item-sliding id="item100">
@@ -33,14 +11,26 @@
                   <ion-img [src]="user.userdp"></ion-img>
                 </ion-avatar>
                 <ion-label>
-                  <h2>{{ user.username }}</h2>
-                  <h4>{{ user.content }}</h4>
-                  <h6>{{user.timestamp }}</h6>
+                  <h3 style="font-weight: bold;">{{ user.username }}</h3>
+                  <ion-item lines="none">
+                    <ion-note *ngIf="!user.inbox" slot="start" >
+                      you
+                    </ion-note>
+                     <p  style="background: rgba(51, 138, 196, 0.1);margin-left: 20px" *ngIf="!user.inbox" >{{ user.content }}</p>
+                    <!-- <h6>{{user.timestamp }}</h6> -->
+                    <ion-note slot="end">
+                      {{ user?.timestamp | date }}
+                    </ion-note>
+                  </ion-item>
                 </ion-label>
                 <ion-note slot="end">
-                  <!-- {{ data[0].created_at |  date:'shortTime' }} 
-                  {{user.timestamp }}-->
-                  <ion-icon class="msgIcon" *ngIf="user.inbox" color="primary" name="ellipse"></ion-icon>
+                  <ion-item lines="none">
+                    <p style="background: rgba(255, 11, 133, 0.1);" *ngIf="user.inbox"  slot="start">{{ user.content }}</p>
+                    <!-- {{ data[0].created_at |  date:'shortTime' }} 
+                    {{user.timestamp }}-->
+                    <ion-icon slot="end" class="msgIcon" *ngIf="user.inbox && !user.viewed" color="primary" name="ellipse"></ion-icon>
+                  </ion-item>
+
                 </ion-note>
             </ion-item> 
             <!-- <ion-item-options side="start">
@@ -67,32 +57,7 @@
   </ion-grid>
 </ion-content>
 
-<!-- <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item >
-      <ion-avatar slot="start">
-      //<img [src]="" />
-      </ion-avatar>
-      <ion-button slot="end" fill="clean" size="large" (click)="play()">
-        <ion-icon name="play-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-</ion-content> -->
 
-<!-- <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor="let v of videos">
-      <ion-avatar slot="start">
-        <img [src]="v.thumb" />
-      </ion-avatar>
-      <ion-label>{{v.title}}</ion-label>
-      <ion-button slot="end" fill="clean" (click)="play(v.url)" size="large">
-        <ion-icon name="play-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-</ion-content> -->
 
 
 

@@ -188,9 +188,7 @@ export class ChatPage implements OnInit {
     this.content.scrollToBottom(100);
   }
 
-  // ionViewWillLeave() {
-  //   this.events.unsubscribe('chat:received');
-  // }
+
 
   ionViewWillEnter(){
     this.profileservice.loadUserProfile(this.otherUserId).subscribe(resData => {

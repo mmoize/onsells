@@ -6,7 +6,7 @@ import { Plugins } from '@capacitor/core';
 import * as firebase from 'firebase';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { map, timeout } from 'rxjs/operators';
 import { constants } from 'perf_hooks';
 import { NgControlStatus } from '@angular/forms';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
@@ -149,12 +149,26 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
   }
 
 
-  ngOnInit() {
 
+  ionViewWillEnter(){
+    const convoData = this.msgService.currentUser.conversations;
+    convoData.forEach(resData => {
+      this.imgString.push(resData);
+      console.log('thisis reenter', resData)
+    });
+  }
+
+
+  ngOnInit() {
+    setTimeout(() => {
+
+      
+    }, 500);
 
   }
 
   getUpdatedDp() {
+
    const convoData = this.msgService.currentUser.conversations;
 
    convoData.forEach(resData => {
@@ -282,6 +296,50 @@ loadUsers(user) {
   }
 
   openChatDetail(user) {
+
+    const myReference = this.afs.doc('chatUsers/' + this.userid);
+    const otherReference = this.afs.doc('chatUsers/' + user.userid);
+
+    myReference.get().subscribe(resData => {
+      const capturedData = resData.data();
+      
+      capturedData.conversations.forEach(element => {
+        if ( element.chatid === user.chatid) {
+          if (element.inbox) {
+            element.viewed = true;
+            element.onseen = new Date();
+
+
+          } else if (!element.inbox) {
+            element.viewed = true;
+            element.onseen = new Date();
+          }
+          myReference.update({conversations: capturedData.conversations});
+          console.log('capturedData mine', capturedData.conversations);
+        }
+      }); 
+    });
+
+    otherReference.get().subscribe(resData => {
+      const capturedData = resData.data();
+      
+      capturedData.conversations.forEach(element => {
+        if ( element.chatid === user.chatid) {
+          if (element.inbox) {
+            element.onseen = new Date();
+            element.theyviewed = true;
+
+          } else if (!element.inbox) {
+            element.theyviewed = true;
+            element.onseen = new Date();
+          }
+          otherReference.update({conversations: capturedData.conversations});
+          console.log('capturedData other', capturedData.conversations);
+
+        }
+      }); 
+    });
+
     sessionStorage.setItem('other_userid', user.userid);
     sessionStorage.setItem('other_username', user.username);
     sessionStorage.setItem('other_dp', this.userdp);

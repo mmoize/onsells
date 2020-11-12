@@ -235,15 +235,21 @@ pushNewMessage(list, msg, OtherUserId) {
       if ( element.chatid === this.chat.chatid) {
         if (element.inbox) {
           element.inbox = false;
+          element.viewed = true;
           element.outbox = true;
           element.content = msg;
           element.timestamp = new Date();
+          element.theyviewed = false;
+          element.onseen = '';
           console.log('capturedData aq', element);
         } else if (!element.inbox) {
             element.inbox = false;
             element.outbox = true;
+            element.viewed = true;
             element.content = msg;
             element.timestamp = new Date();
+            element.theyviewed = false;
+            element.onseen = '';
             console.log('capturedData', element);
         }
 
@@ -263,14 +269,20 @@ pushNewMessage(list, msg, OtherUserId) {
         if (element.inbox) {
           element.inbox = true;
           element.outbox = false;
+          element.viewed = false;
           element.content = msg;
           element.timestamp = new Date();
+          element.theyviewed = true;
+          element.onseen = '';
           console.log('capturedData aq other', element);
         } else if (!element.inbox) {
             element.inbox = true;
             element.outbox = false;
+            element.viewed = false;
             element.content = msg;
             element.timestamp = new Date();
+            element.theyviewed = true;
+            element.onseen = '';
             console.log('capturedData', element);
         }
 

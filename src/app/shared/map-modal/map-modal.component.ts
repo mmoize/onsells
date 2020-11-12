@@ -9,7 +9,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() center: {lat: -34.397, lng: 150.644};
+  @Input() center: {lat: -33.8708, lng: 151.2073};
   @Input() selectable = true;
   @Input() closeButtonText = 'cancel';
   @Input() title = 'Pick Location';
@@ -30,8 +30,8 @@ export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
       this.googleMaps = googleMaps;
       const mapEl = this.mapElementRef.nativeElement;
       const map = new googleMaps.Map(mapEl, {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 18
+        center: {lat: -33.8708, lng: 151.2073},
+        zoom: 10
       });
 
       this.googleMaps.event.addListenerOnce(map, 'idle', () => {
