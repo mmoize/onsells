@@ -72,16 +72,6 @@ export class MessagesPage implements OnInit {
    this.getUserData();
    setTimeout(() => {
 
-    // const ref = firebase.firestore().collection('chatUsers').doc(this.userid);
-    // ref.set(
-    //   {userid: this.userid,
-    //   emai: this.email,
-    //   username: this.username},
-    //   {merge: true}
-    // );
-
-
-
     firebase.firestore().collection('chatUsers').get().then(resData => {
          resData.forEach(childData => {
            if (childData.data()['userid'] != this.userid) {
@@ -98,21 +88,6 @@ export class MessagesPage implements OnInit {
 
 
 
-  // createUser() {
-
-  //   firebase.firestore().collection('chatUsers').doc(this.userid).set({
-  //     userid: this.userid,
-  //     username: this.username,
-  //     email: this.email
-  //     })
-  //     .then(() => {
-  //         console.log('Document successfully written!');
-  //       })
-  //     .catch((error) => {
-  //         console.error('Error writing document: ', error);
-  //       });
-
-  // }
 
 
   async getUserData() {

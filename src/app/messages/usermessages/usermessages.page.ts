@@ -14,6 +14,7 @@ import { VideoOptions, VideoPlayer } from '@ionic-native/video-player/ngx';
 
 //import * as PluginsLibrary from 'capacitor-video-player';
 import * as PluginsLibrary from '@jeepq/capacitor';
+import { BehaviorSubject, empty, interval, Observable, Subscription } from 'rxjs';
 const { CapacitorVideoPlayer, Device } = Plugins;
 
 
@@ -38,9 +39,11 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
   currentlyPlaying = null;
   stickyVideo: HTMLVideoElement = null;
 
+  initialLoading = false;
+
   stickyPlaying = false;
   @ViewChild('stickyplayer', {static: false}) stickyPlayer: ElementRef;
-
+  mySubscription: Subscription;
 
   email;
   username;
@@ -52,8 +55,9 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
   chatuserListTest = [];
   chatuserList;
 
-  imgString = [];
 
+  imgString = [];
+  private msgs = new BehaviorSubject([]);
 
   title: string = 'fleeks';
 
@@ -126,11 +130,19 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
 
                   });
 
+                  this.mySubscription= interval(5000).subscribe((x => {
+                    this.getUpdatedDp();
+                    console.log('it happened');
+                }));
+
                 }, 1000);
 
 
               }
 
+ ionViewDidLeave(){
+   this.mySubscription.unsubscribe();
+ }             
 
   // Loads current user information
   async setCurrentUserDetails() {
@@ -150,52 +162,72 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
 
 
 
-  ionViewWillEnter(){
-    const convoData = this.msgService.currentUser.conversations;
-    convoData.forEach(resData => {
-      this.imgString.push(resData);
-      console.log('thisis reenter', resData)
-    });
-  }
+ionViewDidLoad(){
+ this.initialLoading = true;
+}
 
 
   ngOnInit() {
-    setTimeout(() => {
 
-      
-    }, 500);
 
   }
 
+  onRefresh(id) {
+    let usermsg = this.imgString.filter(user => user.userid !== id);
+    console.log('thisis onref', this.imgString);
+    return usermsg;
+  }
+
   getUpdatedDp() {
+   
+   const getCurrentData = this.msgService.setCurrentUser(sessionStorage.getItem('userId'));
+   setTimeout(() => {
+    const convoData = this.msgService.currentUser.conversations;
 
-   const convoData = this.msgService.currentUser.conversations;
+    convoData.forEach(resData => {
+     const data = [];
+     data.push(resData)
+     let usermsg = data.filter(user => user.userid !== this.userid);
+     this.profileService.loadUserProfile(resData.userid).subscribe(res => {
+       if (!this.initialLoading) {
+        this.userdp = res.image;
+        resData['userdp'] = this.userdp;
+       } else {
+         // do thing here
+       }
+  
+       const checkRoleExistence = roleParam =>  this.imgString.some( data => data.userid === roleParam );
+       const onexist = checkRoleExistence(resData.userid);
 
-   convoData.forEach(resData => {
-    this.profileService.loadUserProfile(resData.userid).subscribe(res => {
-      this.userdp = res.image;
-      resData['userdp'] = this.userdp;  
-      
-      const checkRoleExistence = roleParam =>  this.imgString.some( data => data.userid === roleParam );
-      const onexist = checkRoleExistence(resData.userid);
-      if (resData.userid !== this.userid) {
-        if (!onexist) {
-          this.imgString.push(resData);
-        } else {
-          // do nothing
-        }
+       if (!onexist) {
+        console.log('res..', resData);
+        this.imgString.push(resData);
       } else {
+       console.log('res..1', resData);
+       this.imgString.forEach(res => {
+         res['content'] = resData.content;
+       });
+       
         // do nothing
       }
 
 
+     });
+ 
     });
 
-   });
+    console.log('this is incoming data', convoData);
+    
+  }, 500);
 
-   console.log('this is incoming data', this.imgString);
+
+   
 
   }
+
+
+ 
+
 
 
   getCurrentUserChats() {

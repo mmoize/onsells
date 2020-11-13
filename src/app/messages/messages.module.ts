@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MessagesPageRoutingModule } from './messages-routing.module';
-import {TimeAgoPipe} from 'time-ago-pipe';
+
 
 import { MessagesPage } from './messages.page';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
@@ -21,6 +21,6 @@ import { UsermessagesPageModule } from './usermessages/usermessages.module';
     SuperTabsModule.forRoot(),
     MessagesPageRoutingModule,
   ],
-  declarations: [MessagesPage, UsermessagesPage, TimeAgoPipe]
+  declarations: [MessagesPage, UsermessagesPage]
 })
 export class MessagesPageModule {}

@@ -91,6 +91,7 @@ ion-img {
   .pins {
     column-count: 3;
     margin-top: 5px;
+    
   }
 
 
@@ -127,7 +128,7 @@ ion-icon {
 
 
 ion-searchbar{
-    --icon-color: var (--ion-color-primary);
+  
     --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
 
     ::ng-deep{
@@ -140,6 +141,11 @@ ion-searchbar{
             }
         }
     }   
+}
+
+location-image {
+    --icon-color: var (--ion-color-primary);
+    --border-radius: 20px;
 }
 
 

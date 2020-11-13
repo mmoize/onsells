@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { ProfileService } from './../../accounts/profile.service';
 import { Category } from './../category.model';
 import { FcmService } from './../../fcm.service';
@@ -10,13 +11,15 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
-import { Platform, ModalController } from '@ionic/angular';
+import { Platform, ModalController, ActionSheetController } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
 import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
 import { MessageService } from 'src/app/messages/message.service';
 import * as firebase from 'firebase';
+import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
+
 
 
 @Component({
@@ -60,6 +63,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   searchControl: FormControl;
   searchtext;
   taggit;
+  locationimage;
   
   currentAreaLocationName;
   latitude;
@@ -187,6 +191,7 @@ constructor(public postservice: PostService,
             private routes: Router,
             private profileservice: ProfileService,
             public msgService: MessageService,
+            private actionSheetCtrl: ActionSheetController,
             private modalCtrl: ModalController,
 
               ) {
@@ -490,7 +495,8 @@ async setCurrentUserDetails() {
       };
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
-
+      this.locationimage = this.getMapImage(this.latitude, this.longitude, 10);
+      console.log('Error Locating the user', this.locationimage);
     }).catch(err => {
       console.log('Error Locating the user', err);
     });
@@ -517,7 +523,8 @@ async setCurrentUserDetails() {
     } else if (this.listedLoadedPosts !== undefined)  {
       this.searching =false;
     }   
-
+    
+  
   }
 
   async setUpListings() {
@@ -570,6 +577,7 @@ onOpenFiltersModal() {
        this.minFilterPrice =  data.data.min;
 
        this.onClickedCategory(this.Selectedcategory);
+       this.locationimage = this.getMapImage(this.latitude, this.longitude, 10);
     });
   });
 }
@@ -617,7 +625,49 @@ onOpenMapFiltersModal() {
   }
 
 
+  private getMapImage(lat: number, lng: number, zoom: number) {
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=500x300&maptype=roadmap
+    &markers=color:red%7Clabel:Place%7C${lat},${lng}
+    &key=${environment.googleMapsApiKey}`;
+  }
 
+
+  onPickLocation() {
+    this.actionSheetCtrl.create({
+      header: 'Please Choose',
+      buttons: [
+        {text: 'Auto-Locate', handler: () => {
+          this.locateUser();
+        }},
+        {text: 'Pick on Map', handler: () => {
+          this.openMap();
+        }},
+        {text: 'Cancel', role: 'cancel'}
+      ]
+    }).then(actionSheetEl => {
+      actionSheetEl.present();
+    });
+  }
+
+  private openMap() {
+    this.modalCtrl.create({component: MapModalComponent}).then(modelEl => {
+      modelEl.onDidDismiss().then(modalData => {
+        console.log('this is maps',modalData);
+        if (!modalData.data) {
+          return;
+        }
+        const coordinates: Coordinates = {
+           lat: modalData.data.lat,
+           lng: modalData.data.lng
+         };
+        this.latitude = coordinates.lat;
+        this.longitude = coordinates.lng;
+       this.locationimage = this.getMapImage(coordinates.lat, coordinates.lng, 10);
+       this.onClickedCategory(this.Selectedcategory);
+      });
+      modelEl.present();
+    });
+  }
 
 
 }
