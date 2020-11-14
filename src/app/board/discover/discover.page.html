@@ -1,16 +1,16 @@
 <ion-header>
     <ion-toolbar color="primary">
       <ion-item lines="none">
-        <ion-buttons slot="start">
+        <ion-buttons *ngIf="!aboutToSearch"  slot="start">
           <ion-menu-button menu="m1"></ion-menu-button>
         </ion-buttons>
         <!-- <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img> -->
         <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
           <div id="divsearchInput">
-            <ion-searchbar [(ngModel)]="searchtext"  (ionChange)="onSearchInput($event)"  [formControl]="searchControl"></ion-searchbar>
+            <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
           </div>
         </ion-col>
-        <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
+        <ion-buttons *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
           <ion-img [src]="currentUserDP" class="img-head"></ion-img>
         </ion-buttons>
       </ion-item>
@@ -37,7 +37,7 @@
       </ion-item>
     </ion-col>
   </ion-row> -->
-  
+
   
   <ion-content>
 
@@ -71,13 +71,14 @@
         <ion-item lines="none">
           <ion-buttons slot="start">
             <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
-            <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
-            <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon>
+            <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
+              <ion-icon  name="add-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="onfilter" (click)="onDisplayFilters()">
+              <ion-icon    color="primary" name="add-circle-outline"></ion-icon>
+            </ion-button>
           </ion-buttons>
           <ion-item (click)="onOpenMapFiltersModal()" slot="end"lines="none">
-            <!-- <ion-buttons  *ngIf="currentUserDP"   color="success">
-              <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-            </ion-buttons> -->
             <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
             <h4   style="margin-top: 10px" style="font-weight: bold;" >{{ currentAreaLocationName}}</h4>
           </ion-item>
@@ -110,18 +111,20 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col size ="12" size-sm="8" offset-sm ="2">
+    <ion-row >
+      <ion-col size ="12" size-sm="8" offset-sm ="2" style="padding: 0px;" >
+        <div class="mapDiv"  >
+          <img 
+          
+          role="button"
+          class="location-image" 
+          [src]="locationimage" 
+          style="height: 8rem;object-fit: cover;width:100%;border-radius:15px"
+          (click)="onPickLocation()"
+          *ngIf="locationimage" 
+          />
         
-        <ion-img 
-        role="button"
-        class="location-image" 
-        [src]="locationimage" 
-        style="height: 8rem;object-fit: cover;border-radius: 5px indigo;"
-        (click)="onPickLocation()"
-        *ngIf="locationimage" 
-        >
-      </ion-img>
+        </div>
       </ion-col>
     </ion-row>
 
@@ -139,7 +142,7 @@
     <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
       <ion-row>
         <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-           <h4>There are no available products right now, please come back later</h4>
+           <h4>There are no available Listings right now, please come back later or change location </h4>
         </ion-col>
       </ion-row>
     </ion-grid>

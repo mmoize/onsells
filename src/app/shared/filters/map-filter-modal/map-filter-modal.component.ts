@@ -252,8 +252,7 @@ onClickclose() {
   }
 
 SelectSearchResult(item) {
-    /// WE CAN CONFIGURE MORE COMPLEX FUNCTIONS SUCH AS UPLOAD DATA TO FIRESTORE OR LINK IT TO SOMETHING
-    // alert(JSON.stringify(item));
+
     console.log('tthis is the results', item.structured_formatting.main_text);
     this.areaName = item.structured_formatting.main_text;
     this.placesId = item.place_id;

@@ -44,7 +44,8 @@ export class MapModalComponent implements OnInit, AfterViewInit, OnDestroy {
            lat: event.latLng.lat(),
            lng: event.latLng.lng()
           };
-          this.modalCtrl.dismiss(selectedCoords);
+          this.modalCtrl.dismiss(selectedCoords );
+          console.log('its map event',event);
         });
       } else {
         const marker = new googleMaps.Marker({

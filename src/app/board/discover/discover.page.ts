@@ -9,7 +9,7 @@ import { PostService } from './../post.service';
 import { Post } from './../post.model';
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription, fromEvent } from 'rxjs';
-import { take, debounceTime, map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { take, debounceTime, map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
 import { Platform, ModalController, ActionSheetController } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
@@ -19,6 +19,7 @@ import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal
 import { MessageService } from 'src/app/messages/message.service';
 import * as firebase from 'firebase';
 import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -62,8 +63,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
   searchTerm: string = '';
   searchControl: FormControl;
   searchtext;
+  aboutToSearch = false;
   taggit;
   locationimage;
+
   
   currentAreaLocationName;
   latitude;
@@ -78,7 +81,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   categoryList = [
     new Category(
       '0',
-      'All',
+      'Fleeks',
       'assets/icons/homeandgarden.svg'
     ),
     new Category(
@@ -192,6 +195,7 @@ constructor(public postservice: PostService,
             private profileservice: ProfileService,
             public msgService: MessageService,
             private actionSheetCtrl: ActionSheetController,
+            private http: HttpClient,
             private modalCtrl: ModalController,
 
               ) {
@@ -378,12 +382,14 @@ async setCurrentUserDetails() {
     this.searchTerm = search;
 
     this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(resData => {
-          console.log('this is there posts', resData);
           if (resData.length >= 0) {
             this.postsSub = this.postservice.postRes.subscribe(postData => {
               this.listedLoadedPosts = postData;
               this.searching = false;
-              this.searchtext = '';
+             
+              setTimeout(() => {
+                this.searchtext = '';
+              }, 5000);
             });
           } else {
             this.searching = false;
@@ -403,7 +409,15 @@ async setCurrentUserDetails() {
 
     }
 
+    aboutTosearch() {
 
+      if (this.aboutToSearch) {
+        this.aboutToSearch = false;
+      } else if (!this.aboutToSearch) {
+        this.aboutToSearch = true;
+      }
+
+    }
 
 
     
@@ -423,7 +437,7 @@ async setCurrentUserDetails() {
 
 
     const category_id = category.id;
-    console.log('this is category', category.id);
+
     const dicParam = {};
     dicParam['lat']= this.latitude;
     dicParam['lng'] = this.longitude;
@@ -445,7 +459,7 @@ async setCurrentUserDetails() {
       this.isLoading = true;
 
       this.postsSub = this.postservice.fetchPosts(dicParam).subscribe(data => {
-        console.log('this is category data', data);
+
         this.listedLoadedPosts = data;
         this.isLoading = false;
         this.searching = false;
@@ -496,6 +510,7 @@ async setCurrentUserDetails() {
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
       this.locationimage = this.getMapImage(this.latitude, this.longitude, 10);
+      this.getAddress(this.latitude, this.longitude);
       console.log('Error Locating the user', this.locationimage);
     }).catch(err => {
       console.log('Error Locating the user', err);
@@ -662,11 +677,29 @@ onOpenMapFiltersModal() {
          };
         this.latitude = coordinates.lat;
         this.longitude = coordinates.lng;
-       this.locationimage = this.getMapImage(coordinates.lat, coordinates.lng, 10);
-       this.onClickedCategory(this.Selectedcategory);
+        this.locationimage = this.getMapImage(coordinates.lat, coordinates.lng, 10);
+        this.onClickedCategory(this.Selectedcategory);
+        this.getAddress( this.latitude, this.longitude).subscribe(resData => {
+          console.log('address o1', resData.address_components[3]);
+        });
+
       });
       modelEl.present();
     });
+  }
+
+  private getAddress(lat: number, lng: number) {
+    return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=
+    ${environment.googleMapsApiKey}`
+    ).pipe(map(geoData => {
+      if (!geoData || !geoData.results || geoData.results.length === 0) {
+        return null;
+      }
+      this.currentAreaLocationName = geoData.results[0].address_components[3].short_name;
+      console.log('yes11')
+      return geoData.results[0].formatted_address;
+    })
+    );
   }
 
 
