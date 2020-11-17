@@ -10,7 +10,7 @@
             <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
           </div>
         </ion-col>
-        <ion-buttons *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+        <ion-buttons (click)="onOpenProfile()" *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
           <ion-img [src]="currentUserDP" class="img-head"></ion-img>
         </ion-buttons>
       </ion-item>
@@ -161,8 +161,8 @@
                 <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
                          
                       <ion-card    >
-                          <!-- <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img> -->
-                          <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
+                          <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                          <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
                       </ion-card>
                         <div id="toplay">
                           <ion-label >

@@ -426,17 +426,9 @@ export class OffersPage implements OnInit, OnDestroy {
   }
 
 
-  // async presentAlertMultipleButtons() {
-  //   const alert = await this.alertController.create({
-  //     cssClass: 'my-custom-class',
-  //     header: 'Delete Item',
-  //     subHeader: 'Are you sure want to delete.',
-  //     message: 'The current listing will be taken down.',
-  //     buttons: ['Cancel', 'Open Modal', 'Delete']
-  //   });
-
-  //   await alert.present();
-  // }
+  onOpenListingDetails(post) {
+    this.routes.navigateByUrl(`board/discover/post-detail/${post.id}`);
+  }
 
 
   async presentAlertConfirm(postId: string, slidingitem: IonItemSliding) {

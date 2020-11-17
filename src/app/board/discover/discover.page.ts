@@ -20,6 +20,7 @@ import { MessageService } from 'src/app/messages/message.service';
 import * as firebase from 'firebase';
 import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
+import { resetFakeAsyncZone } from '@angular/core/testing';
 
 
 
@@ -510,8 +511,10 @@ async setCurrentUserDetails() {
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
       this.locationimage = this.getMapImage(this.latitude, this.longitude, 10);
-      this.getAddress(this.latitude, this.longitude);
-      console.log('Error Locating the user', this.locationimage);
+      this.getAddress(this.latitude, this.longitude).subscribe(res => {
+        console.log('Error Locating the user', res);
+      });
+
     }).catch(err => {
       console.log('Error Locating the user', err);
     });
@@ -624,6 +627,10 @@ onOpenMapFiltersModal() {
     console.log('clickx', this.loaded);
   }
 
+  onOpenProfile() {
+    this.routes.navigateByUrl(`/accounts/profile`);
+  }
+
   ngOnDestroy() {
     if (this.postsSub) {
       this.postsSub.unsubscribe();
@@ -653,6 +660,9 @@ onOpenMapFiltersModal() {
       buttons: [
         {text: 'Auto-Locate', handler: () => {
           this.locateUser();
+          setTimeout(() => {
+            this.onClickedCategory(this.Selectedcategory);
+          }, 500);
         }},
         {text: 'Pick on Map', handler: () => {
           this.openMap();
@@ -688,7 +698,7 @@ onOpenMapFiltersModal() {
     });
   }
 
-  private getAddress(lat: number, lng: number) {
+  private getAddress(lat, lng) {
     return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=
     ${environment.googleMapsApiKey}`
     ).pipe(map(geoData => {
@@ -696,7 +706,7 @@ onOpenMapFiltersModal() {
         return null;
       }
       this.currentAreaLocationName = geoData.results[0].address_components[3].short_name;
-      console.log('yes11')
+      console.log('yes11', this.currentAreaLocationName);
       return geoData.results[0].formatted_address;
     })
     );

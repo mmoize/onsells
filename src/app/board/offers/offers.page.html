@@ -122,7 +122,7 @@
       
       <ion-virtual-scroll style="height: 20vh;" *ngIf="userHasLoadedListings"  [items]="loadedUserPosts" approxItemHeight="70px">
 
-        <ion-card id="recentCard" *virtualItem="let post" >
+        <ion-card (click)="onOpenListingDetails(post)" id="recentCard" *virtualItem="let post" >
           <ion-item-sliding #slidingItem id="item100">
             <ion-item (click)="openViewImageModal(data)">        <!--(click)="openViewImageModal(data)" -->
               <ion-thumbnail slot="start">
