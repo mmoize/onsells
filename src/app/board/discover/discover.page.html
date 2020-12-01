@@ -60,7 +60,12 @@
     <ion-row>
       <ion-col size ="12" size-sm="8" offset-sm ="2">
         <div *ngIf="allCategory"   >
-          <h2  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #474747  ; ">{{ Selectedcategory.name }}</h2>
+          <ion-item lines="none">
+            <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #474747  ; ">{{ Selectedcategory.name }}</h2>
+            <ion-select slot="end" [(ngModel)]="secondselectedCategory" (ngModelChange)="onsecondCategory($event)"   class="custom-options">
+              <ion-select-option   *ngFor="let category of selectedSecondChildCategory" [value]="category">{{category.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
         </div>
       </ion-col>
     </ion-row>

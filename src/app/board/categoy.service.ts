@@ -21,7 +21,7 @@ export class CategoyService {
       'assets/icons/homeandgarden.svg'
     ),
     new Category(
-      '7',
+      '31',
       'Entertainment',
       'assets/icons/entertainment.svg'
     ),
@@ -58,27 +58,32 @@ export class CategoyService {
 
   HomeGardenCategoryList = [
     new Subcategory(
+      '22',
       'Tools',
       'tool',
       '1'
     ),
     new Subcategory(
+      '7',
       'Furniture',
       'furniture ',
       '1'
     ),
     new Subcategory(
+      '8',
       'Garden',
       'garden',
       '1'
     ),
     new Subcategory(
+      '23',
       'Appliances',
       'Electronics',
       '1'
 
     ),
     new Subcategory(
+      '25',
       'Household',
       'household',
       '1'
@@ -89,21 +94,25 @@ export class CategoyService {
   ];
   clothingAccessoriesCategoryList = [
     new Subcategory(
+      '24',
       'Jewelry & Accessories',
       'jewelry_&_accessories',
       '2'
     ),
     new Subcategory(
+      '9',
       'Bags & luggage',
       'Bags_&_luggage',
       '2'
     ),
     new Subcategory(
+      '10',
       'Men\'s Clothing & Shoes',
       'mens_clothing_&_shoes',
       '2'
     ),
     new Subcategory(
+      '28',
       'Women\'s Clothing & Shoes',
       'womens_clothing_&_shoes',
       '2'
@@ -115,11 +124,13 @@ export class CategoyService {
 
   ElectronicsCategoryList = [
     new Subcategory(
+      '18',
       'Mobile Phones',
       'mobile_phones',
       '3'
     ),
     new Subcategory(
+      '13',
       'Electronics & Computers',
       'electronics_&_Computers',
       '3'
@@ -129,21 +140,25 @@ export class CategoyService {
 
   familyCategoryList = [
     new Subcategory(
+      '29',
       'Toy & Games',
       'toy_&_Games',
       '4'
     ),
     new Subcategory(
+      '21',
       'Baby & Kids',
       'baby_&_kids',
       '4'
     ),
     new Subcategory(
+      '17',
       'Pet Supplies',
       'pet_supplies',
       '4'
     ),
     new Subcategory(
+      '12',
       'Health & Beauty',
       'health_&_beauty',
       '4'
@@ -155,33 +170,39 @@ export class CategoyService {
 
     hobbiesCategoryList = [
       new Subcategory(
+        '11',
         'Sports & Outdoors',
         'sports_&_outdoors',
         '6'
       ),
       new Subcategory(
+        '15',
         'Musical Instrunments',
         'musical_instrunments',
         '6'
       ),
       new Subcategory(
+        '14',
         'Arts & Crafts',
         'art_&_crafts',
         '6'
       ),
       new Subcategory(
+        '22',
         'Antiques & Collectibles',
         'antiques_&_collectibles',
         '6'
   
       ),
       new Subcategory(
+        '26',
         'Auto Parts',
         'auto_parts',
         '6'
   
       ),
       new Subcategory(
+        '30',
         'Bicycles',
         'bicycles',
         '6'
@@ -191,14 +212,16 @@ export class CategoyService {
       ];
       entertainmentCategoryList = [
         new Subcategory(
+          '32',
           'Books, Movies & Music',
           'books_&_movies_&_music',
-          '7'
+          '31'
         ),
         new Subcategory(
+          '33',
           'Video Games',
           'video_games',
-          '7'
+          '31'
         ),
       ]
 

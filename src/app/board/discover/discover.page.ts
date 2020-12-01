@@ -11,7 +11,7 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
-import { Platform, ModalController, ActionSheetController } from '@ionic/angular';
+import { Platform, ModalController, ActionSheetController, PopoverController } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
@@ -21,6 +21,7 @@ import * as firebase from 'firebase';
 import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { resetFakeAsyncZone } from '@angular/core/testing';
+import { CategoyService } from '../categoy.service';
 
 
 
@@ -31,8 +32,20 @@ import { resetFakeAsyncZone } from '@angular/core/testing';
 })
 export class DiscoverPage implements OnInit, OnDestroy {
 
+  homeGardenCategoryList;
+  clothingAccCategoryList;
+  eletronicsCategoryList;
+  familyCategoryList;
+  hobbiesCategoryList;
+  entertainmentCategoryList;
+
+  selectedSecondChildCategory;
+  secondselectedCategory;
+
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
+
+
 
   email;
   username;
@@ -191,65 +204,71 @@ export class DiscoverPage implements OnInit, OnDestroy {
   };
 
 
-constructor(public postservice: PostService,
-            private routes: Router,
-            private profileservice: ProfileService,
-            public msgService: MessageService,
-            private actionSheetCtrl: ActionSheetController,
-            private http: HttpClient,
-            private modalCtrl: ModalController,
+  constructor(public postservice: PostService,
+              private routes: Router,
+              private profileservice: ProfileService,
+              public msgService: MessageService,
+              private actionSheetCtrl: ActionSheetController,
+              private http: HttpClient,
+              private modalCtrl: ModalController,
+              public popoverController: PopoverController,
+              private categoryservice: CategoyService,
 
-              ) {
-                this.searchControl = new FormControl();
-                this.onSearchListings();
-                this.getCurrentUserProfile();
-                this.setCurrentUserDetails();
+                ) {
 
-                setTimeout(() => {
+                  this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
+                  this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
+                  this.familyCategoryList = this.categoryservice.getFamilyCategory();
+                  this.eletronicsCategoryList = this.categoryservice.getElectronicsCategory();
+                  this.hobbiesCategoryList = this.categoryservice.getHobbiesCategory();
+                  this.entertainmentCategoryList = this.categoryservice.getEntertainmentCategory();
 
-                  // Set firebase credentials.
+                  this.searchControl = new FormControl();
+                  this.onSearchListings();
+                  this.getCurrentUserProfile();
+                  this.setCurrentUserDetails();
 
-                  const users = [];
-                  firebase.firestore().collection('chatUsers').get().then(resData => {
-                    resData.forEach(childData => {
-                      users.push(childData.data());
-                      if (childData.data()['userid'] !== this.userid) {
+                  setTimeout(() => {
+
+                    // Set firebase credentials.
+
+                    const users = [];
+                    firebase.firestore().collection('chatUsers').get().then(resData => {
+                      resData.forEach(childData => {
                         users.push(childData.data());
-                        this.testUsers.push(childData.data());
-                      }
+                        if (childData.data()['userid'] !== this.userid) {
+                          users.push(childData.data());
+                          this.testUsers.push(childData.data());
+                        }
 
+                      });
+                      this.chatuserListTest = users;
+
+
+                      const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
+                      const onexist = checkRoleExistence(this.userid);
+                      console.log(' does user exist', onexist);
+                      setTimeout(() => {
+                        if (!onexist) {
+                          // tslint:disable-next-line: no-unused-expression
+                          this.msgService.createUser(
+                            this.userid,
+                          {'username': this.username,
+                          'email': this.email,
+                          'userid': this.userid,
+                          'userdp': this.userdp,
+                          'conversations': []}
+                            ).then(() => {
+                              // do nothing for now..
+                            });  
+                        } else {
+                          this.setUpMsgService();
+                        }
+                      }, 500);
                     });
-                    this.chatuserListTest = users;
-
-
-                    const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
-                    const onexist = checkRoleExistence(this.userid);
-                    console.log(' does user exist', onexist);
-                    setTimeout(() => {
-                      if (!onexist) {
-                        // tslint:disable-next-line: no-unused-expression
-                        this.msgService.createUser(
-                          this.userid,
-                        {'username': this.username,
-                         'email': this.email,
-                         'userid': this.userid,
-                         'userdp': this.userdp,
-                        'conversations': []}
-                          ).then(() => {
-                            // do nothing for now..
-                          });  
-                      } else {
-                        this.setUpMsgService();
-                      }
-                    }, 500);
-                  });
-                }, 1000);
-
-
-                this.PreloadPost();
-
-
-               }
+                  }, 1000);
+                  this.PreloadPost();
+  }
 
 PreloadPost() {
 
@@ -312,33 +331,33 @@ PreloadPost() {
     }, 5000);
   }
 
-async setCurrentUserDetails() {
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  const userDicData = JSON.parse(value);
+  async setCurrentUserDetails() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const userDicData = JSON.parse(value);
 
-  this.email = userDicData.email;
-  this.username = userDicData.username;
-  this.userid = JSON.stringify(userDicData.user_id);
-
-
-  this.profileservice.loadUserProfile(this.userid).subscribe(res => {
-    this.userdp = JSON.stringify(res.image);
-  });
+    this.email = userDicData.email;
+    this.username = userDicData.username;
+    this.userid = JSON.stringify(userDicData.user_id);
 
 
-}
+    this.profileservice.loadUserProfile(this.userid).subscribe(res => {
+      this.userdp = JSON.stringify(res.image);
+    });
+
+
+  }
 
   // checks if new listings are already in display
   checkRoleExistence(id: string):boolean {
       return this.loadedPosts.some(r => r.id === id);
-    }
+  }
 
-    setUpMsgService() {
-      this.msgService.setCurrentUser(this.userid);
-    }
+  setUpMsgService() {
+    this.msgService.setCurrentUser(this.userid);
+  }
 
 
-   ngOnInit() {
+  ngOnInit() {
 
     // When there's no selected category.
     if (!this.Selectedcategory) {
@@ -350,6 +369,12 @@ async setCurrentUserDetails() {
   onSearch() {
     this.listedLoadedPosts = this.items;
   }
+
+
+ onSecondChildCategory(selectedChild) {
+   
+ }
+
 
   async onSearchListings() {
 
@@ -428,6 +453,14 @@ async setCurrentUserDetails() {
     this.onClickedCategory(category);
   }
 
+  onsecondCategory(event) {
+     console.log('category', event.id)
+     this.secondselectedCategory= undefined;
+     this.onClickedCategory(event);
+     
+
+  }
+
 
   // Sets the filters that fetches current listed Post within the user's radius.
   async onClickedCategory(category) {
@@ -435,6 +468,8 @@ async setCurrentUserDetails() {
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
+
+   this.secondselectedCategory = '';
 
 
     const category_id = category.id;
@@ -453,8 +488,27 @@ async setCurrentUserDetails() {
     }
 
     this.Selectedcategory = category;
+    console.log('category', category)
     
     if (category_id !=='0') {
+
+      if (category_id ==='1') {
+        this.selectedSecondChildCategory = this.homeGardenCategoryList;
+
+      }
+      if (category_id ==='7') {
+        this.selectedSecondChildCategory = this.entertainmentCategoryList;
+      }
+      if (category_id ==='3') {
+        this.selectedSecondChildCategory = this.eletronicsCategoryList;
+      }
+      if (category_id ==='4') {
+        this.selectedSecondChildCategory = this.familyCategoryList;
+      }
+      if (category_id ==='2') {
+        this.selectedSecondChildCategory = this.clothingAccCategoryList;
+      }
+
       this.allCategory = true;
       this.categorySelected = true;
       this.isLoading = true;
@@ -511,6 +565,7 @@ async setCurrentUserDetails() {
       this.latitude = Coordinates.lat;
       this.longitude = Coordinates.lng;
       this.locationimage = this.getMapImage(this.latitude, this.longitude, 10);
+      console.log('image 02', this.locationimage);
       this.getAddress(this.latitude, this.longitude).subscribe(res => {
         console.log('Error Locating the user', res);
       });
@@ -688,6 +743,7 @@ onOpenMapFiltersModal() {
         this.latitude = coordinates.lat;
         this.longitude = coordinates.lng;
         this.locationimage = this.getMapImage(coordinates.lat, coordinates.lng, 10);
+        console.log('image 01', this.locationimage);
         this.onClickedCategory(this.Selectedcategory);
         this.getAddress( this.latitude, this.longitude).subscribe(resData => {
           console.log('address o1', resData.address_components[3]);
@@ -711,6 +767,17 @@ onOpenMapFiltersModal() {
     })
     );
   }
+
+
+  // async presentPopover(ev: any) {
+  //   const popover = await this.popoverController.create({
+  //     component: PopoverComponent,
+  //     cssClass: 'my-custom-class',
+  //     event: ev,
+  //     translucent: true
+  //   });
+  //   return await popover.present();
+  // }
 
 
 }
