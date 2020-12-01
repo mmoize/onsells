@@ -10,7 +10,7 @@ const fbAdmin = require('firebase-admin');
 const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage({
-  projectId: 'myplaces-ae5f2'
+  projectId: 'placebnb'
 });
 
 fbAdmin.initializeApp({credential: fbAdmin.credential.cert(require('./ionicApp.json'))})
@@ -52,7 +52,7 @@ exports.storeImage = functions.https.onRequest((req, res) => {
       return fbAdmin.auth().verifyIdToken(idToken).then(decodedToken => {
         console.log(uploadData.type);
         return storage
-          .bucket('myplaces-ae5f2.appspot.com')
+          .bucket('placebnb.appspot.com')
           .upload(uploadData.filePath, {
             uploadType: 'media',
             destination: imagePath,
@@ -68,7 +68,7 @@ exports.storeImage = functions.https.onRequest((req, res) => {
           return res.status(201).json({
             imageUrl:
               'https://firebasestorage.googleapis.com/v0/b/' +
-              storage.bucket('myplaces-ae5f2.appspot.com').name +
+              storage.bucket('placebnb.appspot.com').name +
               '/o/' +
               encodeURIComponent(imagePath) +
               '?alt=media&token=' +
