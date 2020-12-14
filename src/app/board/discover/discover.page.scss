@@ -3,34 +3,60 @@
 }
 
 ion-card {
-    border-radius: 3px;
+    border-radius: 20px;
 
     overflow: hidden;
     text-align: center;
     position: relative;
     margin: 0px;
     padding: 0px;
-
-
-
+    margin-bottom:  20px;
 }
+
+ion-image {
+    margin: 0px;
+}
+
+#firstlayer > ion-card > ion-img {
+    margin: 0px;
+}
+
+body > app-root > ion-app > ion-router-outlet > app-board > ion-tabs > div > ion-router-outlet > app-discover > ion-content > ion-grid:nth-child(6) > ion-row > ion-col > div {
+    margin: 0px;
+}
+
+div.item-native {
+    padding: 0px;
+}
+
+#firstlayer > ion-card > ion-card-content{
+    padding: opx;
+}
+
+#firstlayer > ion-card > ion-label > ion-card-header {
+    padding: 0.3rem;
+    font-weight: bolder;
+}
+
 
 #firstlayer {
     overflow: hidden;
+    // overflow: scroll;
     text-align: center;
     position: relative;
+    display: inline-block;
     //margin-top: 5px;
-
 }
+
 ion-label {
     font-weight: bold;
- 
+    margin: 0px;
 }
 
 h3 {
     background-color: rgb(35, 43, 39, 0.9);
     font-weight: bolder;
-    color: rgba(49, 175, 101, 0.87);
+    color: rgba(221, 214, 220, 0.87);
     border-radius: 5px;
 }
 #toplay{
@@ -56,6 +82,7 @@ h3 {
     color:violet;
     width: 25px;
     height: 25px;
+    font-weight: bold;
 }
 
 // ion-item {
@@ -91,6 +118,19 @@ ion-img {
   
   .pins {
     column-count: 3;
+    margin-top: 5px;
+    
+  }
+
+
+  .pinMobile {
+    display: inline-block;
+    margin: 0 5px 5px;
+    padding: 5px;
+  }
+  
+  .pinsMobile {
+    column-count: 2;
     margin-top: 5px;
     
   }

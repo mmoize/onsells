@@ -10,7 +10,12 @@ export interface ProfileData {
   user_id: string;
   username: string;
   first_name: string;
+  followers: [];
+  following: [];
+  following_count: number;
+  followers_count: number;
   last_name: string;
+  is_following;
   country: string;
   city: string;
   bio: string;
@@ -25,31 +30,45 @@ export class ProfileService {
   private _posts = new BehaviorSubject<Post[]>([]);
 
   private _userProfileData = new BehaviorSubject<userProfileData>(null);
+
   userresultData;
 
   baseUrl = 'https://sellet.herokuapp.com/api/profiles/';
   profileEditUrl = 'https://sellet.herokuapp.com/api/user/';
+  
+  fullProfileUrl = 'https://sellet.herokuapp.com/api/core/';
 
   userProfileListingsUrl = 'https://sellet.herokuapp.com/api/getprofilepostlisting/';
 
   constructor(private http: HttpClient, ) { }
   
-  loadUserProfile(id) {
-    return this.http.get<ProfileData>(`${this.baseUrl}${id}`).pipe(tap(this.setProfile.bind(this)));
+  loadUserProfile1(token, userName) {
+    return this.http.get<ProfileData>(`${this.fullProfileUrl}${userName}/`,  {
+      headers: {
+        'Content-Type': 'application/json',
+        // tslint:disable-next-line: max-line-length
+        Authorization: 'Token ' + token ,
+      }
+    }
+    ).pipe(tap(this.setProfile.bind(this)));
 
   }
 
+  loadUserProfile(id) {
+    return this.http.get<ProfileData>(`${this.baseUrl}${id}`).pipe(tap(this.setProfile.bind(this)));
+  }
   setProfile(profileData: ProfileData) {
+    console.log('new dara', profileData);
     const rawData = JSON.stringify(profileData);
     const parseData = JSON.parse(rawData);
-    const theUserID = parseData.profile.user_id;
-    const theUsername = parseData.profile.username;
-    const theFname = parseData.profile.f_name;
-    const theLname = parseData.profile.l_name;
-    const theCountry = parseData.profile.country;
-    const theCity = parseData.profile.city;
-    const theBio = parseData.profile.bio;
-    const theimage = parseData.profile.image;
+    const theUserID = parseData.user_id;
+    const theUsername = parseData.username;
+    const theFname = parseData.f_name;
+    const theLname = parseData.l_name;
+    const theCountry = parseData.country;
+    const theCity = parseData.city;
+    const theBio = parseData.bio;
+    const theimage = parseData.image;
     const userProfile = new userProfileData (
        profileData.user_id = theUserID,
        profileData.username = theUsername,
@@ -159,6 +178,47 @@ export class ProfileService {
       }
     });
    }
+
+
+
+    UserFollowRelationship(token, info, username) {
+
+    const data = info;
+    const xhr = new XMLHttpRequest();
+    const url = `${this.fullProfileUrl}${username}/follow`;
+    xhr.open('POST', url, true);
+    // xhr.setRequestHeader( 'Content-Type', 'application/json' );
+    xhr.setRequestHeader( 'Authorization', 'Token ' + token );
+    xhr.withCredentials = true;
+    return xhr.send(data);
+
+  }
+  UserUnFollowRelationship(token, info, username) {
+
+    const data = info;
+    console.log('content type', data);
+    const xhr = new XMLHttpRequest();
+    const url = `${this.fullProfileUrl}${username}/follow`;
+    xhr.open('POST', url, true);
+    // xhr.setRequestHeader( 'Content-Type', 'application/json' );
+    xhr.setRequestHeader( 'Authorization', 'Token ' + token );
+    xhr.withCredentials = true;
+    return xhr.send(data);
+
+  }
+
+
+  getUserProfile(token, info) {
+    const data = info;
+    const xhr = new XMLHttpRequest();
+    const url = `${this.fullProfileUrl}/${info.username}/`;
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader( 'Authorization', 'Token ' + token );
+    xhr.withCredentials = true;
+    return xhr.send(data);
+  }
+
+
 
 
 

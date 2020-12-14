@@ -19,14 +19,26 @@ export class UserprofileComponent implements OnInit {
   @Input() selectedPost: Post;
   @Input() selectedProfile;
   @Input() userId;
+  @Input() fromRelationData;
 
   theImageString;
   profilesData;
-  ownerImage
+  ownerImage;
+
+  is_following;
+  changedRelationship = false;
+  isFollowing = false;
+  isUnFollowing = false;
 
   listedSeg = false;
   fleekSeg = false;
   mapSeg = false;
+
+  followingSeg = false;
+  followersSeg = false;
+
+  loadedFollowers;
+  loadedFollowing;
 
 
   userListedPost;
@@ -35,33 +47,122 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private modalCtrl: ModalController,
               private routes: Router,
-              private profileservice: ProfileService) { }
+              private profileservice: ProfileService) 
+              { 
+                this.listedSeg = true;
+              }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const dic = JSON.parse(value);
+    const dicData = dic;
+    const token = dicData.token;
+    
+    const userId = dicData.user_id;
+
     if (this.selectedPost) {
-      console.log('user_post', this.selectedPost);
+
+      const username = this.selectedPost.owner['username'];
+      const userId = this.selectedPost.owner['id'];
       this.profilesData = this.selectedPost.owner;
       this.theImageString = this.profilesData.image;
-      console.log('user_post_iamge', this.selectedPost);
-    } else if (this.selectedProfile) {
-      this.theImageString = this.selectedProfile.image;
-    } else if (this.userId) {
-      //opening user-profile from chat-modal
-     this.getUserFromChat(this.userId);
-    }
-    }
 
-    async getUserFromChat(userid) {
-      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-      const dic = JSON.parse(value);
-      const dicToken = dic.token;
-      
-      this.userListedSub = this.profileservice.UserProfileListings(userid , dicToken).subscribe(resData => {
+      this.userListedSub = this.profileservice.UserProfileListings(userId, username).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
 
-      this.userListedSub = this.profileservice.loadUserProfile(userid).subscribe(resData => {
+      this.profileservice.loadUserProfile1(token, username).subscribe(resData => {
+        this.is_following = resData.is_following;
+        if (this.is_following) {
+          this.isUnFollowing = true;
+        } else if (!this.is_following) {
+          this.isFollowing = true;
+        }
+        this.loadedFollowers = resData.followers;
+        this.loadedFollowing = resData.following;
+        this.theImageString = resData.image;
+        console.log('selected post username', resData);
+      });
+      console.log('user_post_iamge', this.selectedPost);
+    } else if (this.selectedProfile) {
+      this.theImageString = this.selectedProfile.image;
+    } else if (this.userId) {
+     // opening user-profile from chat-modal
+     this.getUserFromChat(this.userId);
+     console.log('profile service id', this.userId);
+
+    } else if (this.fromRelationData) {
+
+      this.theImageString = this.fromRelationData.image;
+      const relationUserId = this.fromRelationData.id;
+      const relationUsername = this.fromRelationData.username;
+      console.log('from relation', this.fromRelationData);
+
+      this.userListedSub = this.profileservice.UserProfileListings(relationUserId, relationUsername).subscribe(resData => {
+        this.userListedPost = resData;
+        console.log('for res listed', resData);
+      });
+
+      this.profileservice.loadUserProfile1(token, this.fromRelationData.username).subscribe(resData => {
+        this.is_following = resData.is_following;
+        if (this.is_following) {
+          this.isUnFollowing = true;
+        } else if (!this.is_following) {
+          this.isFollowing = true;
+        }
+        this.loadedFollowers = resData.followers;
+        this.loadedFollowing = resData.following;
+        this.profilesData = resData;
+        this.theImageString = resData.image;
+        console.log('this is new profile after', this.profilesData);
+        console.log('this is new profile', this.loadedFollowers);
+
+      });
+
+    }
+  
+    }
+
+
+    async reloadUser() {
+      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+      const dic = JSON.parse(value);
+      const dicData = dic;
+      const token = dicData.token;    
+       
+      this.profileservice.loadUserProfile1(token, this.fromRelationData.username).subscribe(resData => {
+        this.is_following = resData.is_following;
+        if (this.is_following) {
+          this.isUnFollowing = true;
+        } else if (!this.is_following) {
+          this.isFollowing = true;
+        }
+        this.loadedFollowers = resData.followers;
+        this.loadedFollowing = resData.following;
+        this.profilesData = resData;
+        this.theImageString = resData.image;
+        console.log('this is new profile after', this.profilesData);
+        console.log('this is new profile', this.loadedFollowers);
+
+      });
+    }
+
+
+    async getUserFromChat(userid) {
+      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+      const dic = JSON.parse(value);
+      const dicData = dic.token;
+      const token = dicData.token;
+      const username = dicData.username;
+      const userId = dicData.user_id;
+      
+      this.userListedSub = this.profileservice.UserProfileListings(userid, username).subscribe(resData => {
+        this.userListedPost = resData;
+        console.log('for res listed', resData);
+      });
+
+      this.userListedSub = this.profileservice.loadUserProfile1(token, username).subscribe(resData => {
         console.log('Profile Data Results', resData);
         this.theImageString = resData.image;
         this.profilesData = resData;
@@ -72,7 +173,7 @@ export class UserprofileComponent implements OnInit {
   
       const user = this.selectedPost.owner;
       const userID = user['id'];
-      this.userListedSub = this.profileservice.UserProfileListings(userID , dicToken).subscribe(resData => {
+      this.userListedSub = this.profileservice.UserProfileListings(userID , token).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
@@ -83,14 +184,58 @@ export class UserprofileComponent implements OnInit {
 
   }
 
+ async onFollowUser() {
+   if (this.isFollowing === true) {
+
+     this.isUnFollowing = true;
+     this.isFollowing = false;
+     this.reloadUser();
+   } else if (this.isFollowing === false) {
+     this.reloadUser();
+     this.isFollowing = true;
+     this.isUnFollowing = false;
+   }
+   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+   const dic = JSON.parse(value);
+   const dicData = dic;
+   const token = dicData.token;
+
+   const info = new FormData();
+   info.append('action', 'follow');
+  // info.append('username', this.profilesData.username);
+   this.profileservice.UserFollowRelationship(token, info, this.profilesData.username);
+
+ }
+
+ async unFollowUser() {
+
+  if (this.isUnFollowing === true) {
+    this.isUnFollowing = false;
+    this.isFollowing = true;
+    this.reloadUser();
+  } else if (this.isUnFollowing === false) {
+    this.reloadUser();
+    this.isFollowing = false;
+    this.isUnFollowing = true;
+  }
+  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const dic = JSON.parse(value);
+  const dicData = dic;
+  const token = dicData.token;
+
+  const info = new FormData();
+  // info['action'] = 'unfollow';
+  info.append('action', 'unfollow');
+  // info.append('username', this.profilesData.username);
+  this.profileservice.UserUnFollowRelationship(token, info, this.profilesData.username);
+
+ }
+
   onCancel() {
     this.modalCtrl.dismiss(null, 'cancel');
   }
 
   doRefresh(event) {
-
-
-
     setTimeout(() => {
       console.log('user_post', this.selectedPost);
       this.ownerImage = this.selectedPost.owner;
@@ -129,6 +274,7 @@ export class UserprofileComponent implements OnInit {
       this.fleekSeg = false;
       this.listedSeg = false;
       this.mapSeg = true;
+      this.followersSeg = true;
     }
 
   }
@@ -137,6 +283,29 @@ export class UserprofileComponent implements OnInit {
     this.routes.navigateByUrl(`/board/discover/post-detail/${id}`);
     this.modalCtrl.dismiss(null, 'cancel');
   }
+
+  followersSegmentChanged(event: CustomEvent<SegmentChangeEventDetail>) {
+    if (event.detail.value === 'following') {
+      this.followingSeg = true;
+      this.followersSeg = false;
+      
+    }  else if (event.detail.value === 'followers') {
+      console.log('its 2');
+      this.followersSeg = true;
+      this.followingSeg = false;
+    } 
+  }
+
+  openModal(user) {
+    this.modalCtrl.create({
+      component:UserprofileComponent,
+      componentProps: { fromRelationData: user}
+    }).then(modalEl => {
+      modalEl.present();
+      return modalEl.onDidDismiss();
+    });
+  }
+
 
 }
  

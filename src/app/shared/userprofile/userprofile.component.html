@@ -12,13 +12,22 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="!mapSeg" >
       <ion-col size="12" size-sm="8" offset-sm= "2"  >
         <ion-card  id="mianCard">
           <div  class="contact-card">
             <ion-card-header color="transparent" class="contact-card__header-image"> 
               <div class="contact-card__avatar" style="background: transparent;">
-              <img                
+              <!-- <ion-img 
+                id = "ionAvatar"               
+                title="Fleeks" 
+                [text]="profilesData?.username" 
+                scheme="dark"  
+                class="thumb-img" 
+                ionImgViewer  style='height: 100%; width: 100%; --border-radius: 100%; object-fit: cover;'  [src]="theImageString"></ion-img> -->
+                <img 
+                *ngIf="theImageString" 
+                id = "ionAvatar"               
                 title="Fleeks" 
                 [text]="profilesData?.username" 
                 scheme="dark"  
@@ -29,42 +38,42 @@
             </ion-card-header>
             <p class="contact-card__name">{{ profilesData?.username }}</p>
             <div class="contact-card__footer">
-              <!-- <div class="contact-card__footer__core">
+              <div class="contact-card__footer__core">
               
                 <ion-card color="transparent"  class="contact-card__footer__core__email">
-                  <ion-card-header>
-                    <ion-card-title>Bio</ion-card-title>
-                  </ion-card-header>
-                  <ion-card-content *ngIf="selectedPost">
-                    
-                    {{ selectedPost?.owner.bio }}
-                  </ion-card-content>
-                  <ion-card-content *ngIf="selectedProfile">
-                    
-                    {{ selectedProfile.bio }}
-                  </ion-card-content>
-                </ion-card>
-    
-                <ion-card color="transparent" class="contact-card__footer__core__email">
-                  <ion-card-header>
-                    <ion-card-title>City</ion-card-title>
-                  </ion-card-header>
-    
+                  <!-- <ion-card-header>
+                    <ion-card-title></ion-card-title>
+                  </ion-card-header> -->
                   <ion-card-content >
-                    {{ selectedPost?.owner.city }}
+                    <ion-item lines="none">
+                      <ion-item (click)="onFollowUser()" *ngIf="isFollowing"  slot="start">
+                        <ion-buttons>
+                          <ion-icon slot="start" color="tertiary" name="person-add-outline"></ion-icon>
+                        </ion-buttons>
+                        <ion-buttons>
+                          <ion-button style="color:dodgerblue">
+                            follow
+                          </ion-button>
+                        </ion-buttons>
+                      </ion-item>
+                      <ion-item (click)="unFollowUser()" lines="none" *ngIf="isUnFollowing" slot="end">
+                        <ion-buttons>
+                          <ion-icon slot="start" name="person-remove-outline"></ion-icon>
+                        </ion-buttons>
+                        <ion-buttons>
+                          <ion-button style="color:dodgerblue">
+                            unfollow
+                          </ion-button>
+                        </ion-buttons>
+                      </ion-item>
+
+                    </ion-item>
                   </ion-card-content>
+
                 </ion-card>
     
-                <ion-card color="transparent" class="contact-card__footer__core__email">
-                  <ion-card-header>
-                    <ion-card-title> Country</ion-card-title>
-                  </ion-card-header>
-                  
-                   <ion-card-content>
-                    {{selectedPost?.owner.country }}
-                   </ion-card-content>
-                </ion-card>
-              </div> -->
+
+              </div>
             </div>
            </div>
         </ion-card>
@@ -116,5 +125,76 @@
 
       </ion-col>
     </ion-row>
+     
+    <ion-row *ngIf="mapSeg" >
+      <ion-col>
+        <ion-segment (ionChange)="followersSegmentChanged($event)" value="followers" color="tertiary">
+          <ion-segment-button value="followers">
+            <ion-label *ngIf="followersSeg"  style="font-weight: bold;">Followers</ion-label>
+            <ion-icon name="people-outline"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button value="following">
+            <ion-label *ngIf="followingSeg"  style="font-weight: bold;" >Following</ion-label>
+            <ion-icon name="person-add-outline"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="mapSeg && followersSeg" >
+      <ion-col size ="12" size-sm="8" offset-sm ="2">
+        <ion-virtual-scroll style="height: 20vh;"   [items]="loadedFollowers" approxItemHeight="70px">
+
+          <ion-card (click)="openModal(user)" style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="recentCard" *virtualItem="let user" >
+
+            <ion-item-sliding style="margin: 10px;box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="item100">
+              <ion-item lines="none" >        <!--(click)="openViewImageModal(data)" -->
+                <ion-avatar style="border-radius: 15px" slot="start">
+                  <ion-img style="object-fit: cover;"  [src]="user.image"></ion-img>
+                </ion-avatar>
+                <ion-label style="margin-left: 10px;">
+                  <h2>{{ user.username }}</h2>
+                  <!-- <p>{{  }}</p> -->
+                </ion-label>
+                <ion-note slot="end">
+                  <!-- {{ post.created_at |  date:'shortTime' }}
+                  {{post.created_at | date }} -->
+                </ion-note>
+            </ion-item> 
+            </ion-item-sliding>
+          </ion-card>
+
+         </ion-virtual-scroll>  
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row *ngIf="mapSeg && followingSeg" >
+      <ion-col size ="12" size-sm="8" offset-sm ="2">
+        <ion-virtual-scroll style="height: 20vh;"   [items]="loadedFollowing" approxItemHeight="70px">
+
+          <ion-card (click)="openModal(user)" style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="recentCard" *virtualItem="let user" >
+
+            <ion-item-sliding style="margin: 10px;box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);" id="item100">
+              <ion-item lines="none" >        <!--(click)="openViewImageModal(data)" -->
+                <ion-avatar style="border-radius: 15px" slot="start">
+                  <ion-img style="object-fit: cover;"  [src]="user.image"></ion-img>
+                </ion-avatar>
+                <ion-label style="margin-left: 10px;">
+                  <h2>{{ user.username }}</h2>
+                  <!-- <p>{{  }}</p> -->
+                </ion-label>
+                <ion-note slot="end">
+                  <!-- {{ post.created_at |  date:'shortTime' }}
+                  {{post.created_at | date }} -->
+                </ion-note>
+            </ion-item> 
+            </ion-item-sliding>
+          </ion-card>
+
+         </ion-virtual-scroll>  
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 </ion-content>

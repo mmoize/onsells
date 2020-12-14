@@ -24,6 +24,8 @@ import { resetFakeAsyncZone } from '@angular/core/testing';
 import { CategoyService } from '../categoy.service';
 
 
+type CurrentPlatform = 'browser' | 'native'; 
+
 
 @Component({
   selector: 'app-discover',
@@ -31,6 +33,9 @@ import { CategoyService } from '../categoy.service';
   styleUrls: ['./discover.page.scss'],
 })
 export class DiscoverPage implements OnInit, OnDestroy {
+
+  private _currentPlatform: CurrentPlatform;
+  platformIsMobile = false;
 
   homeGardenCategoryList;
   clothingAccCategoryList;
@@ -211,11 +216,15 @@ export class DiscoverPage implements OnInit, OnDestroy {
               private actionSheetCtrl: ActionSheetController,
               private http: HttpClient,
               private modalCtrl: ModalController,
+              private platform: Platform,
               public popoverController: PopoverController,
               private categoryservice: CategoyService,
 
                 ) {
 
+
+                  this.setCurrentPlatform();
+                  
                   this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
                   this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
                   this.familyCategoryList = this.categoryservice.getFamilyCategory();
@@ -269,6 +278,35 @@ export class DiscoverPage implements OnInit, OnDestroy {
                   }, 1000);
                   this.PreloadPost();
   }
+
+
+  get currentPlatform() {
+    return this._currentPlatform;
+  }
+
+  isNative() {
+    return this._currentPlatform === 'native';
+  }
+  isBrowser() {
+    return this._currentPlatform === 'browser';
+  }
+
+  private setCurrentPlatform() {
+    // Are we on mobile platform? Yes if platform is ios or android, but not desktop or mobileweb, no otherwise
+    if (
+        this.platform.is('ios')
+        || this.platform.is('android')
+        ) {
+          this._currentPlatform = 'native';
+          this.platformIsMobile = true;
+          console.log('platform is mobile');
+    } else {
+      this._currentPlatform = 'browser';
+      console.log('platform is desktop');
+    }
+  }
+
+
 
 PreloadPost() {
 
@@ -579,8 +617,9 @@ PreloadPost() {
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const userid = dic.user_id;
-    this.profileservice.loadUserProfile(userid).subscribe(resData => {
+    this.profileservice.loadUserProfile1(dic.token, dic.username).subscribe(resData => {
       this.currentUserDP = resData.image;
+      console.log('setting up user image', resData);
     });
   }
 

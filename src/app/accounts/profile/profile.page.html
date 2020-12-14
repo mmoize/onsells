@@ -18,7 +18,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="!mapSeg" >
       <ion-col  size ="12" size-sm="6" offset-sm ="3"   >
         <ion-card  id="mianCard">
           <div  class="contact-card">
@@ -58,6 +58,7 @@
         </ion-segment>
       </ion-col>
     </ion-row>
+
     <ion-row style="padding: 10px;">
       <ion-col size ="12" size-sm="6" offset-sm ="3" >
         
@@ -81,10 +82,81 @@
             </ion-item> 
             </ion-item-sliding>
           </ion-card>
-
          </ion-virtual-scroll>
-
       </ion-col>
     </ion-row>
+
+
+    <ion-row *ngIf="mapSeg" >
+      <ion-col>
+        <ion-segment (ionChange)="followersSegmentChanged($event)" value="followers" color="tertiary">
+          <ion-segment-button value="followers">
+            <ion-label *ngIf="followersSeg"  style="font-weight: bold;">Followers</ion-label>
+            <ion-icon name="people-outline"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button value="following">
+            <ion-label *ngIf="followingSeg"  style="font-weight: bold;" >Following</ion-label>
+            <ion-icon name="person-add-outline"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="mapSeg && followersSeg" >
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
+        <ion-virtual-scroll style="height: 20vh;"   [items]="loadedFollowers" approxItemHeight="70px">
+
+          <ion-card style="box-shadow: 15px 25px 20px 15px rgba(255, 11, 133, 0.1);" id="recentCard" *virtualItem="let user" >
+
+            <ion-item-sliding  id="item100">
+              <ion-item lines="none" >        <!--(click)="openViewImageModal(data)" -->
+                <ion-avatar style="border-radius: 15px" slot="start">
+                  <ion-img style="object-fit: cover;"  [src]="user.image"></ion-img>
+                </ion-avatar>
+                <ion-label style="margin-left: 10px;">
+                  <h2>{{ user.username }}</h2>
+                  <!-- <p>{{  }}</p> -->
+                </ion-label>
+                <ion-note slot="end">
+                  <!-- {{ post.created_at |  date:'shortTime' }}
+                  {{post.created_at | date }} -->
+                </ion-note>
+            </ion-item> 
+            </ion-item-sliding>
+          </ion-card>
+
+         </ion-virtual-scroll>  
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row *ngIf="mapSeg && followingSeg" >
+      <ion-col size ="12" size-sm="4" offset-sm ="4">
+        <ion-virtual-scroll style="height: 20vh;"   [items]="loadedFollowing" approxItemHeight="70px">
+
+          <ion-card  style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);padding:0.7rem" id="recentCard" *virtualItem="let user" >
+
+
+              <ion-item lines="none" >        <!--(click)="openViewImageModal(data)" -->
+                <ion-avatar style="border-radius: 15px" slot="start">
+                  <ion-img style="object-fit: cover;"  [src]="user.image"></ion-img>
+                </ion-avatar>
+                <ion-label style="margin-left: 10px;">
+                  <h2>{{ user.username }}</h2>
+                  <!-- <p>{{  }}</p> -->
+                </ion-label>
+                <ion-note slot="end">
+                  <!-- {{ post.created_at |  date:'shortTime' }}
+                  {{post.created_at | date }} -->
+                </ion-note>
+            </ion-item> 
+
+          </ion-card>
+
+         </ion-virtual-scroll>  
+      </ion-col>
+    </ion-row>
+
+
   </ion-grid>
 </ion-content>

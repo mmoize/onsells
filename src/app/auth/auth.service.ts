@@ -104,7 +104,7 @@ export class AuthService  implements OnDestroy {
     return dat;
   }
 
-  async returnUsername() {
+  async returnUsername() { 
     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
     const dit = JSON.parse(value);
     const dat = dit.username;

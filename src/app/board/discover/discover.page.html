@@ -10,7 +10,7 @@
             <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
           </div>
         </ion-col>
-        <ion-buttons (click)="onOpenProfile()" *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+        <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
           <ion-img [src]="currentUserDP" class="img-head"></ion-img>
         </ion-buttons>
       </ion-item>
@@ -158,30 +158,126 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-grid>
+
+    <ion-grid style="padding: 1rem;" *ngIf="platformIsMobile" >
+        <ion-row>
+            <ion-col size ="12" size-sm="8" offset-sm ="2" >
+
+              <div class="pinsMobile">
+                <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
+                      <ion-card >
+                          <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                          <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
+                          <!-- <ion-card-content>
+                            <div id="toplay">
+                              <ion-label >
+                                  <h3 >{{ post?.product[0].price  |currency }}</h3>
+                              </ion-label>
+                            <ion-label >
+                                <ion-item lines="none">
+                                  <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                                  <h3 >{{ post?.viewcount}}</h3>
+                                </ion-item>
+                            </ion-label>
+                            </div>
+                            <div   >
+                              <ion-item>
+                                <ion-label slot="start" >
+                                    <ion-item lines="none">
+                                      <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                                      <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                                    </ion-item>
+                                </ion-label>
+                                <ion-label >
+                                    <h3 >{{ post?.product[0].price  |currency }}</h3>
+                                </ion-label>
+                              </ion-item>
+                            </div>
+                          </ion-card-content> -->
+
+                            <ion-label>
+                              <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
+                            </ion-label>
+
+
+                          <div   >
+                            <ion-item>
+                              <ion-label slot="start" >
+                                  <ion-item lines="none">
+                                    <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                                    <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                                  </ion-item>
+                              </ion-label>
+                              <ion-label >
+                                  <h3 >{{ post?.product[0].price  |currency }}</h3>
+                              </ion-label>
+                            </ion-item>
+                          </div>
+                      </ion-card>
+
+                </div>
+              </div>
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+      <ion-grid style="padding: 1rem;" *ngIf="!platformIsMobile" >
         <ion-row>
             <ion-col size ="12" size-sm="8" offset-sm ="2" >
 
               <div class="pins">
                 <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
                          
-                      <ion-card    >
-                          <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
-                          <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
-                      </ion-card>
-                        <div id="toplay">
+                  <ion-card >
+                    <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                    <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
+                    <!-- <ion-card-content>
+                      <div id="toplay">
+                        <ion-label >
+                            <h3 >{{ post?.product[0].price  |currency }}</h3>
+                        </ion-label>
+                      <ion-label >
+                          <ion-item lines="none">
+                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                            <h3 >{{ post?.viewcount}}</h3>
+                          </ion-item>
+                      </ion-label>
+                      </div>
+                      <div   >
+                        <ion-item>
+                          <ion-label slot="start" >
+                              <ion-item lines="none">
+                                <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                                <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                              </ion-item>
+                          </ion-label>
                           <ion-label >
                               <h3 >{{ post?.product[0].price  |currency }}</h3>
                           </ion-label>
-                        </div>
-                        <!-- <div   id="divViews" >
-                          <ion-label >
-                              <ion-item lines="none">
-                                <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                                <h3 >{{ post?.viewcount}}</h3>
-                              </ion-item>
-                          </ion-label>
-                        </div> -->
+                        </ion-item>
+                      </div>
+                    </ion-card-content> -->
+
+                      <ion-label>
+                        <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
+                      </ion-label>
+
+
+                    <div   >
+                      <ion-item>
+                        <ion-label slot="start" >
+                            <ion-item lines="none">
+                              <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                              <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                            </ion-item>
+                        </ion-label>
+                        <ion-label >
+                            <h3 >{{ post?.product[0].price  |currency }}</h3>
+                        </ion-label>
+                      </ion-item>
+                    </div>
+                </ion-card>
                     
                 </div>
               </div>
@@ -192,8 +288,38 @@
   </ion-content>
  
 
+  <!-- <ion-grid style="padding: 1rem;" *ngIf="!platformIsMobile" >
+    <ion-row>
+        <ion-col size ="12" size-sm="8" offset-sm ="2" >
 
+          <div class="pins">
+            <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
+                     
+                  <ion-card >
+                      <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                     
+                  </ion-card>
+                    <div id="toplay">
+                      <ion-label >
+                          <h3 >{{ post?.product[0].price  |currency }}</h3>
+                      </ion-label>
+                    </div>
+                    <div   id="divViews" >
+                      <ion-label >
+                          <ion-item lines="none">
+                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                            <h3 >{{ post?.viewcount}}</h3>
+                          </ion-item>
+                      </ion-label>
+                    </div>
+                
+            </div>
+          </div>
 
+        </ion-col>
+    </ion-row>
+</ion-grid>
+ -->
 
 
 
