@@ -734,7 +734,7 @@ onOpenMapFiltersModal() {
   onDisplayFilters() {
     if (this.onfilter) {
       this.onfilter = false;
-    } else if (!this.onfilter) {
+    } else  {
       this.onfilter = true;
 
     }
