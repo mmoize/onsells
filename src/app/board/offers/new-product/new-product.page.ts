@@ -304,6 +304,7 @@ export class NewProductPage implements OnInit {
     tag['id'] = getRandomArbitrary(1,1000);
     tag['tagg']= data;
     this.addedTags.push(tag);
+    this.tag = '';
   }
 
 

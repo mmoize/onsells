@@ -10,7 +10,7 @@ ion-card {
     position: relative;
     margin: 0px;
     padding: 0px;
-    margin-bottom:  20px;
+    
 }
 
 ion-image {
@@ -30,7 +30,7 @@ div.item-native {
 }
 
 #firstlayer > ion-card > ion-card-content{
-    padding: opx;
+    padding: 0px;
 }
 
 #firstlayer > ion-card > ion-label > ion-card-header {
@@ -45,7 +45,9 @@ div.item-native {
     text-align: center;
     position: relative;
     display: inline-block;
-    //margin-top: 5px;
+    border-radius: 20px;
+    box-shadow: 0 10px 10px rgba(70, 60, 64, 0.418);
+    margin-bottom:  1.2rem;
 }
 
 ion-label {
@@ -54,9 +56,10 @@ ion-label {
 }
 
 h3 {
-    background-color: rgb(35, 43, 39, 0.9);
+    //background-color: rgb(35, 43, 39, 0.9);
     font-weight: bolder;
-    color: rgba(221, 214, 220, 0.87);
+    font-size: large;
+    color: rgba(26, 23, 25, 0.87);
     border-radius: 5px;
 }
 #toplay{
@@ -125,7 +128,7 @@ ion-img {
 
   .pinMobile {
     display: inline-block;
-    margin: 0 5px 5px;
+    margin: 0 20px 20px;
     padding: 5px;
   }
   
@@ -199,6 +202,7 @@ ion-item {
     display: flex;
     align-items: center;
     flex-direction: column-reverse;
+    margin-bottom: 1rem;
 
 }
 
@@ -255,3 +259,10 @@ input {
     border-radius: 5px;
 }
 
+.mapDiv {
+    box-shadow: 0 15px 25px rgba(92, 8, 47, 0.856);
+    //box-shadow: 0 15px 20px rgba(70, 60, 64, 0.856);
+    // display: inline-block;
+    margin: 0px;
+    overflow: hidden;
+}

@@ -90,7 +90,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   currentAreaLocationName;
   latitude;
   longitude;
-  onfilter = false;
+  onfilter = true;
   categorySelected = false;
   Selectedcategory;
   minFilterPrice;
@@ -734,7 +734,7 @@ onOpenMapFiltersModal() {
   onDisplayFilters() {
     if (this.onfilter) {
       this.onfilter = false;
-    } else {
+    } else if (!this.onfilter) {
       this.onfilter = true;
 
     }
