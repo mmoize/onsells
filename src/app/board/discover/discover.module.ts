@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { LazyLoadImageModule } from 'ng-lazyload-image'; 
 
 import { DiscoverPageRoutingModule } from './discover-routing.module';
 
@@ -20,6 +21,7 @@ import { ProductDetailPageModule } from './product-detail/product-detail.module'
     FormsModule,
     IonicModule,
     SharedModule,
+    LazyLoadImageModule,
     ReactiveFormsModule,
     DiscoverPageRoutingModule
   ],

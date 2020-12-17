@@ -155,7 +155,8 @@
               <div class="pinsMobile">
                 <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
                       <ion-card >
-                          <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                        <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" />
+                          <!-- <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" ></ion-img> -->
                           <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
                           <!-- <ion-card-content>
                             <div id="toplay">

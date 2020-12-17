@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CommonModule } from '@angular/common';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -46,6 +47,7 @@ import { MomentModule } from 'ngx-moment';
             SuperTabsModule.forRoot(),
             ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
             AngularFireModule.initializeApp(environment.firebaseConfig),
+            LazyLoadImageModule,
             AngularFireAuthModule,
             AngularFireDatabaseModule,
             AngularFireStorageModule,
