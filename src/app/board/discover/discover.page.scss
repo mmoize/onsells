@@ -187,6 +187,39 @@ ion-searchbar{
     }   
 }
 
+
+#searchBarDesktop > div > input {
+   width: 70vw;
+}
+
+
+
+
+#searchBarDesktop {
+
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+
+    --height: 4rem; 
+    margin-top: 10rem;
+    --width: 70vw;
+
+
+    ::ng-deep{
+        .searchbar-input-container{  
+            --width: 70vw;         
+            .searchbar-input{ 
+                border-radius: 20px;
+
+                //height: 4rem;
+                //any style that you want to implement on your searchbar
+                //box-shadow: rgb(44, 41, 41);
+                //box-shadow: 5px 10px red;
+            }
+        }
+    }   
+
+}
+
 location-image {
     --icon-color: var (--ion-color-primary);
     --border-radius: 20px;
@@ -260,9 +293,39 @@ input {
 }
 
 .mapDiv {
-    box-shadow: 0 15px 25px rgba(92, 8, 47, 0.856);
-    //box-shadow: 0 15px 20px rgba(70, 60, 64, 0.856);
+    //box-shadow: 0 15px 25px rgba(92, 8, 47, 0.856);
+    box-shadow: 0 10px 10px rgba(51, 47, 49, 0.856);
     // display: inline-block;
     margin: 0px;
     overflow: hidden;
 }
+
+
+#homeHeaders {
+    //background: rgb(35,0,36);
+    //background: linear-gradient(180deg, rgba(35,0,36,1) 14%, rgba(172,124,155,0) 82%);
+    background: linear-gradient(180deg, rgba(158, 56, 122, 0.568) 14%, rgba(179, 171, 176, 0) 82%);
+    // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    border-bottom: 0px;
+    padding: 0px;
+
+}
+
+
+#homeHeadersDesktop {
+    
+    // background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2013/12/02/182518/8854ad3013a3ae7072656c43ec1a568b-1000.jpg") no-repeat center fixed ;
+    // background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/48753.jpg") no-repeat center fixed;
+    background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    // background: url("https://i.pinimg.com/originals/5c/4a/d2/5c4ad2b8188d3d14613902209dc33165.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.luxewalls.com.au/wp-content/uploads/2020/10/5.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/2703797.jpg") no-repeat center fixed;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2012/03/23/1742/0281fbc906a36721c25f55f3ce963407.jpg") no-repeat center fixed;
+    // background: url("https://cdn.wallpapersafari.com/27/90/uwPC5N.jpg") no-repeat center fixed;
+    height: 80vh;
+}
+

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 import { HomePage } from './home.page';
 
@@ -13,6 +14,7 @@ import { HomePage } from './home.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    LazyLoadImageModule ,
     HomePageRoutingModule
   ],
   declarations: [HomePage]

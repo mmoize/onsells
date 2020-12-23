@@ -11,6 +11,7 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
 import { HomePageModule } from './home/home.module';
 import { FleekscameraPageModule } from './fleekscamera/fleekscamera.module';
 import { FleekPageModule } from './fleek/fleek.module';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { FleekPageModule } from './fleek/fleek.module';
     HomePageModule,
     FleekPageModule,
     FleekscameraPageModule,
+    LazyLoadImageModule,
     SuperTabsModule.forRoot(),
   ],
   declarations: [FleeksPage]

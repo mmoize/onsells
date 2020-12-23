@@ -11,7 +11,7 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Plugins, Capacitor } from '@capacitor/core';
-import { Platform, ModalController, ActionSheetController, PopoverController } from '@ionic/angular';
+import { Platform, ModalController, ActionSheetController, PopoverController, IonContent } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
 import {  Coordinates } from '../location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
@@ -33,6 +33,9 @@ type CurrentPlatform = 'browser' | 'native';
   styleUrls: ['./discover.page.scss'],
 })
 export class DiscoverPage implements OnInit, OnDestroy {
+
+  @ViewChild('DesktopContent') content: IonContent;
+  scrolled = false;
 
   private _currentPlatform: CurrentPlatform;
   platformIsMobile = false;
@@ -100,18 +103,18 @@ export class DiscoverPage implements OnInit, OnDestroy {
   categoryList = [
     new Category(
       '0',
-      'Fleeks',
-      'assets/icons/homeandgarden.svg'
-    ),
-    new Category(
-      '1',
-      'Home & Garden ',
+      'Home',
       'assets/icons/homeandgarden.svg'
     ),
     new Category(
       '7',
       'Entertainment',
       'assets/icons/entertainment.svg'
+    ),
+    new Category(
+      '1',
+      'Home & Garden ',
+      'assets/icons/homeandgarden.svg'
     ),
     new Category(
       '3',
@@ -817,6 +820,24 @@ onOpenMapFiltersModal() {
   //   });
   //   return await popover.present();
   // }
+
+  logScrollStart() {
+    console.log('logScrollStart');
+    document.getElementById('desktopContent');
+  }
+
+  logScrolling(event) {
+
+
+    if (event.detail.currentY >=300 ) {
+        this.scrolled = true;
+        console.log('Down to the bottom', event.detail.currentY)
+        console.log('Down ', this.scrolled)
+    } else if (event.detail.currentY <=200)
+       this.scrolled = false
+       console.log('up ', this.scrolled)
+        console.log('Back to the top', event.detail.currentY)
+  }
 
 
 }

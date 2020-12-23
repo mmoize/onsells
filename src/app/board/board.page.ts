@@ -19,7 +19,7 @@ export class BoardPage implements OnInit {
   }
 
   openFleeks() {
-    this.routes.navigateByUrl(`/messages`);
+    this.routes.navigateByUrl(`/fleeks`);
   }
 
 

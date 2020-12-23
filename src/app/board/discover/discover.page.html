@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="platformIsMobile">
     <ion-toolbar color="primary">
       <ion-item lines="none">
         <ion-buttons *ngIf="!aboutToSearch"  slot="start">
@@ -22,35 +22,21 @@
 
       </div> -->
     </ion-toolbar>
-  </ion-header>
+</ion-header>
 
-  <!-- <ion-row>
-    <ion-col>   
-      <ion-item lines="none">
-        <ion-buttons slot="start">
-          <ion-menu-button menu="m1"></ion-menu-button>
-        </ion-buttons>
-        <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img>
-        <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
-          <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-        </ion-buttons>
-      </ion-item>
-    </ion-col>
-  </ion-row> -->
+<ion-content *ngIf="platformIsMobile">
 
-  
-  <ion-content>
+  <ion-grid id="homeHeaders" *ngIf="platformIsMobile">
+
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-
-
 
     <ion-row>
       <ion-col size ="12" size-sm="8" offset-sm ="2">
         <div *ngIf="allCategory"   >
           <ion-item lines="none">
-            <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #474747  ; ">{{ Selectedcategory.name }}</h2>
+            <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #141111  ; ">{{ Selectedcategory.name }}</h2>
             <ion-select slot="end" [(ngModel)]="secondselectedCategory" (ngModelChange)="onsecondCategory($event)"   class="custom-options">
               <ion-select-option   *ngFor="let category of selectedSecondChildCategory" [value]="category">{{category.name}}</ion-select-option>
             </ion-select>
@@ -66,18 +52,18 @@
           <ion-buttons slot="start">
             <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
             <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
-              <ion-icon  name="add-circle-outline"></ion-icon>
+              <ion-icon style="color: #141111 ;"  name="add-circle-outline"></ion-icon>
             </ion-button>
             <ion-button *ngIf="onfilter" (click)="onDisplayFilters()">
-              <ion-icon    color="primary" name="add-circle-outline"></ion-icon>
+              <ion-icon    style="color: #141111b9 ;"  name="add-circle"></ion-icon>
             </ion-button>
           </ion-buttons>
           <ion-item (click)="onOpenMapFiltersModal()" slot="end"lines="none">
             <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
-            <h4   style="margin-top: 10px" style="font-weight: bold;" >{{ currentAreaLocationName}}</h4>
+            <h4   style="margin-top: 10px" style="font-weight: bolder;" >{{ currentAreaLocationName}}</h4>
           </ion-item>
           <ion-buttons (click)="onOpenFiltersModal()"  >
-            <ion-icon color="primary" name="settings-outline"></ion-icon>
+            <ion-icon style="color: #141111 ;"  name="settings-outline"></ion-icon>
             <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
           </ion-buttons>
         </ion-item>
@@ -86,20 +72,23 @@
           <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon> -->
       </ion-col>
     </ion-row>
-    <div id="divSpinner" *ngIf="searching" class="spinner-container">
-      <ion-spinner color="primary" ></ion-spinner>
+
+    <div id="divSpinner" *ngIf="searching && !scrolled" class="spinner-container">
+      <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;" ></ion-spinner>
     </div>
 
 
 
     <ion-row *ngIf="onfilter" >
       <ion-col size ="12" size-sm="8" offset-sm ="2" >
-       <ion-slides [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
-          <ion-slide *ngFor="let category of categoryList"  >
-            <ion-item lines="none" class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
-              <ion-icon slot="start" [src]="category.icon"></ion-icon>
-              <ion-label style="overflow: visible;">{{ category.name }}</ion-label>
-            </ion-item>
+       <ion-slides  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
+          <ion-slide  *ngFor="let category of categoryList"  >
+            <ion-card  class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
+              <ion-item-sliding style="padding: 0.2rem" lines="none">
+                <ion-icon slot="start"  style="width:1rem;height:1rem" [src]="category.icon"></ion-icon>
+                <ion-label slot="end" style="overflow: hidden;">{{ category.name }}</ion-label>
+              </ion-item-sliding>
+            </ion-card>
         </ion-slide>
        </ion-slides>
       </ion-col>
@@ -122,194 +111,280 @@
       </ion-col>
     </ion-row>
 
-    <!-- <ion-grid *ngIf="isLoading">
-      <ion-row > 
-        <ion-col  size ="12" size-sm="8" offset-sm ="2" text-center>
-            <div id="spinnerid">
-                <ion-spinner color="primary"></ion-spinner>
-            </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid> -->
-
-  
-    <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
-      <ion-row>
-        <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-           <h4>There are no available Listings right now, please come back later or change location </h4>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-grid>
-
-      <ion-row>
-        <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <ion-grid style="padding: 1rem;" *ngIf="platformIsMobile" >
-        <ion-row>
-            <ion-col size ="12" size-sm="8" offset-sm ="2" >
-
-              <div class="pinsMobile">
-                <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                      <ion-card >
-                        <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" /> -->
-                          <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
-                          <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
-                          <!-- <ion-card-content>
-                            <div id="toplay">
-                              <ion-label >
-                                  <h3 >{{ post?.product[0].price  |currency }}</h3>
-                              </ion-label>
-                            <ion-label >
-                                <ion-item lines="none">
-                                  <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                                  <h3 >{{ post?.viewcount}}</h3>
-                                </ion-item>
-                            </ion-label>
-                            </div>
-                            <div   >
-                              <ion-item>
-                                <ion-label slot="start" >
-                                    <ion-item lines="none">
-                                      <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                                      <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                                    </ion-item>
-                                </ion-label>
-                                <ion-label >
-                                    <h3 >{{ post?.product[0].price  |currency }}</h3>
-                                </ion-label>
-                              </ion-item>
-                            </div>
-                          </ion-card-content> -->
-
-                            <ion-label>
-                              <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
-                            </ion-label>
+  </ion-grid>
 
 
-                          <div   >
-                            <ion-item>
-                              <ion-label>
-                                  <ion-item lines="none">
-                                    <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                                    <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                                  </ion-item>
-                              </ion-label>
-                              <ion-label  >
-                                  <h3  >{{ post?.product[0].price  |currency }}</h3>
-                              </ion-label>
-                            </ion-item>
-                          </div>
-                      </ion-card>
+  <div id="divSpinner" *ngIf="searching && scrolled" class="spinner-container">
+    <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;margin-top: 2rem" ></ion-spinner>
+  </div> 
 
-                </div>
-              </div>
 
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+  <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
+    <ion-row>
+      <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
+         <h4>There are no available Listings right now, please come back later or change location </h4>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-grid style="padding: 1rem;" *ngIf="!platformIsMobile" >
-        <ion-row>
-            <ion-col size ="12" size-sm="8" offset-sm ="2" >
 
-              <div class="pins">
-                <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                         
-                  <ion-card  >
-                    <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
-                    <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" /> -->
-                    <!-- <ion-card-content>
-                      <div id="toplay">
-                        <ion-label >
-                            <h3 >{{ post?.product[0].price  |currency }}</h3>
+  <ion-grid style="padding: 1rem;" *ngIf="platformIsMobile" >
+    <ion-row>
+        <ion-col size ="12" size-sm="8" offset-sm ="2" >
+
+          <div class="pinsMobile">
+            <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
+                  <ion-card >
+                    <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" /> -->
+                      <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+                        <ion-label>
+                          <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
                         </ion-label>
-                      <ion-label >
-                          <ion-item lines="none">
-                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                            <h3 >{{ post?.viewcount}}</h3>
-                          </ion-item>
-                      </ion-label>
-                      </div>
+
+
                       <div   >
                         <ion-item>
-                          <ion-label slot="start" >
+                          <ion-label>
                               <ion-item lines="none">
                                 <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
                                 <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
                               </ion-item>
                           </ion-label>
-                          <ion-label >
-                              <h3 >{{ post?.product[0].price  |currency }}</h3>
+                          <ion-label  >
+                              <h3  >{{ post?.product[0].price  |currency }}</h3>
                           </ion-label>
                         </ion-item>
                       </div>
-                    </ion-card-content> -->
-
-                      <ion-label>
-                        <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
-                      </ion-label>
-
-
-                    <div   >
-                      <ion-item>
-                        <ion-label slot="start" >
-                            <ion-item lines="none">
-                              <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                              <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                            </ion-item>
-                        </ion-label>
-                        <ion-label >
-                            <h3 >{{ post?.product[0].price  |currency }}</h3>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-                </ion-card>
-                    
-                </div>
-              </div>
-
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-  </ion-content>
- 
-
-  <!-- <ion-grid style="padding: 1rem;" *ngIf="!platformIsMobile" >
-    <ion-row>
-        <ion-col size ="12" size-sm="8" offset-sm ="2" >
-
-          <div class="pins">
-            <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                     
-                  <ion-card >
-                      <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
-                     
                   </ion-card>
-                    <div id="toplay">
-                      <ion-label >
-                          <h3 >{{ post?.product[0].price  |currency }}</h3>
-                      </ion-label>
-                    </div>
-                    <div   id="divViews" >
-                      <ion-label >
-                          <ion-item lines="none">
-                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                            <h3 >{{ post?.viewcount}}</h3>
-                          </ion-item>
-                      </ion-label>
-                    </div>
-                
+
             </div>
           </div>
 
         </ion-col>
     </ion-row>
-</ion-grid>
- -->
+  </ion-grid>  
+</ion-content>
+
+      <!-- <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img> -->
+
+<!-- <ion-header *ngIf="!platformIsMobile">
+  <ion-toolbar color="primary">
+    <ion-item lines="none">
+      <ion-buttons *ngIf="!aboutToSearch"  slot="start">
+        <ion-menu-button menu="m1"></ion-menu-button>
+      </ion-buttons>
+
+      <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+        <div id="divsearchInput">
+          <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+        </div>
+      </ion-col>
+      <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+        <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+      </ion-buttons>
+    </ion-item>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-toolbar *ngIf="scrolled"  >
+  <ion-item lines="none">
+    <ion-buttons style="margin:0rem"  *ngIf="!aboutToSearch"  slot="start">
+      <ion-button  style="height:3rem;margin-right:0rem">
+        <ion-img style="height:2.5rem;width:8rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+      <div style="margin-bottom: 1rem;" id="divsearchInput">
+        <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+      </div>
+    </ion-col>
+    <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+      <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+    </ion-buttons>
+  </ion-item>
+      <!-- <ion-row>
+        <ion-col>   
+          <ion-item lines="none">
+            <ion-buttons slot="start">
+              <ion-menu-button menu="m1"></ion-menu-button>
+            </ion-buttons>
+            <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img>
+            <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
+              <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+            </ion-buttons>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+</ion-toolbar>
+
+<ion-content  [scrollEvents]="true"  #desktopContent *ngIf="!platformIsMobile" (ionScroll)="logScrolling($event)" (ionScrollStart)="logScrollStart()">
+
+
+
+
+    <ion-grid id="homeHeadersDesktop" *ngIf="!platformIsMobile">
+
+      <ion-toolbar *ngIf="!scrolled"  color="transparent">
+        <ion-item lines="none">
+          <ion-buttons  *ngIf="!aboutToSearch"  slot="start">
+            <ion-button  style="height:3rem;">
+              <ion-img style="height:2.5rem;width:8rem;margin: 0.5rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
+            </ion-button>
+          </ion-buttons>
+          
+          <!-- <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+            <div id="divsearchInput">
+              
+            </div>
+          </ion-col> -->
+          <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+            <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+          </ion-buttons>
+        </ion-item>
+      </ion-toolbar>
+
+
+
+
+      <ion-row>
+          <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
+            <div id="divsearchInput">
+              <ion-searchbar id="searchBarDesktop" [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+            </div>
+          </ion-col>
+      </ion-row>
+
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+  
+  
+  
+      <ion-row>
+        <ion-col size ="12" size-sm="8" offset-sm ="2">
+          <div *ngIf="allCategory"   >
+            <ion-item lines="none">
+              <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-weight: bolder; font-size:xx-large;color: #faf6f6 ; ">{{ Selectedcategory.name }}</h2>
+              <ion-select slot="end" [(ngModel)]="secondselectedCategory" (ngModelChange)="onsecondCategory($event)"   class="custom-options">
+                <ion-select-option   *ngFor="let category of selectedSecondChildCategory" [value]="category">{{category.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+        </ion-col>
+      </ion-row>
+  
+  
+      <ion-row>
+        <ion-col  size ="12" size-sm="8" offset-sm ="2">
+          <ion-item lines="none">
+            <ion-buttons slot="start">
+              <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
+              <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
+                <ion-icon style="color: #b9b3b3 ; height:2rem;width:2rem"  name="add-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button *ngIf="onfilter" (click)="onDisplayFilters()">
+                <ion-icon   style="color: #b9b3b3 ; height:2rem;width:2rem"  name="add-circle"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-item (click)="onPickLocation()" slot="end"lines="none">
+              <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
+              <ion-buttons>
+                <ion-button>
+                  <ion-icon slot="start" name="map"></ion-icon>
+                  <h4   style="margin-top: 10px" style="font-weight: bolder;" >{{ currentAreaLocationName}}</h4>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+            <ion-buttons (click)="onOpenFiltersModal()"  >
+              <ion-icon style="color: #b9b3b3 ; height:2rem;width:2rem" name="settings"></ion-icon>
+              <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
+            </ion-buttons>
+          </ion-item>
+            <!-- <ion-note (click)="onDisplayFilters()" >filters</ion-note>
+            <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
+            <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon> -->
+        </ion-col>
+      </ion-row>
+
+      <div id="divSpinner" *ngIf="searching && !scrolled" class="spinner-container">
+        <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;" ></ion-spinner>
+      </div>
+  
+  
+  
+      <ion-row *ngIf="onfilter && !aboutToSearch" >
+        <ion-col size ="12" size-sm="8" offset-sm ="2" >
+         <ion-slides  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
+            <ion-slide  *ngFor="let category of categoryList"  >
+              <ion-card style="margin-bottom: 2rem;overflow: visible;"  class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
+                <ion-item style="padding: 0.2rem;overflow: visible;" lines="none">
+                  <ion-icon slot="start"  style="width:1rem;height:1rem" [src]="category.icon"></ion-icon>
+                  <ion-label slot="end" style="overflow: visible;">{{ category.name }}</ion-label>
+                </ion-item>
+              </ion-card>
+          </ion-slide>
+         </ion-slides>
+        </ion-col>
+      </ion-row>
+  
+  
+    </ion-grid>
+
+
+    <ion-grid style="margin: 5rem" *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
+      <ion-row>
+        <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
+           <h4>There are no available Listings right now, please come back later or change your  location </h4>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <div id="divSpinner" *ngIf="searching && scrolled" class="spinner-container">
+      <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;margin-top: 2rem" ></ion-spinner>
+    </div>
+
+
+    <ion-grid  style="padding: 1rem;margin-top:1rem" *ngIf="!platformIsMobile" >
+      <ion-row>
+          <ion-col size ="12" size-sm="8" offset-sm ="2" >
+
+            <div class="pins">
+              <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
+                        
+                <ion-card  >
+                  <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
+
+                    <ion-label>
+                      <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
+                    </ion-label>
+
+
+                  <div   >
+                    <ion-item>
+                      <ion-label slot="start" >
+                          <ion-item lines="none">
+                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                            <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                          </ion-item>
+                      </ion-label>
+                      <ion-label >
+                          <h3 >{{ post?.product[0].price  |currency }}</h3>
+                      </ion-label>
+                    </ion-item>
+                  </div>
+              </ion-card>
+                  
+              </div>
+            </div>
+
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>
+ 
+
 
 
 

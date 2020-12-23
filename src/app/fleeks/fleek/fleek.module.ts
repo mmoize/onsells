@@ -9,6 +9,7 @@ import { FleekPageRoutingModule } from './fleek-routing.module';
 import { FleekPage } from './fleek.page';
 
 import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
     FormsModule,
     IonicModule,
     FleekPageRoutingModule,
+    LazyLoadImageModule,
     NgxIonicImageViewerModule,
     
   ],
