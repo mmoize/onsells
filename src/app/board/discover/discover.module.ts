@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { LazyLoadImageModule } from 'ng-lazyload-image'; 
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { DiscoverPageRoutingModule } from './discover-routing.module';
 
@@ -25,6 +26,6 @@ import { ProductDetailPageModule } from './product-detail/product-detail.module'
     ReactiveFormsModule,
     DiscoverPageRoutingModule
   ],
-  declarations: [DiscoverPage, MainFilterComponent]
+  declarations: [DiscoverPage, MainFilterComponent, TimeAgoPipe]
 })
 export class DiscoverPageModule {}

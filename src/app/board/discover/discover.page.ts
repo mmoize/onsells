@@ -36,6 +36,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   @ViewChild('DesktopContent') content: IonContent;
   scrolled = false;
+  mobileScrolled = false;
 
   private _currentPlatform: CurrentPlatform;
   platformIsMobile = false;
@@ -104,7 +105,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
     new Category(
       '0',
       'Home',
-      'assets/icons/homeandgarden.svg'
+      'assets/icons/homefleek.svg'
     ),
     new Category(
       '7',
@@ -149,6 +150,12 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
 
   // control's the category list slider.
+
+  slideOpts1 = {
+    effect: 'flip',
+    zoom: false,
+    slidesPerView: 3
+  };
 
   slideOpts = {
     on: {

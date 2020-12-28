@@ -1,6 +1,27 @@
+// @font-face {
+//     font-family: 'Open Sans';
+//     src: url("assets\fonts\OpenSans-Bold.ttf") format('OpenSans');
+
+// }
+
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+
+
+
+
+#homeHeadersDesktop > ion-row:nth-child(4) > ion-col > div > ion-item > ion-select  {
+    color:rgb(19, 212, 58);
+}
+
+
+
+
 #theTitle {
     margin-left: 15%;
+    font-family: 'Open Sans', sans-serif;
 }
+
+
 
 ion-card {
     border-radius: 20px;
@@ -15,6 +36,7 @@ ion-card {
 
 ion-image {
     margin: 0px;
+
 }
 
 #firstlayer > ion-card > ion-img {
@@ -104,26 +126,38 @@ h3 {
     overflow: hidden;
 }
 
+img {
+    // min-width:13.125rem;
+    // object-fit: cover;
+
+}
+
+
 ion-img {
  
     object-fit: cover;
     height: 100%;
     width: 100%;
     margin-bottom: 0.5rem;
+
+
+
     
 }
 
 .pin {
     display: inline-block;
-    margin: 0 5px 5px;
-    padding: 5px;
+    margin: 0 0.313rem 0.313rem;
+    padding: 0.313rem;
   }
   
   .pins {
-    column-count: 3;
-    margin-top: 5px;
+    column-count: 4;
+    margin-top: 0.313rem;
     
   }
+
+  
 
 
   .pinMobile {
@@ -188,9 +222,7 @@ ion-searchbar{
 }
 
 
-#searchBarDesktop > div > input {
-   width: 70vw;
-}
+
 
 
 
@@ -198,23 +230,37 @@ ion-searchbar{
 #searchBarDesktop {
 
     --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 7rem;
 
-    --height: 4rem; 
-    margin-top: 10rem;
-    --width: 70vw;
 
 
     ::ng-deep{
-        .searchbar-input-container{  
-            --width: 70vw;         
+        .searchbar-input-container{        
             .searchbar-input{ 
-                border-radius: 20px;
+                border-radius: 2rem;
+                font-size:x-large;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: bolder;
 
-                //height: 4rem;
+                height: 4rem;
                 //any style that you want to implement on your searchbar
                 //box-shadow: rgb(44, 41, 41);
                 //box-shadow: 5px 10px red;
             }
+            
+            button {
+                margin-bottom: 3rem;
+            }
+
+            ion-icon {
+                margin-top: 0.7rem;
+                color: violet;
+            }
+
+            searchbar-clear-icon sc-ion-searchbar-md md hydrated {
+                padding-bottom: 8rem;
+            }
+
         }
     }   
 
@@ -257,12 +303,19 @@ ion-title {
 //     margin: 0px;
 // }
 
+input.searchbar-input.sc-ion-searchbar-md {
+    --width: 50%;
+}
 
-
+#searchBarDesktop > div > input {
+    --width:50%;
+}
 
 input {
     --border-radius: 25px;
 }
+
+
 
 #divsearchInput {
     display: flex;
@@ -270,6 +323,27 @@ input {
     text-align: center;
     width: 100%;
 }
+
+#divsearchInputDesktop {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    //width: 100%;
+    //width: 60vw;
+}
+
+
+#searchBarDesktop > div > ion-icon {
+
+}
+
+
+
+
+
+
+
+    
 
 
 #rowsearch {
@@ -304,22 +378,32 @@ input {
 #homeHeaders {
     //background: rgb(35,0,36);
     //background: linear-gradient(180deg, rgba(35,0,36,1) 14%, rgba(172,124,155,0) 82%);
-    background: linear-gradient(180deg, rgba(158, 56, 122, 0.568) 14%, rgba(179, 171, 176, 0) 82%);
+    // background: linear-gradient(180deg, rgba(158, 56, 122, 0.568) 14%, rgba(179, 171, 176, 0) 82%);
+    //background-image: linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(117, 19, 93, 0.151)), url('https://images4.alphacoders.com/964/964483.jpg');
+    // background: linear-gradient(180deg, rgba(101,24,116,0) 32%, 	rgb(255, 255, 255) 88%, 	rgb(255, 255, 255) 95%), url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") ;
+    background: linear-gradient(180deg, rgba(101,24,116,0) 32%, 	rgb(255, 255, 255) 88%, 	rgb(255, 255, 255) 95%), url("https://i.redd.it/afhhcswvk9821.jpg") ;
+    // background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
     // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
     border-bottom: 0px;
     padding: 0px;
+    height: 70vh;
 
+}
+
+
+#mobilePinGrid {
+    // background-image: linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(207, 187, 202, 0.945)), url('https://images4.alphacoders.com/964/964483.jpg');
 }
 
 
 #homeHeadersDesktop {
     
-    // background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
+    //background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
     // background-size: cover;
     // background: url("https://www.wallpaperup.com/uploads/wallpapers/2013/12/02/182518/8854ad3013a3ae7072656c43ec1a568b-1000.jpg") no-repeat center fixed ;
-    // background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+    background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
     // background: url("https://wallpaperaccess.com/full/48753.jpg") no-repeat center fixed;
-    background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
     // background: url("https://i.pinimg.com/originals/5c/4a/d2/5c4ad2b8188d3d14613902209dc33165.jpg") no-repeat center fixed;
     // background-size: cover;
     // background: url("https://www.luxewalls.com.au/wp-content/uploads/2020/10/5.jpg") no-repeat center fixed;
@@ -329,3 +413,31 @@ input {
     height: 80vh;
 }
 
+
+
+.card {
+    //box-shadow: unset;
+    border-radius: 9px;
+    background-color: white !important;
+}
+.price {
+    font-size: 18px;
+    float: left;
+    margin: 3px;
+}
+.inline {
+    font-size: 15px;
+    margin-inline-end: 5px;
+    text-decoration: line-through;
+}
+.subtitle {
+    font-size: 12px;
+    color: rgb(120, 120, 120);
+}
+.badge {
+    position: absolute;
+    top: 5%;
+    right: 0;
+    background-color: rgba(12, 12, 12, .75);
+    border-radius: 2rem;
+}
