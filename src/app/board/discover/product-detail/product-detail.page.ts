@@ -22,6 +22,9 @@ import { Plugins } from '@capacitor/core';
 })
 export class ProductDetailPage implements OnInit, OnDestroy {
 
+
+  liked = false;
+
   constructor(private router: Router,
               private navCtrl: NavController,
               private modalCtrl: ModalController,
@@ -136,6 +139,8 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     });
   }
 
+
+
   doRefresh(event) {
 
     this.ngOnInit();
@@ -158,6 +163,12 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
   onback() {
     this.router.navigateByUrl('/board/discover');
+  }
+
+
+  like() {
+
+    this.liked = !this.liked;
   }
 
 
