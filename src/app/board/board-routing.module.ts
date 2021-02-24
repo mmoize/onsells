@@ -16,7 +16,13 @@ const routes: Routes = [
       {
         path: 'offers',
         loadChildren: () => import('./offers/offers.module').then( m => m.OffersPageModule)
+      },
+
+      {
+         path: 'messages',
+         loadChildren: () => import('../messages/messages.module').then( m => m.MessagesPageModule)
       }
+
     ],
   },
 

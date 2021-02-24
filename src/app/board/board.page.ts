@@ -18,9 +18,11 @@ export class BoardPage implements OnInit {
   ngOnInit() {
   }
 
-  openFleeks() {
+  openmessages() {
     this.routes.navigateByUrl(`/messages`);
   }
-
+  openFleeks() {
+    this.routes.navigateByUrl(`/fleeks`);
+  }
 
 }

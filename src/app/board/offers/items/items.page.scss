@@ -1,0 +1,71 @@
+// ion-toolbar {
+//     border: 0px;
+//     --box-shadow: 0 0px 0px rgb(235, 23, 23);
+//     --background:  rgba(228, 65, 243, 0.589);
+// }
+
+#centertitle {
+    text-align: center;
+    width: 80%;
+}
+ion-col {
+    text-align: center;
+}
+div{
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+
+}
+
+ion-item-option {
+    border-radius: 10px;
+
+}
+
+#outer {
+    display: flex;
+    flex-direction: column-reverse;
+    float: left;
+}
+
+h3 {
+    background-color: rgb(35, 43, 39, 0.5);
+    font-weight: bolder;
+    color: rgb(19, 224, 122, 0.8);
+    border-radius: 5px;
+}
+
+
+#productheader {
+    font-weight: bolder;
+    font-size: larger;
+}
+
+#topplay {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    position: absolute;
+    
+}
+
+#trashicon {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#btnicon {
+    background-color: transparent;
+    background: transparent;
+    --background: transparent;
+    --border: transparent;
+    --border-color: transparent;
+    --box-shadow: transparent;
+
+}
+
+#recentCard {
+    border-radius: 10px;
+    padding: 0px;
+ }

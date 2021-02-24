@@ -18,6 +18,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
  <ion-grid>
+
    <ion-row >
      <ion-col size="12" size-sm="6" offset-sm ="3">
        <div *ngIf="isLoading">
@@ -29,6 +30,8 @@
        </div >
      </ion-col>
    </ion-row>
+
+   
    <ion-row>
      <ion-col size="12" size-sm="6" offset-sm ="3">
        <ion-item lines="none">
@@ -38,158 +41,33 @@
        </ion-item>
      </ion-col>
    </ion-row>
-   <ion-row>
-     <ion-col size="12" size-sm="6" offset-sm ="3">
-          <ion-card style="width: 150px; height: 200px; border: 2px solid #f8f8f8" *ngIf="!userHasLoadedItem"    > 
-               <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
-               <img  id="touched" src="assets/img/placeholder.png"/>
-               <ion-card-content style="margin-top: -10px;"(click)="onNewProduct()">
-                             <ion-label>Add Item</ion-label>
-                             <ion-label >
-                              <h3 >Price: None</h3>
-                          </ion-label>
-               </ion-card-content >
-               <div *ngIf="ClickedProdImage"  id="topplay">
-                <ion-button id="btnicon">
-                  <ion-icon    color = "primary" id="trashicon" name="trash-outline"></ion-icon>
-                </ion-button>
-              </div>
-            </ion-card>
 
-      <ion-slides *ngIf="userHasLoadedItem"  [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
-        <ion-slide *ngFor="let product of loadedProducts" style="width: 150px; height: 200px; border: 2px solid #f8f8f8">
-          <!-- //click)="onNewPostListing()" -->
-          <ion-card   > 
-               <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
-               <img (click)="onClickProdImage()" id="touched" [src]="product.productimage_set[0].image"/>
-               <ion-card-content (click)="onNewPostListing()">
-                             <ion-label>{{ product.title }}</ion-label>
-                             <ion-label >
-                              <h3 >{{ product.price |currency }}</h3>
-                          </ion-label>
-               </ion-card-content >
-               <div *ngIf="ClickedProdImage"  id="topplay">
-                  <ion-button (click)="onDelete(product.id)" id="btnicon">
-                    <ion-icon    color = "primary" id="trashicon" name="trash-outline"></ion-icon>
-                  </ion-button>
-                </div>
-            </ion-card>
-        </ion-slide>
-      </ion-slides>
-     </ion-col>
-   </ion-row>
    <ion-row>
-      <ion-col size="12" size-sm="6" offset-sm ="3">
-        <ion-item lines="none">
-        <ion-label slot="start">
-          <ion-header id="productheader">Current listings: {{userPostCount}}</ion-header>
-        </ion-label>
-        </ion-item>
+      <ion-col style="height: 35vh;" size="12" size-sm="6" offset-sm ="3">
+        <app-items></app-items>
       </ion-col>
    </ion-row>
-  <ion-row>
+
+
+   <ion-row>
     <ion-col size="12" size-sm="6" offset-sm ="3">
-
-      <ion-card (click)="onNewPostListing()" id="recentCard" *ngIf="!userHasLoadedListings"  >
-        <ion-item-sliding id="item100">
-          <ion-item >        <!--(click)="openViewImageModal(data)" -->
-            <ion-thumbnail slot="start">
-              <ion-img  src="assets/img/placeholder.png"></ion-img>
-            </ion-thumbnail>
-          <ion-label>
-            <h2>add Listing</h2>
-            <p>You currenlty you have 0 listed item</p>
-          </ion-label>
-          <ion-note slot="end">
-
-          </ion-note>
-        </ion-item> 
-
-    
-        <ion-item-options side="end">
-          <ion-item-option  color="danger">
-            <h4 style="font-weight: bolder;">Remove</h4>
-            <!-- <ion-icon slot="icon-only" name="trash"></ion-icon> -->
-          </ion-item-option>
-          <!-- <ion-item-option>
-            <ion-icon slot="icon-only" name="star"></ion-icon>
-          </ion-item-option> -->
-        </ion-item-options>
-        </ion-item-sliding>
-      </ion-card>
-
-
-      
-      <ion-virtual-scroll style="height: 20vh;" *ngIf="userHasLoadedListings"  [items]="loadedUserPosts" approxItemHeight="70px">
-
-        <ion-card (click)="onOpenListingDetails(post)" id="recentCard" *virtualItem="let post" >
-          <ion-item-sliding #slidingItem id="item100">
-            <ion-item (click)="openViewImageModal(data)">        <!--(click)="openViewImageModal(data)" -->
-              <ion-thumbnail slot="start">
-                <ion-img  [src]="post.product[0].productimage_set[0].image"></ion-img>
-              </ion-thumbnail>
-            <ion-label>
-              <h2>{{ post.product[0].title }}</h2>
-              <p>{{ post.product[0].description }}</p>
-            </ion-label>
-            <ion-note slot="end">
-              {{ post.created_at |  date:'shortTime' }}
-              {{post.created_at | date }}
-              <p>
-                  <ion-icon name="eye-outline"></ion-icon>
-                  {{ post.viewcount }}
-              </p>
-            </ion-note>
-          </ion-item> 
-          <!-- <ion-item-options side="start">
-            <ion-item-option>
-              <ion-icon slot="icon-only" name="heart"></ion-icon>
-            </ion-item-option>
-          </ion-item-options> -->
-      
-          <ion-item-options side="end">
-            <ion-item-option  (click)="presentAlertConfirm(post.id, slidingItem)"  color="danger">
-              <h4  style="font-weight: bolder;">Remove</h4>
-              <!-- <ion-icon slot="icon-only" name="trash"></ion-icon> -->
-            </ion-item-option>
-            <!-- <ion-item-option>
-              <ion-icon slot="icon-only" name="star"></ion-icon>
-            </ion-item-option> -->
-          </ion-item-options>
-          </ion-item-sliding>
-        </ion-card>
-
-
-
-        <!-- <ion-item
-        *virtualItem="let post"
-         detail>
-          <ion-thumbnail slot="start">
-            <ion-img  [src]="post.product[0].productimage_set[0].image"></ion-img>
-          </ion-thumbnail>
-          <ion-label>
-            <h2>{{ post.product[0].title }}</h2>
-            <p>{{ post.product[0].description }}</p>
-          </ion-label>
-        </ion-item> -->
-       </ion-virtual-scroll>
+      <ion-item lines="none">
+       <ion-label slot="start">
+         <ion-header id="productheader">Current listings</ion-header>
+       </ion-label>
+      </ion-item>
     </ion-col>
   </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <app-current-listings ></app-current-listings>
+    </ion-col>
+  </ion-row>
+   
  </ion-grid>
 </ion-content>
- 
 
-       <!-- <ion-list *ngIf="!isLoading && loadedOffers.length > 0"> 
-         <ion-item-sliding *ngFor="let offers of loadedOffers" #slidingitem> 
-         <app-offer-product [offers]="offers"></app-offer-product>
-         <ion-item-options>
-           <ion-item-option color="secondary" (click)="onEdit(offers.id, slidingitem )" [routerLink]="['/','places','offers','edit', offers.id]">
-             <ion-icon name="create" slot="top"></ion-icon>
-              Edit
-           </ion-item-option>
-         </ion-item-options>
-         </ion-item-sliding>
-       </ion-list> -->
 
 
 

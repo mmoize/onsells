@@ -72,6 +72,17 @@ div.item-native {
     margin-bottom:  1.2rem;
 }
 
+#firstlayerIOS {
+    overflow: hidden;
+    // overflow: scroll;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    border-radius: 1.25rem;
+    box-shadow: 0 0.625rem 0.625rem rgba(46, 44, 44, 0.418);
+    margin-bottom:  1.2rem;
+}
+
 ion-label {
     font-weight: bold;
     margin: 0px;
@@ -165,8 +176,21 @@ ion-img {
     margin: 0 20px 20px;
     padding: 5px;
   }
+
+  .iospinMobile {
+    display: inline-block;
+    margin: 0 20px 20px;
+    padding: 5px;
+  }
   
   .pinsMobile {
+    column-count: 2;
+    margin-top: 5px;
+    
+  }
+
+
+  .iospinsMobile {
     column-count: 2;
     margin-top: 5px;
     
@@ -250,6 +274,9 @@ ion-searchbar{
             
             button {
                 margin-bottom: 3rem;
+                ion-icon {
+                    margin-top: 0.2rem;
+                }
             }
 
             ion-icon {
@@ -265,6 +292,91 @@ ion-searchbar{
     }   
 
 }
+
+
+
+#searchBarAndroid {
+
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 7rem;
+
+
+
+    ::ng-deep{
+        .searchbar-input-container{        
+            .searchbar-input{ 
+                border-radius: 2rem;
+                font-size:x-large;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: bolder;
+
+                height: 3rem;
+            }
+            
+            button {
+                margin-bottom: 3rem;
+                ion-icon {
+                    margin-top: 0.1rem;
+                }
+            }
+
+            ion-icon {
+                margin-top: 0.35rem;
+                color: violet;
+            }
+
+            searchbar-clear-icon sc-ion-searchbar-md md hydrated {
+                padding-bottom: 8rem;
+            }
+
+        }
+    }   
+
+}
+
+
+#searchBarIOS {
+
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+
+
+
+    ::ng-deep{
+        .searchbar-input-container{        
+            .searchbar-input{ 
+                border-radius: 2rem;
+                font-size:x-large;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: bolder;
+
+                height: 3rem;
+            }
+            
+            button {
+                margin-bottom: 3rem;
+                ion-icon {
+                    margin-top: 0.1rem;
+                }
+            }
+
+            ion-icon {
+                margin-top: 0.35rem;
+                color: violet;
+            }
+
+            searchbar-clear-icon sc-ion-searchbar-md md hydrated {
+                padding-bottom: 8rem;
+            }
+
+        }
+    }   
+
+}
+
+
+
 
 location-image {
     --icon-color: var (--ion-color-primary);
@@ -324,6 +436,14 @@ input {
     width: 100%;
 }
 
+
+#divsearchInputIOS {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
 #divsearchInputDesktop {
     display: flex;
     align-items: center;
@@ -375,7 +495,23 @@ input {
 }
 
 
-#homeHeaders {
+#androidhomeHeaders {
+    //background: rgb(35,0,36);
+    //background: linear-gradient(180deg, rgba(35,0,36,1) 14%, rgba(172,124,155,0) 82%);
+    // background: linear-gradient(180deg, rgba(158, 56, 122, 0.568) 14%, rgba(179, 171, 176, 0) 82%);
+    //background-image: linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(117, 19, 93, 0.151)), url('https://images4.alphacoders.com/964/964483.jpg');
+    // background: linear-gradient(180deg, rgba(101,24,116,0) 32%, 	rgb(255, 255, 255) 88%, 	rgb(255, 255, 255) 95%), url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") ;
+    background: linear-gradient(180deg, rgba(101,24,116,0) 32%, 	rgb(255, 255, 255) 88%, 	rgb(255, 255, 255) 95%), url("https://i.redd.it/afhhcswvk9821.jpg") ;
+    // background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+    // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    border-bottom: 0px;
+    padding: 0px;
+    height: 75vh;
+
+}
+
+
+#ioshomeHeaders {
     //background: rgb(35,0,36);
     //background: linear-gradient(180deg, rgba(35,0,36,1) 14%, rgba(172,124,155,0) 82%);
     // background: linear-gradient(180deg, rgba(158, 56, 122, 0.568) 14%, rgba(179, 171, 176, 0) 82%);
@@ -419,6 +555,7 @@ input {
     //box-shadow: unset;
     border-radius: 9px;
     background-color: white !important;
+
 }
 .price {
     font-size: 18px;
@@ -441,3 +578,34 @@ input {
     background-color: rgba(12, 12, 12, .75);
     border-radius: 2rem;
 }
+
+
+
+
+.cardios {
+    box-shadow: unset;
+    border-radius: 9px;
+    background-color: white !important;
+}
+.priceios {
+    font-size: 18px;
+    float: left;
+    margin: 3px;
+}
+.inlineios {
+    font-size: 15px;
+    margin-inline-end: 5px;
+    text-decoration: line-through;
+}
+.subtitleios {
+    font-size: 12px;
+    color: rgb(120, 120, 120);
+}
+.badgeios {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    background-color: rgba(12, 12, 12, .75);
+    border-radius: 0;
+}
+

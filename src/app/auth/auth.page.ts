@@ -23,6 +23,7 @@ export class AuthPage implements OnInit {
   ispassTokenInput= false;
 
   isLoading = false;
+  passwordTouch =false;
 
   constructor(private authService: AuthService,
               private router: Router ,
@@ -47,6 +48,10 @@ export class AuthPage implements OnInit {
         validators: []
       }),
     });
+  }
+
+  passwordTouched() {
+      this.passwordTouch = true;
   }
 
 

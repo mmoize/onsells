@@ -1,48 +1,28 @@
-<!-- <ion-header *ngIf="platformIsMobile">
-    <ion-toolbar color="primary">
-      <ion-item lines="none">
-        <ion-buttons *ngIf="!aboutToSearch"  slot="start">
-          <ion-menu-button menu="m1"></ion-menu-button>
-        </ion-buttons>
-        <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
-          <div id="divsearchInput">
-            <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
-          </div>
-        </ion-col>
-        <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
-          <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-        </ion-buttons>
-      </ion-item>
-    </ion-toolbar>
-</ion-header> -->
+   <!-- Iphone Operating system STARTS HERE -->
+   <!-- Iphone Operating system STARTS HERE -->
+   <!-- Iphone Operating system STARTS HERE -->
 
 
-<ion-toolbar *ngIf=" mobileScrolled "  >
+
+<ion-toolbar *ngIf="mobileScrolled  && iosPlatform"  >
   <ion-item lines="none">
-    <ion-buttons style="margin:0rem"  *ngIf="!aboutToSearch"  slot="start">
+    <!-- <ion-buttons slot="start" style="margin:0rem"  *ngIf="!aboutToSearch"  >
       <ion-button  style="height:3rem;margin-right:0rem">
-        <ion-img style="height:2.5rem;width:8rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
+        <ion-img style="height:1.5rem;width:6rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
+    <div     id="divsearchInput">
+      <ion-searchbar style="margin-top: 1rem;"  [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+    </div>
 
-    <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
-      <div style="margin-bottom: 1rem;" id="divsearchInput">
-        <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
-      </div>
-    </ion-col>
-    <ion-buttons style="height: 3rem; border-raidus:100%" (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
-      <ion-button style="height: 3rem; border-raidus:100%">
-        <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-      </ion-button>
-    </ion-buttons>
   </ion-item>
 
 </ion-toolbar>
 
 
-<ion-content *ngIf="platformIsMobile">
+<ion-content  [scrollEvents]="true"  #mobileContent  (ionScroll)="logMobileScrolling($event)" (ionScrollStart)="logScrollStart()"  *ngIf="platformIsMobile && iosPlatform">
 
-  <ion-grid id="homeHeaders" *ngIf="platformIsMobile">
+  <ion-grid id="ioshomeHeaders" *ngIf="platformIsMobile && iosPlatform">
     
     <ion-toolbar *ngIf="!mobileScrolled"   color="transparent">
       <ion-item lines="none" style="margin-top: 2rem;">
@@ -69,9 +49,9 @@
 
 
     <ion-row>
-      <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-        <div id="divsearchInputDesktop" >
-          <ion-searchbar  style="height:rem;width: 75%; margin-left:12.5%" id="searchBarDesktop" [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+      <ion-col size ="12"  text-center>
+        <div id="divsearchInputIOS" >
+          <ion-searchbar  style="height:2rem;width: 90%; margin-left:5%" id="searchBarIOS" [(ngModel)]="searchtext"   (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
         </div>
       </ion-col>
     </ion-row>
@@ -203,6 +183,255 @@
 
   <ion-grid id="mobilePinGrid" style="padding: 1rem;" *ngIf="platformIsMobile" >
     <ion-row style="background:transparent">
+        <ion-col    color="transparent" size ="12">
+          
+          <!-- <div class="iospinsMobile" style="background:transparent">
+            <div id="firstlayer" *ngFor="let post of listedLoadedPosts" style="background:transparent"> 
+              <ion-card (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+                <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge>
+                <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
+                <ion-card-content>
+                  <ion-label style="text-align: left;">
+                    <ion-card-header style="padding: 0.25rem;color:#000000;"> {{ post?.product[0].title }} </ion-card-header>
+                  </ion-label>
+                  <ion-card-title >
+                    <ion-row>
+                        <ion-col >
+                        <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
+                        <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
+                          <ion-icon  id="divViewsicon" name="eye-outline"></ion-icon>
+                          <h2 slot="end"style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                        </ion-item>
+                        </ion-col>
+                    </ion-row>
+                  </ion-card-title>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div> -->
+
+          <!-- <ion-card class="cardios" no-margin ">
+            <ion-badge class="badgeios" *ngIf="data.offer">{{data.discount}}%</ion-badge>
+            <img [src]="data.image[0]" [alt]="data.name">
+            <ion-card-content>
+              <ion-card-title>
+                <ion-row>
+                  <ion-col *ngIf="data.offer" no-padding>
+                    <ion-text text-left><span class="priceios"><span class="inline">{{data.currency}}{{data.cost_price}}</span> <strong>{{data.currency}}{{fun.calculate(data.cost_price, data.discount)}}</strong></span></ion-text>
+                  </ion-col>
+                  <ion-col *ngIf="!data.offer" no-padding>
+                    <ion-text text-left><span class="priceios"><strong>{{data.currency}}{{data.cost_price}}</strong></span></ion-text>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col text-left no-padding>
+                    <h6 text-left class="subtitleios">{{data.bought}}+ bought this</h6>
+                  </ion-col>
+                </ion-row>
+              </ion-card-title>
+            </ion-card-content>
+          </ion-card> -->
+
+          <div class="iospinsMobile" style="background:transparent">
+            <div id="firstlayerIOS" *ngFor="let post of listedLoadedPosts" style="background:transparent">
+              <ion-card (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+                <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge>
+                <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
+                <ion-card-content>
+                  <ion-label style="text-align: left;">
+                    <ion-card-header style="padding: 0.25rem;color:#000000;"> {{ post?.product[0].title }} </ion-card-header>
+                  </ion-label>
+                  <ion-card-title >
+                    <ion-row>
+                        <ion-col >
+                        <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
+                        <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
+                          <ion-icon  id="divViewsicon" name="eye-outline"></ion-icon>
+                          <h2 slot="end"style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                        </ion-item>
+                        </ion-col>
+                    </ion-row>
+                  </ion-card-title>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div>
+
+        </ion-col>
+    </ion-row>
+  </ion-grid>  
+</ion-content>
+
+
+
+
+
+   <!-- Iphone Operating system ENDS HERE -->
+   <!-- Iphone Operating system ENDS HERE -->
+   <!-- Iphone Operating system ENDS HERE -->
+
+
+
+
+
+
+
+
+
+     <!-- Android Operating system STARTS HERE -->
+     <!-- Android Operating system STARTS HERE -->
+     <!-- Android Operating system STARTS HERE -->
+     <!-- Android Operating system STARTS HERE -->
+
+
+
+
+
+<ion-toolbar *ngIf="mobileScrolled && androidPlatform "  >
+  <ion-item lines="none">
+    <div    style="margin-top: 1rem;margin-bottom: 1rem;" id="divsearchInput">
+      <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+    </div>
+    
+    <!-- <ion-buttons slot="end" *ngIf="!aboutToSearch"  slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons> -->
+  </ion-item>
+
+</ion-toolbar>
+
+
+<ion-content  [scrollEvents]="true"  #mobileContent  (ionScroll)="logMobileScrolling($event)" (ionScrollStart)="logScrollStart()"  *ngIf="platformIsMobile && androidPlatform">
+
+  <ion-grid id="androidhomeHeaders" *ngIf="platformIsMobile && androidPlatform">
+    
+    <ion-toolbar *ngIf="!mobileScrolled"   color="transparent">
+      <ion-item lines="none" style="margin-top: 2rem;">
+        <ion-buttons  *ngIf="!aboutToSearch"  slot="start">
+          <ion-button  style="height:3rem;">
+            <ion-img style="height:2.5rem;width:8rem;margin: 0.5rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
+          </ion-button>
+        </ion-buttons>
+        
+        <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+          <ion-button style="height: 3rem;">
+            <ion-img [src]="currentUserDP" class="img-head"></ion-img>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-toolbar>
+
+
+    <ion-row>
+      <ion-col size ="12"   text-center>
+        <div id="divsearchInput" >
+          <ion-searchbar  style="height:rem;width: 90%; margin-left:5%" id="searchBarAndroid" [(ngModel)]="searchtext"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+
+
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-row>
+      <ion-col size ="12" size-sm="8" offset-sm ="2">
+        <div *ngIf="allCategory"   >
+          <ion-item lines="none">
+            <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-family: 'Open Sans', sans-serif;font-weight: bolder; font-size:x-large;color: #000000  ">{{ Selectedcategory.name }}</h2>
+            <ion-select slot="end" [(ngModel)]="secondselectedCategory" (ngModelChange)="onsecondCategory($event)"   class="custom-options">
+              <ion-select-option   *ngFor="let category of selectedSecondChildCategory" [value]="category">{{category.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row>
+      <ion-col  size ="12" size-sm="8" offset-sm ="2">
+        <ion-item lines="none">
+          <ion-buttons slot="start">
+            <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
+            <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
+              <ion-icon style="color: #141111 ;"  name="add-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="onfilter" (click)="onDisplayFilters()">
+              <ion-icon    style="color: #141111b9 ;"  name="add-circle"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-item (click)="onPickLocation()" slot="end"lines="none">
+            <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
+            <ion-icon style="color: #141111 ;height:1.5rem;margin-top: 0.9rem" slot="start" name="map"></ion-icon>
+            <h4   style="margin-top: 10px" style="font-family: 'Open Sans', sans-serif;font-weight: bolder;color:#141111 " >{{ currentAreaLocationName}}</h4>
+          </ion-item>
+          <ion-buttons (click)="onOpenFiltersModal()"  >
+            <ion-icon style="color: #141111 ;"  name="settings-outline"></ion-icon>
+            <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
+          </ion-buttons>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div id="divSpinner" *ngIf="searching && !scrolled" class="spinner-container">
+      <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;" ></ion-spinner>
+    </div>
+
+
+
+    <ion-row *ngIf="onfilter && !aboutToSearch" >
+      <ion-col size ="12" size-sm="8" offset-sm ="2" >
+       <ion-slides  [options]="slideOpts1">
+          <ion-slide   *ngFor="let category of categoryList"  >
+            <ion-item  (click)="onClickedCategory(category)"lines="none">
+              <!-- <ion-icon slot="start"  style="width:1.8rem;height:1.8rem;" [src]="category.icon"></ion-icon> -->
+              <ion-label  style=" color: 	#000000 ;overflow: hidden;font-family: 'Open Sans';font-weight:bolder;font-size: large;">{{ category.name }}   </ion-label>
+            </ion-item>
+        </ion-slide>
+       </ion-slides>
+      </ion-col>
+    </ion-row>
+
+    <!-- <ion-row >
+      <ion-col size ="12" size-sm="8" offset-sm ="2" style="padding: 10px;" >
+        <div class="mapDiv" style="margin: 0px;border-radius:15px"  >
+          <ion-img 
+          
+          role="button"
+          class="location-image" 
+          [src]="locationimage" 
+          style="height: 8rem;object-fit: cover;width:100%;border-radius:20px;margin:0px"
+          (click)="onPickLocation()"
+          *ngIf="locationimage" 
+          ></ion-img>
+        
+        </div>
+      </ion-col>
+    </ion-row> -->
+
+  </ion-grid>
+
+
+  <div id="divSpinner" *ngIf="searching && scrolled" class="spinner-container">
+    <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;margin-top: 0.2rem" ></ion-spinner>
+  </div> 
+
+
+  <ion-grid *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
+    <ion-row>
+      <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
+         <h4>There are no available Listings right now, please come back later or change location </h4>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid id="mobilePinGrid" style="padding: 1rem;" *ngIf="platformIsMobile" >
+    <ion-row style="background:transparent">
         <ion-col color="transparent" size ="12" size-sm="8" offset-sm ="2">
                     <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" /> -->
           <div class="pinsMobile" style="background:transparent">
@@ -271,26 +500,24 @@
   </ion-grid>  
 </ion-content>
 
-      <!-- <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img> -->
 
-<!-- <ion-header *ngIf="!platformIsMobile">
-  <ion-toolbar color="primary">
-    <ion-item lines="none">
-      <ion-buttons *ngIf="!aboutToSearch"  slot="start">
-        <ion-menu-button menu="m1"></ion-menu-button>
-      </ion-buttons>
 
-      <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
-        <div id="divsearchInput">
-          <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
-        </div>
-      </ion-col>
-      <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
-        <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-      </ion-buttons>
-    </ion-item>
-  </ion-toolbar>
-</ion-header> -->
+
+   <!-- Android Operating system ENDS HERE -->
+   <!-- Android Operating system ENDS HERE -->
+   <!-- Android Operating system ENDS HERE -->
+
+
+
+
+   <!--Desktop Operating system STARTS HERE -->
+   <!--Desktop Operating system STARTS HERE -->
+   <!--Desktop Operating system STARTS HERE -->
+
+
+
+
+
 
 <ion-toolbar *ngIf="scrolled"  >
   <ion-item lines="none">
@@ -357,7 +584,7 @@
       <ion-row>
         <ion-col  text-center>
           <div id="divsearchInputDesktop" >
-            <ion-searchbar  style="height:rem;width: 75%; margin-left:12.5%" id="searchBarDesktop" [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
+            <ion-searchbar  style="height:rem;width: 50%; margin-left:25%" id="searchBarDesktop" [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
           </div>
         </ion-col>
     </ion-row>

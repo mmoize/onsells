@@ -1,0 +1,5 @@
+
+
+<app-android-home *ngIf="iosPlatform" ></app-android-home>
+<app-desktop-home *ngIf="androidPlatform" ></app-desktop-home>
+<app-ios-home *ngIf="desktopPlatform" ></app-ios-home>

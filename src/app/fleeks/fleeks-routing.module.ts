@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'fleek',
     loadChildren: () => import('./fleek/fleek.module').then( m => m.FleekPageModule)
+  },
+  {
+    path: 'video',
+    loadChildren: () => import('./video/video.module').then( m => m.VideoPageModule)
   }
 ];
 

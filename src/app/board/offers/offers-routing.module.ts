@@ -23,6 +23,14 @@ const routes: Routes = [
   {
     path: 'new-post',
     loadChildren: () => import('./new-post/new-post.module').then( m => m.NewPostPageModule)
+  },
+  {
+    path: 'current-listings',
+    loadChildren: () => import('./current-listings/current-listings.module').then( m => m.CurrentListingsPageModule)
+  },
+  {
+    path: 'items',
+    loadChildren: () => import('./items/items.module').then( m => m.ItemsPageModule)
   }
 ];
 

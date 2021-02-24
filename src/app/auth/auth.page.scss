@@ -18,3 +18,66 @@ div {
     object-position: center;
 }
 
+
+
+#AuthPageContentLogin {
+    
+    //background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2013/12/02/182518/8854ad3013a3ae7072656c43ec1a568b-1000.jpg") no-repeat center fixed ;
+    background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/48753.jpg") no-repeat center fixed;
+    // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    // background: url("https://i.pinimg.com/originals/5c/4a/d2/5c4ad2b8188d3d14613902209dc33165.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.luxewalls.com.au/wp-content/uploads/2020/10/5.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/2703797.jpg") no-repeat center fixed;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2012/03/23/1742/0281fbc906a36721c25f55f3ce963407.jpg") no-repeat center fixed;
+    // background: url("https://cdn.wallpapersafari.com/27/90/uwPC5N.jpg") no-repeat center fixed;
+    height: 100vh;
+}
+
+#AuthPageContentReset {
+    
+    //background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2013/12/02/182518/8854ad3013a3ae7072656c43ec1a568b-1000.jpg") no-repeat center fixed ;
+    background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/48753.jpg") no-repeat center fixed;
+    // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
+    // background: url("https://i.pinimg.com/originals/5c/4a/d2/5c4ad2b8188d3d14613902209dc33165.jpg") no-repeat center fixed;
+    // background-size: cover;
+    // background: url("https://www.luxewalls.com.au/wp-content/uploads/2020/10/5.jpg") no-repeat center fixed;
+    // background: url("https://wallpaperaccess.com/full/2703797.jpg") no-repeat center fixed;
+    // background: url("https://www.wallpaperup.com/uploads/wallpapers/2012/03/23/1742/0281fbc906a36721c25f55f3ce963407.jpg") no-repeat center fixed;
+    // background: url("https://cdn.wallpapersafari.com/27/90/uwPC5N.jpg") no-repeat center fixed;
+    height: 80vh;
+}
+
+#resetBtn {
+    --background: transparent;
+    font-weight: bold;
+}
+
+#enterBtn{
+
+    font-weight: bolder;
+
+}
+
+#switchMode {
+    font-weight: bolder;
+    --background: transparent;
+}
+
+ion-list {
+    --background: transparent;
+}
+
+ion-item {
+    --background: transparent;
+}
+
+#AuthPageContentLogin > form > ion-grid > ion-row:nth-child(1) > ion-col > ion-list {
+    --background: transparent;
+}

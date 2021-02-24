@@ -5,6 +5,7 @@ import { MessageService } from 'src/app/messages/message.service';
 import { SuperTabs } from '@ionic-super-tabs/angular';
 import { SuperTabsConfig } from '@ionic-super-tabs/core';
 import { FleekPage } from './fleek/fleek.page';
+import { VideoPage } from './video/video.page';
 
 @Component({
   selector: 'app-fleeks',
@@ -12,10 +13,11 @@ import { FleekPage } from './fleek/fleek.page';
   styleUrls: ['./fleeks.page.scss'],
 })
 export class FleeksPage implements OnInit {
-
+  
   tab1 = FleekscameraPage;
   tab2 = HomePage;
   tab3 = FleekPage;
+  tab4 = VideoPage
   searchbar = false;
   @ViewChild(SuperTabs) superTabs: SuperTabs;
 

@@ -11,6 +11,8 @@ import { OffersPage } from './offers.page';
 import { OfferProductPage } from './offer-product/offer-product.page';
 import { ProductOfferComponent } from './product-offer/product-offer.component';
 import { NewPostPipe } from './new-post.pipe';
+import { ItemsPage } from './items/items.page';
+import { CurrentListingsPage } from './current-listings/current-listings.page';
 
 @NgModule({
   imports: [
@@ -20,6 +22,12 @@ import { NewPostPipe } from './new-post.pipe';
     OffersPageRoutingModule,
     SharedModule,
   ],
-  declarations: [OffersPage, OfferProductPage, ProductOfferComponent, NewPostPipe ]
+  declarations: [OffersPage,
+                 OfferProductPage,
+                 ProductOfferComponent, 
+                 NewPostPipe, 
+                 ItemsPage,
+                 CurrentListingsPage 
+                 ]
 })
 export class OffersPageModule {}

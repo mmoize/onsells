@@ -1,0 +1,157 @@
+<!-- <ion-header>
+  <ion-toolbar>
+   <ion-row>
+      <ion-col size="12" size-sm="6" offset-sm ="3">
+        <ion-item lines="none">
+        <ion-label slot="start">
+          <ion-header id="productheader">Current listings: {{userPostCount}}</ion-header>
+        </ion-label>
+        </ion-item>
+      </ion-col>
+   </ion-row>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-grid>
+
+  <ion-row  >
+    <ion-col size="12" size-sm="6" offset-sm ="3">
+      <ion-segment (ionChange)="changeLayout($event)" value="gridLayout" color="tertiary">
+        <ion-segment-button value="gridLayout">
+          <ion-icon name="apps"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="itemsLayout">
+          <ion-icon name="menu"></ion-icon>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="itemsLayout" >
+    <ion-col size="12" size-sm="6" offset-sm ="3">
+
+
+      <ion-item-sliding *ngIf="!loadedUserPosts"  id="item100">
+        <ion-thumbnail slot="start">
+          <ion-img  src="assets/img/placeholder.png"></ion-img>
+        </ion-thumbnail>
+      <ion-label>
+        <h2>add Listing</h2>
+        <p>You currenlty you have 0 listed item</p>
+      </ion-label>
+    
+    </ion-item-sliding> 
+
+
+        <ion-card style="margin-bottom: 1rem;"   id="recentCard" *ngFor="let post of loadedUserPosts"   >
+          <ion-item-sliding #slidingItem id="item100">
+            <ion-item  (click)="onOpenListingDetails(post)">        <!--(click)="openViewImageModal(data)" -->
+              <ion-thumbnail slot="start">
+                <ion-img  [src]="post.product[0].productimage_set[0].image"></ion-img>
+              </ion-thumbnail>  
+            <ion-label>
+              <h2>{{ post.product[0].title }}</h2>
+              <p>{{ post.product[0].description }}</p>
+            </ion-label>
+            <ion-note slot="end">
+              {{ post.created_at |  date:'shortTime' }}
+              {{post.created_at | date }}
+              <p>
+                  <ion-icon name="eye-outline"></ion-icon>
+                  {{ post.viewcount }}
+              </p>
+            </ion-note>
+          </ion-item> 
+          <!-- <ion-item-options side="start">
+            <ion-item-option>
+              <ion-icon slot="icon-only" name="heart"></ion-icon>
+            </ion-item-option>
+          </ion-item-options> -->
+      
+          <ion-item-options side="end">
+            <ion-item-option  (click)="presentAlertConfirm(post.id, slidingItem)"  color="danger">
+              <h4  style="font-weight: bolder;">Remove</h4>
+              <!-- <ion-icon slot="icon-only" name="trash"></ion-icon> -->
+            </ion-item-option>
+            <!-- <ion-item-option>
+              <ion-icon slot="icon-only" name="star"></ion-icon>
+            </ion-item-option> -->
+          </ion-item-options>
+          </ion-item-sliding>
+        </ion-card>
+
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row *ngIf="gridLayout && !desktopPlatform" >
+    <ion-col size="12" size-sm="6" offset-sm ="3">
+      <div class="pin" style="background:transparent">
+        <div id="pins" *ngFor="let post of loadedUserPosts" style="background:transparent">
+    
+          <ion-card   (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+            <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
+            <ion-card-content>
+              <ion-label style="text-align: left;">
+                <ion-card-header style="padding: 0.25rem;color:#000000;"> {{ post?.product[0].title }} </ion-card-header>
+              </ion-label>
+              <ion-card-title >
+                <ion-row>
+                    <ion-col >
+                    <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
+                    <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
+                      <ion-icon  id="divViewsicon" name="eye-outline"></ion-icon>
+                      <h2 slot="end"style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                    </ion-item>
+                    </ion-col>
+                </ion-row>
+              </ion-card-title>
+            </ion-card-content>
+          </ion-card>
+    
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+
+
+  <ion-row *ngIf="gridLayout && desktopPlatform" >
+    <ion-col size="12" size-sm="6" offset-sm ="3">
+      <div class="pinDesktop" style="background:transparent">
+        <div id="pinsDesktop" *ngFor="let post of loadedUserPosts" style="background:transparent">
+    
+          <ion-card   (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+            <!-- <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge> -->
+            <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
+            <ion-card-content>
+              <ion-label style="text-align: left;">
+                <ion-card-header style="padding: 0.25rem;color:#000000;"> {{ post?.product[0].title }} </ion-card-header>
+              </ion-label>
+              <ion-card-title >
+                <ion-row>
+                    <ion-col >
+                    <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
+                    <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
+                      <ion-icon  id="divViewsicon" name="eye-outline"></ion-icon>
+                      <h2 slot="end"style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                    </ion-item>
+                    </ion-col>
+                </ion-row>
+              </ion-card-title>
+            </ion-card-content>
+          </ion-card>
+    
+        </div>
+      </div>
+
+    </ion-col>
+  </ion-row>
+
+
+
+
+
+</ion-grid>
+
+

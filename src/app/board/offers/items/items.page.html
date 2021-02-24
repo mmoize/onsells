@@ -1,0 +1,41 @@
+
+<!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
+<ion-grid>
+    <ion-card style="width: 150px; height: 200px; border: 2px solid #f8f8f8" *ngIf="!userHasLoadedItem"    > 
+          
+          <img  id="touched" src="assets/img/placeholder.png"/>
+          <ion-card-content style="margin-top: -10px;"(click)="onNewProduct()">
+                        <ion-label>Add Item</ion-label>
+                        <ion-label >
+                        <h3 >Price: None</h3>
+                    </ion-label>
+          </ion-card-content >
+          <div *ngIf="ClickedProdImage"  id="topplay">
+          <ion-button id="btnicon">
+            <ion-icon    color = "primary" id="trashicon" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card>
+
+      <ion-slides  [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+        <ion-slide *ngFor="let product of loadedProducts" style="width: 150px; height: 200px; border: 2px solid #f8f8f8">
+          <!-- //click)="onNewPostListing()" -->
+          <ion-card   > 
+               <!-- <ion-img style="pointer-events:none" src="https://via.placeholder.com/150"></ion-img> -->
+               <img (click)="onClickProdImage()" id="touched" [src]="product.productimage_set[0].image"/>
+               <ion-card-content (click)="onNewPostListing()">
+                             <ion-label>{{ product.title }}</ion-label>
+                             <ion-label >
+                              <h3 >{{ product.price |currency }}</h3>
+                          </ion-label>
+               </ion-card-content >
+               <div *ngIf="ClickedProdImage"  id="topplay">
+                  <ion-button (click)="onDelete(product.id)" id="btnicon">
+                    <ion-icon    color = "primary" id="trashicon" name="trash-outline"></ion-icon>
+                  </ion-button>
+                </div>
+            </ion-card>
+        </ion-slide>
+      </ion-slides>
+
+</ion-grid>

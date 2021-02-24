@@ -1,154 +1,187 @@
-<ion-grid style="padding:0px;height:20%">
-  <ion-col text-center style="text-align: center;" size ="12" size-sm="4" offset-sm ="4">
-    <div style="border: 2px green" >
-      <ion-img style="height:70px;width:180px" src="assets/fleekslogo.png"></ion-img>
-    </div>
-  </ion-col>
-</ion-grid>
 
 
 
 
-<ion-content *ngIf="!isPassReset"  >
-  <form #log="ngForm" (ngSubmit)="onSubmit(log)" >
-    <ion-grid *ngIf="isLogin" >
-      <ion-row>
-        <ion-col size-md="4" offset-md="4">
-          <ion-list style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-           margin-bottom: 20px;">
-            <ion-item >
-                <ion-label position="floating">E-Mail</ion-label>
-                <ion-input
-                type="email"
-                ngModel
-                name="email" 
-                required
-                email
-                #emailCtrl="ngModel"
-                ></ion-input>
-            </ion-item >
-            <ion-item  *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
-              <ion-label >Should be a valid Email address.</ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-label position="floating">Password</ion-label>
-              <ion-input 
-                type="password"
-                ngModel
-                name="password"
-                #passCtrl="ngModel"
-                required  >
-              </ion-input>
-            </ion-item>
-            <ion-item *ngIf="!passCtrl.valid && passCtrl.touched" lines="none">
-              <ion-label >Should be a valid Password.</ion-label>
-            </ion-item>
-          </ion-list>
+
+<ion-content  *ngIf="!isPassReset"  >
+  <ion-grid  id="AuthPageContentLogin">
+
+    <ion-grid   style="padding:0px;height:20%;padding-top:120px">
+      <ion-row >
+          <ion-col justify-content-center align-items-center size-md="4" offset-md="4" >
+          <div style="border: 2px green" >
+            <ion-img style="height:70px;width:180px" src="assets/fleekslogo.png"></ion-img>
+          </div>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col size-md="4" offset-md="4">
-          <ion-button
-          color="primary"
-          type="button" 
-          expand="full"
-          fill="Clear"          
-         (click)="onSwitchAuthMode()">
-          Switch to {{ isLogin ? 'Signup': 'Login' }}</ion-button>
-        <ion-button
-        color="primary" 
-        expand="block" 
-        [disabled]="!log.valid"
-        type="submit" >
-           {{ isLogin ? 'Login' : 'Signup' }}
-        </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-
-    <ion-grid *ngIf="!isLogin" >
-      <ion-row>
-        <ion-col size-md="4" offset-md="4">
-          <ion-list style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-           margin-bottom: 20px;">
-            <ion-item >
-                <ion-label position="floating">username</ion-label>
-                <ion-input
-                type="text"
-                ngModel
-                name="username" 
-                required
-                username
-                #usernameCtrl="ngModel"
-                ></ion-input>
-            </ion-item>
-            <ion-item >
-                <ion-label position="floating">E-Mail</ion-label>
-                <ion-input
-                type="email"
-                ngModel
-                name="email" 
-                required
-                email
-                #emailCtrl="ngModel"
-                ></ion-input>
-            </ion-item>
-            <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
-              <ion-label >Should be a valid Email address.</ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-label position="floating">Password</ion-label>
-              <ion-input 
-                type="password"
-                ngModel
-                name="password"
-                #passCtrl="ngModel"
-                required  ></ion-input>
-            </ion-item>
-            <ion-item *ngIf="!passCtrl.valid && passCtrl.touched" lines="none">
-              <ion-label >Should be a valid Password.</ion-label>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size-md="4" offset-md="4">
-          <ion-button
-          color="primary"
-          type="button" 
-          expand="full"
-          fill="Clear"          
-         (click)="onSwitchAuthMode()">
-          Switch to {{ isLogin ? 'Signup': 'Login' }}</ion-button>
-        <ion-button
-        color="primary" 
-        expand="block" 
-        [disabled]="!log.valid"
-        type="submit" >
-           {{ isLogin ? 'Login' : 'Signup' }}
-        </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </form>
+      </ion-grid>
   
-  <ion-button
-  style="margin-top: 10px%;"
-  color="primary"
-  type="button" 
-  expand="full"
-  fill="Clear"          
- (click)="onPassReset()">
-  reset password </ion-button>
+    <form  style="padding-top:80px" #log="ngForm" (ngSubmit)="onSubmit(log)" >
+      <ion-grid *ngIf="isLogin" >
+        <ion-row>
+          <ion-col size-md="4" offset-md="4">
+            <ion-list style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+             margin-bottom: 20px;background-color: transparent;">
+              <ion-item >
+                  <ion-label position="floating" style="font-weight: bolder;">E-Mail</ion-label>
+                  <ion-input
+                  type="email"
+                  ngModel
+                  name="email" 
+                  required
+                  email
+                  #emailCtrl="ngModel"
+                  ></ion-input>
+              </ion-item >
+              <ion-item  *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
+                <ion-label >Should be a valid Email address.</ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label style="font-weight: bolder;" position="floating">Password</ion-label>
+                <ion-input 
+                  type="password"
+                  ngModel
+                  name="password"
+                  #passCtrl="ngModel"
+                  required  >
+                </ion-input>
+              </ion-item>
+              <ion-item *ngIf="!passCtrl.valid && passCtrl.touched" lines="none">
+                <ion-label >Should be a valid Password.</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="4" offset-md="4">
+            <ion-button
+            id="switchMode"
+            color="primary"
+            type="button" 
+            expand="full"
+            fill="Clear"          
+           (click)="onSwitchAuthMode()">
+            Switch to {{ isLogin ? 'Signup': 'Login' }}</ion-button>
+          <ion-button
+          id="enterBtn"
+          color="primary" 
+          expand="block" 
+          [disabled]="!log.valid"
+          type="submit" >
+             {{ isLogin ? 'Login' : 'Signup' }}
+          </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  
+  
+      <ion-grid *ngIf="!isLogin" >
+        <ion-row>
+          <ion-col style="background-color: transparent;"  size-md="4" offset-md="4">
+            <ion-list style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+             margin-bottom: 20px;background-color: transparent;">
+              <ion-item style="background-color: transparent;" >
+                  <ion-label style="font-weight: bolder;" position="floating">username</ion-label>
+                  <ion-input
+                  type="text"
+                  ngModel
+                  name="username" 
+                  required
+                  username
+                  #usernameCtrl="ngModel"
+                  ></ion-input>
+              </ion-item>
+              <ion-item  style="background-color: transparent;">
+                  <ion-label style="font-weight: bolder;" position="floating">E-Mail</ion-label>
+                  <ion-input
+                  type="email"
+                  ngModel
+                  name="email" 
+                  required
+                  email
+                  #emailCtrl="ngModel"
+                  ></ion-input>
+              </ion-item>
+              <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
+                <ion-label >Should be a valid Email address.</ion-label>
+              </ion-item>
+              <ion-item *ngIf="passwordTouch" lines="none">
+                <ion-label style="color: rgb(167, 13, 128);font-weight:bold" >Password Should have Minimum of 8 characters</ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label style="font-weight: bolder;" position="floating">Password</ion-label>
+                <ion-input 
+                (click)="passwordTouched($event)"
+                  type="password"
+                  ngModel
+                  name="password"
+                  #passCtrl="ngModel"
+                  required  ></ion-input>
+              </ion-item>
+              <ion-item *ngIf="!passCtrl.valid && passCtrl.touched" lines="none">
+                <ion-label style="color: rgb(167, 13, 128);" >Should be a valid Password of Minimum 8 characters.</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-md="4" offset-md="4">
+            <ion-button
+            id="switchMode"
+            color="primary"
+            type="button" 
+            expand="full"
+            fill="Clear"          
+           (click)="onSwitchAuthMode()">
+            Switch to {{ isLogin ? 'Signup': 'Login' }}</ion-button>
+          <ion-button
+          id="enterBtn"
+          color="primary" 
+          expand="block" 
+          [disabled]="!log.valid"
+          type="submit" >
+             {{ isLogin ? 'Login' : 'Signup' }}
+          </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+
+    <ion-row *ngIf="isLogin">
+      <ion-col style="text-align: center;" size-md="4" offset-md="4">
+        <ion-button
+        id="resetBtn"
+        style="margin-top: 10px;background:"
+        color="primary"
+        type="button" 
+  
+        fill="Clear"          
+       (click)="onPassReset()">
+        reset password </ion-button>
+      </ion-col>
+    </ion-row>
+    
+  </ion-grid>
+
 </ion-content>
 
-<ion-content *ngIf="isPassReset"  >
-  <form [formGroup]="form" >
+<ion-content id="AuthPageContentReset" *ngIf="isPassReset"  >
+
+  <ion-grid   style="padding:0px;height:20%;padding-top:120px">
+    <ion-row >
+        <ion-col justify-content-center align-items-center size-md="4" offset-md="4" >
+        <div style="border: 2px green" >
+          <ion-img style="height:70px;width:180px" src="assets/fleekslogo.png"></ion-img>
+        </div>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+
+  <form style="padding-top:80px"  [formGroup]="form" >
     <ion-grid >
       <ion-row>
         <ion-col size-md="4" offset-md="4">
@@ -222,7 +255,6 @@
     (click)="onCanclePassReset()">
   Cancle </ion-button>
 
-  
   
 </ion-content>
 <!-- <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner> -->

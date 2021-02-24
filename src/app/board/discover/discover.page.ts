@@ -35,6 +35,7 @@ type CurrentPlatform = 'browser' | 'native';
 export class DiscoverPage implements OnInit, OnDestroy {
 
   @ViewChild('DesktopContent') content: IonContent;
+  @ViewChild('mobileContent') Mobilecontent: IonContent;
   scrolled = false;
   mobileScrolled = false;
 
@@ -54,7 +55,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
 
-
+  androidPlatform  = false;
+  iosPlatform = false;
+  desktopPlatform = false;
 
   email;
   username;
@@ -234,6 +237,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
 
                   this.setCurrentPlatform();
+                  this.setCurrentPlatforms();
                   
                   this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
                   this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
@@ -313,6 +317,21 @@ export class DiscoverPage implements OnInit, OnDestroy {
     } else {
       this._currentPlatform = 'browser';
       console.log('platform is desktop');
+    }
+  }
+
+
+  private setCurrentPlatforms() {
+    // Are we on mobile platform? Yes if platform is ios or android, but not desktop or mobileweb, no otherwise
+    if (this.platform.is('ios')) {
+      this.iosPlatform = true;
+      console.log('its ios');
+    } else if ( this.platform.is('android')) {
+      this.androidPlatform = true;
+      console.log('its android');
+    } else if (this.platform.is('desktop')) {
+      this.desktopPlatform = true;
+      console.log('its desk');
     }
   }
 
@@ -489,6 +508,7 @@ PreloadPost() {
         this.aboutToSearch = false;
       } else if (!this.aboutToSearch) {
         this.aboutToSearch = true;
+        this.Mobilecontent.scrollToPoint(0,260,200);
       }
 
     }
@@ -832,9 +852,22 @@ onOpenMapFiltersModal() {
     console.log('logScrollStart');
     document.getElementById('desktopContent');
   }
+  logMobileScrolling(event) {
+
+    if (event.detail.currentY >=300 ) {
+      
+      this. mobileScrolled = true;
+      console.log('Down to the bottom', event.detail.currentY)
+      console.log('Down ', this. mobileScrolled)
+    } else if (event.detail.currentY <=200)
+      this.mobileScrolled = false
+      console.log('up ', this. mobileScrolled)
+        console.log('Back to the top', event.detail.currentY)
+  }
+    
+  
 
   logScrolling(event) {
-
 
     if (event.detail.currentY >=300 ) {
         this.scrolled = true;

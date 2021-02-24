@@ -15,6 +15,8 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
 import { OffersPageModule } from './offers/offers.module';
 import { DiscoverPageModule } from './discover/discover.module';
 import { ProductDetailPageModule } from './discover/product-detail/product-detail.module';
+import { HomePageModule } from './home/home.module';
+import { MessagesPageModule } from '../messages/messages.module';
 
 
 @NgModule({
@@ -24,6 +26,7 @@ import { ProductDetailPageModule } from './discover/product-detail/product-detai
     IonicModule,
     DiscoverPageModule,
     OffersPageModule,
+    MessagesPageModule,
     FleekscameraPageModule,
     BoardPageRoutingModule,
   ],

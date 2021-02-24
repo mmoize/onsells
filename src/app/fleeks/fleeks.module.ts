@@ -1,3 +1,5 @@
+import { VideoPageModule } from './video/video.module';
+import { VideoPage } from './video/video.page';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +24,7 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
     HomePageModule,
     FleekPageModule,
     FleekscameraPageModule,
+    VideoPageModule,
     LazyLoadImageModule,
     SuperTabsModule.forRoot(),
   ],

@@ -1,7 +1,7 @@
         <ion-content [scrollEvents]="true">
           <ion-slides (ionSlideDidChange)="SlideDidChange(item)" (ionScroll)="didScrolls($event)"  (ionScroll)="didScroll($event)" [options]="slideOptions">
         
-            <ion-slide style="background: black;" *ngFor="let item of videos"  (ionSlideDidChange)="SlideDidChange(item)">
+            <ion-slide (click)="SlideDidChange(item)"   style="background: black;" *ngFor="let item of videos"  (ionSlideDidChange)="SlideDidChange(item)">
               <div class="ion-padding">
                 <ion-card style="background: rgba(0, 0, 0, 0.603);" >
                  <!-- <ion-card-header>
@@ -10,7 +10,7 @@
             
                  <ion-card-content>
                    {{ item.text }}
-                   <div *ngIf="item.url" >
+                   <div >
                      <video loop="loop" #player playsinline preload="auto">
                        <source [src]="item.url" type="video/mp4"/>
                      </video>
@@ -57,3 +57,30 @@
         
           </ion-slides>
         </ion-content>
+
+
+
+
+                   <!-- <div *ngIf="item.url" >
+                     <video loop="loop" #player playsinline preload="auto">
+                       <source [src]="item.url" type="video/mp4"/>
+                     </video>
+                     <div class="bar">
+
+                        <ion-button (click)="openMarketplace(player)" color="primary" fill="clear">
+                          <ion-icon color="primary" slot="icon-only" src="assets/icons/marketplace.svg"></ion-icon>
+                        </ion-button>
+
+                        <ion-button ion-button (click)="playOnSide(player)" color="primary" fill="clear">
+                          <ion-icon color="primary" slot="icon-only" name="person-circle-outline"></ion-icon>
+                        </ion-button>
+                    </div>    -->
+
+                        <!-- <ion-button (click)="openFullScreen(player)" color="primary" fill="clear">
+                          <ion-icon slot="icon-only" name="easel"></ion-icon>
+                        </ion-button> -->
+                     
+                     
+                        <!-- <ion-button (click)="playOnSide(player)" color="primary" fill="clear">
+                          <ion-icon slot="icon-only" name="open"></ion-icon>
+                        </ion-button> -->
