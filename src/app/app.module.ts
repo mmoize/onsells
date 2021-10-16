@@ -44,6 +44,7 @@ import { getStorage, provideStorage }
 from '@angular/fire/storage';
 import { getAnalytics, provideAnalytics } 
 from '@angular/fire/analytics';
+import { provideMessaging,getMessaging } from '@angular/fire/messaging';
 
 
 
@@ -67,7 +68,8 @@ from '@angular/fire/analytics';
             provideAnalytics(() => getAnalytics()),
             ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
             ServiceWorkerModule.register('ngsw-worker.js'),
-            LazyLoadImageModule, 
+            LazyLoadImageModule,
+            provideMessaging(() => getMessaging()), 
 
 
 

@@ -1,18 +1,14 @@
 {
-  "projects": {
-    "production": "fleek-market",
-    "default": "fleek-market"
-  },
   "targets": {
     "fleek-market": {
       "hosting": {
         "app": [
           "fleek-market"
-        ],
-        "fleek-market": [
-          "myapp-fleek-market" 
         ]
       }
     }
+  },
+  "projects": {
+    "default": "fleek-market"
   }
 }

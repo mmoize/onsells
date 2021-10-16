@@ -179,7 +179,13 @@
         },
         "deploy": {
           "builder": "@angular/fire:deploy",
-          "options": {}
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "app:build:production",
+            "firebaseProject": "fleek-market",
+            "firebaseHostingSite": "fleek-market"
+          }
         }
       }
     }

@@ -33,3 +33,8 @@ environment.ts
 environment.prod.ts 
 firebase-messaging-sw.js    
 ionicApp.json 
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
