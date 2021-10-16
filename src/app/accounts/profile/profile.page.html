@@ -14,7 +14,7 @@
 
 
 <ion-content >
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)"> 
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid>
@@ -29,7 +29,7 @@
                   <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img>
               </div>
             </ion-card-header>
-            <p class="contact-card__name">{{ userProfile?.username }}</p>
+            <p class="contact-card__name">{{ userProfile?.username |titlecase }}</p>
             <div class="contact-card__footer">
               <div class="contact-card__footer__core">
               

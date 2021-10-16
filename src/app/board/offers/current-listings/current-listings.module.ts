@@ -15,6 +15,7 @@ import { CurrentListingsPage } from './current-listings.page';
     IonicModule,
     CurrentListingsPageRoutingModule
   ],
-  declarations: [CurrentListingsPage]
+  declarations: [CurrentListingsPage],
+  exports: [CurrentListingsPage]
 })
 export class CurrentListingsPageModule {}

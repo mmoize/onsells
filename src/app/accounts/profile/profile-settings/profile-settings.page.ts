@@ -4,7 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';
 import { LoadingController, ActionSheetController } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
+
 
 @Component({
   selector: 'app-profile-settings',
@@ -61,14 +62,13 @@ export class ProfileSettingsPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const Token = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
     
     this.authService.returnUsername().then(resData => {
       const username = resData;
       console.log('the issue', resData);
-      this.profileservice.loadUserProfile1(Token, username).subscribe(resDatas => {
+      this.profileservice.loadUserProfile1(authDictionary.token, username).subscribe(resDatas => {
         this.userProfile = resDatas;
         this.imageString = this.userProfile.image;
       });

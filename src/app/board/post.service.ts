@@ -1,15 +1,19 @@
 import { stringify } from 'querystring';
-import { Product } from './product.model';
-import { PlaceLocation, Coordinates } from '../location.model';
+import { Product } from '../models/product.model';
+
 
 import { switchMap, map, tap, take } from 'rxjs/operators';
-import { Post } from './post.model';
+
 import { BehaviorSubject, async } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { ProductLocation } from './location.model';
-import { Plugins, Capacitor } from '@capacitor/core';
+import { ProductLocation } from '../models/location.model';
+import {  Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
+import { Coordinates, PlaceLocation } from '../models/place-location.model';
+import { Post } from '../models/post.model';
+import { Storage } from '@capacitor/storage';
 
 interface PostData {
   id: string;
@@ -69,18 +73,18 @@ export class PostService {
   private _posts = new BehaviorSubject<Post[]>([]);
   private _products = new BehaviorSubject<Product[]>([]);
 
-  postsUrl = 'https://sellet.herokuapp.com/api/postlocationview/';
-  postDetailUrl = 'https://sellet.herokuapp.com/api/postdetail/';
-  postImageSetUrl = 'https://sellet.herokuapp.com/api/imageset/';
-  userPostsUrl = 'https://sellet.herokuapp.com/api/userpostview/';
-  userPostListingsUrl = 'https://sellet.herokuapp.com/api/postcreateview/1';
-  postDeleteUrl = 'https://sellet.herokuapp.com/api/userdeletepostview/';
-  postCategoryUrl = 'https://sellet.herokuapp.com/api/viewpostfilter/';
-  postSearchUrl = 'https://sellet.herokuapp.com/api/postsearchview/?product__title__startswith=';
+  postsUrl = 'https://fleekmarket.herokuapp.com/api/postlocationview/';
+  postDetailUrl = 'https://fleekmarket.herokuapp.com/api/postdetail/';
+  postImageSetUrl = 'https://fleekmarket.herokuapp.com/api/imageset/';
+  userPostsUrl = 'https://fleekmarket.herokuapp.com/api/userpostview/';
+  userPostListingsUrl = 'https://fleekmarket.herokuapp.com/api/postcreateview/1';
+  postDeleteUrl = 'https://fleekmarket.herokuapp.com/api/userdeletepostview/';
+  postCategoryUrl = 'https://fleekmarket.herokuapp.com/api/viewpostfilter/';
+  postSearchUrl = 'https://fleekmarket.herokuapp.com/api/postsearchview/?product__title__startswith=';
 
-  productCreateUrl = 'https://sellet.herokuapp.com/api/products/';
-  productsFetchUrl = 'https://sellet.herokuapp.com/api/userproductview/';
-  productDeleteUrl = 'https://sellet.herokuapp.com/api/userdeleteproductview/';
+  productCreateUrl = 'https://fleekmarket.herokuapp.com/api/products/';
+  productsFetchUrl = 'https://fleekmarket.herokuapp.com/api/userproductview/';
+  productDeleteUrl = 'https://fleekmarket.herokuapp.com/api/userdeleteproductview/';
 
 
 
@@ -113,7 +117,7 @@ export class PostService {
       return;
     }
 
-    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+    Geolocation.getCurrentPosition().then(geoPosition => {
       const Coordinates: Coordinates = {
         lat: geoPosition.coords.latitude,
         lng: geoPosition.coords.longitude
@@ -296,16 +300,14 @@ export class PostService {
 
   async getPostDetail(id: string) {
 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
-    console.log('for auth token', dicToken);
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
 
     this.httpService.get(`${this.postImageSetUrl}${id}`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + dicToken,
+        Authorization: 'Token ' + authDictionary.token,
       }
     }).subscribe(resData => {
       console.log('all', resData);
@@ -318,7 +320,7 @@ export class PostService {
         headers: {
           'Content-Type': 'application/json',
           // tslint:disable-next-line: max-line-length
-          Authorization: 'Token ' + dicToken ,
+          Authorization: 'Token ' + authDictionary.token,
         }
       });
     })).pipe(map(postData => {
@@ -337,31 +339,26 @@ export class PostService {
 
 
   async createPostListing(data) {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
-    console.log('for auth token', dicToken);
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
     const xhr = new XMLHttpRequest();
     const url = this.userPostListingsUrl ;
     xhr.open('POST', url, true);
-    xhr.setRequestHeader( 'Authorization', 'Token ' + dicToken );
+    xhr.setRequestHeader( 'Authorization', 'Token ' + authDictionary.token );
     xhr.withCredentials = true;
     return xhr.send(data);
   }
 
   async onPostDelete(id) {
-
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
-    console.log('for auth token', dicToken);
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
   
     return this.httpService.delete(`${this.postDeleteUrl}${id}`, {
       headers: {
         'Content-Type': 'application/json',
         // tslint:disable-next-line: max-line-length
-        Authorization: 'Token ' + dicToken ,
+        Authorization: 'Token ' + authDictionary.token ,
       }
     }).subscribe(() => {
   
@@ -421,15 +418,13 @@ export class PostService {
 
 
   async createProductUpload(data) {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
-    console.log('for auth token', dicToken);
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
     const xhr = new XMLHttpRequest();
     const url = this.productCreateUrl;
     xhr.open('POST', url, true);
-    xhr.setRequestHeader( 'Authorization', 'Token ' + dicToken );
+    xhr.setRequestHeader( 'Authorization', 'Token ' + authDictionary.token );
     xhr.withCredentials = true;
     return xhr.send(data);
   }
@@ -485,16 +480,14 @@ export class PostService {
 
  async productDelete(id) {
 
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  const dic = JSON.parse(value);
-  const dicToken = dic.token;
-  console.log('for auth token', dicToken);
+   const {value}   = await Storage.get({ key : 'authData'})  ; 
+  const authDictionary = JSON.parse(value);
 
   return this.httpService.delete(`${this.productDeleteUrl}${id}`, {
     headers: {
       'Content-Type': 'application/json',
       // tslint:disable-next-line: max-line-length
-      Authorization: 'Token ' + dicToken ,
+      Authorization: 'Token ' + authDictionary ,
     }
   }).subscribe(() => {
 

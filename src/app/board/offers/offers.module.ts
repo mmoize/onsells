@@ -13,21 +13,25 @@ import { ProductOfferComponent } from './product-offer/product-offer.component';
 import { NewPostPipe } from './new-post.pipe';
 import { ItemsPage } from './items/items.page';
 import { CurrentListingsPage } from './current-listings/current-listings.page';
+import { ItemsPageModule } from './items/items.module';
+import { CurrentListingsPageModule } from './current-listings/current-listings.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
+    FormsModule,
     OffersPageRoutingModule,
     SharedModule,
+    ItemsPageModule,
+    CurrentListingsPageModule
   ],
-  declarations: [OffersPage,
+  declarations: [
                  OfferProductPage,
                  ProductOfferComponent, 
                  NewPostPipe, 
-                 ItemsPage,
-                 CurrentListingsPage 
-                 ]
+                 OffersPage
+                 ],
+  exports: []
 })
 export class OffersPageModule {}

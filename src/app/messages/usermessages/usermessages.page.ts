@@ -3,9 +3,9 @@ import { stringify } from 'querystring';
 import { ProfileService } from './../../accounts/profile.service';
 import { Component, OnInit, AfterViewInit, QueryList, ViewChildren, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Plugins } from '@capacitor/core';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import { Router } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
+// import { AngularFirestore } from '@angular/fire/firestore';
 import { map, timeout } from 'rxjs/operators';
 import { constants } from 'perf_hooks';
 import { NgControlStatus } from '@angular/forms';
@@ -83,7 +83,7 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
               private videoPlay: VideoPlayer,
               private renderer: Renderer2,
               // private _scrollToService: ScrollToService,
-              private afs: AngularFirestore,
+              // private afs: AngularFirestore,
               private routes: Router,
               ) {
 
@@ -95,40 +95,40 @@ export class UsermessagesPage implements OnInit, AfterViewInit {
                   // Set firebase credentials.
 
                   const users = [];
-                  firebase.firestore().collection('chatUsers').get().then(resData => {
-                    resData.forEach(childData => {
-                      users.push(childData.data());
-                      if (childData.data()['userid'] != this.userid) {
-                        users.push(childData.data());
-                        this.testUsers.push(childData.data());
-                      }
+                  // firebase.firestore().collection('chatUsers').get().then(resData => {
+                  //   resData.forEach(childData => {
+                  //     users.push(childData.data());
+                  //     if (childData.data()['userid'] != this.userid) {
+                  //       users.push(childData.data());
+                  //       this.testUsers.push(childData.data());
+                  //     }
 
-                    });
-                    this.chatuserListTest = users;
+                  //   });
+                  //   this.chatuserListTest = users;
 
 
-                    const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
-                    const onexist = checkRoleExistence(this.userid);
-                    console.log(' does user exist', onexist);
-                    setTimeout(() => {
-                      if (!onexist) {
-                        // tslint:disable-next-line: no-unused-expression
-                        this.msgService.createUser(
-                          this.userid,
-                        {'username': this.username,
-                         'email': this.email,
-                         'userid': this.userid,
-                         'userdp': this.userdp,
-                        'conversations': []}
-                          ).then(() => {
-                            // do nothing for now..
-                          });
-                      } else {
-                        this.getCurrentUserChats();
-                      }
-                    }, 500);
+                  //   const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
+                  //   const onexist = checkRoleExistence(this.userid);
+                  //   console.log(' does user exist', onexist);
+                  //   setTimeout(() => {
+                  //     if (!onexist) {
+                  //       // tslint:disable-next-line: no-unused-expression
+                  //       this.msgService.createUser(
+                  //         this.userid,
+                  //       {'username': this.username,
+                  //        'email': this.email,
+                  //        'userid': this.userid,
+                  //        'userdp': this.userdp,
+                  //       'conversations': []}
+                  //         ).then(() => {
+                  //           // do nothing for now..
+                  //         });
+                  //     } else {
+                  //       this.getCurrentUserChats();
+                  //     }
+                  //   }, 500);
 
-                  });
+                  // });
 
                   this.mySubscription= interval(5000).subscribe((x => {
                     this.getUpdatedDp();
@@ -232,29 +232,29 @@ ionViewDidLoad(){
 
   getCurrentUserChats() {
     this.msgService.setCurrentUser(this.userid); // setting up the uid in the service for easy access.
-    this.msgService.getUsers().pipe(map(actions => {
-      return actions.map(resData => {
-        const data = resData.payload.doc.data();
-        const id = resData.payload.doc.id;
-        return {...data};
-      });
-    })
-  ).subscribe(data => {
-    this.msgService.currentUser.conversations.forEach((res) => {
-      console.log('hi its them', res);
-    } );
-    console.log('data',  this.msgService.currentUser.conversations );
-    this.users = data.filter(item => {
-      const find  = this.msgService.currentUser.conversations.find(resElement => resElement.userid === item.userid);
-      console.log('data',  find  );
-      console.log('data1',  item );
-      if (!find) {
-        return item;
-      }
-    });
-    console.log('data users', this.users );
-    this.getUpdatedDp();
-  });
+  //   this.msgService.getUsers().pipe(map(actions => {
+  //     return actions.map(resData => {
+  //       const data = resData.payload.doc.data();
+  //       const id = resData.payload.doc.id;
+  //       return {...data};
+  //     });
+  //   })
+  // ).subscribe(data => {
+  //   this.msgService.currentUser.conversations.forEach((res) => {
+  //     console.log('hi its them', res);
+  //   } );
+  //   console.log('data',  this.msgService.currentUser.conversations );
+  //   this.users = data.filter(item => {
+  //     const find  = this.msgService.currentUser.conversations.find(resElement => resElement.userid === item.userid);
+  //     console.log('data',  find  );
+  //     console.log('data1',  item );
+  //     if (!find) {
+  //       return item;
+  //     }
+  //   });
+  //   console.log('data users', this.users );
+  //   this.getUpdatedDp();
+  // });
 }
 
 
@@ -266,21 +266,21 @@ loadUsers(user) {
   const chats = [...this.msgService.currentUser.conversations];
   const find = chats.find(resItem => resItem.userid === user.userid);
   if (find) {
-    this.msgService.getChat(find.chatid).subscribe(resData => {
-      this.temp = resData;
+    // this.msgService.getChat(find.chatid).subscribe(resData => {
+    //   this.temp = resData;
 
-      this.msgService.chat = this.temp[0];
+    //   this.msgService.chat = this.temp[0];
 
-      this.messages = this.msgService.chat.messages === undefined ? [] : this.msgService.chat.messages;
-      this.showMessages = true;
-      return;
-    });
+    //   this.messages = this.msgService.chat.messages === undefined ? [] : this.msgService.chat.messages;
+    //   this.showMessages = true;
+    //   return;
+    // });
     this.routes.navigateByUrl('messages/chat');
 
   } else {
-    this.msgService.addNewChat().then(async () => {
-      let resEl = await this.msgService.addChat(user);
-    });
+    // this.msgService.addNewChat().then(async () => {
+    //   let resEl = await this.msgService.addChat(user);
+    // });
     this.routes.navigateByUrl('messages/chat');
   }
 
@@ -324,58 +324,59 @@ loadUsers(user) {
 
   // Firebase Server Timestamp
   get timestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
+    // firebase.firestore.FieldValue.serverTimestamp();
+    return
   }
 
   openChatDetail(user) {
 
-    const myReference = this.afs.doc('chatUsers/' + this.userid);
-    const otherReference = this.afs.doc('chatUsers/' + user.userid);
+    // const myReference = this.afs.doc('chatUsers/' + this.userid);
+    // const otherReference = this.afs.doc('chatUsers/' + user.userid);
 
-    myReference.get().subscribe(resData => {
-      const capturedData = resData.data();
+    // myReference.get().subscribe(resData => {
+    //   const capturedData = resData.data();
       
-      capturedData.conversations.forEach(element => {
-        if ( element.chatid === user.chatid) {
-          if (element.inbox) {
-            element.viewed = true;
-            element.onseen = new Date();
+    //   capturedData.conversations.forEach(element => {
+    //     if ( element.chatid === user.chatid) {
+    //       if (element.inbox) {
+    //         element.viewed = true;
+    //         element.onseen = new Date();
 
 
-          } else if (!element.inbox) {
-            element.viewed = true;
-            element.onseen = new Date();
-          }
-          myReference.update({conversations: capturedData.conversations});
-          console.log('capturedData mine', capturedData.conversations);
-        }
-      }); 
-    });
+    //       } else if (!element.inbox) {
+    //         element.viewed = true;
+    //         element.onseen = new Date();
+    //       }
+    //       myReference.update({conversations: capturedData.conversations});
+    //       console.log('capturedData mine', capturedData.conversations);
+    //     }
+    //   }); 
+    // });
 
-    otherReference.get().subscribe(resData => {
-      const capturedData = resData.data();
+    // otherReference.get().subscribe(resData => {
+    //   const capturedData = resData.data();
       
-      capturedData.conversations.forEach(element => {
-        if ( element.chatid === user.chatid) {
-          if (element.inbox) {
-            element.onseen = new Date();
-            element.theyviewed = true;
+    //   capturedData.conversations.forEach(element => {
+    //     if ( element.chatid === user.chatid) {
+    //       if (element.inbox) {
+    //         element.onseen = new Date();
+    //         element.theyviewed = true;
 
-          } else if (!element.inbox) {
-            element.theyviewed = true;
-            element.onseen = new Date();
-          }
-          otherReference.update({conversations: capturedData.conversations});
-          console.log('capturedData other', capturedData.conversations);
+    //       } else if (!element.inbox) {
+    //         element.theyviewed = true;
+    //         element.onseen = new Date();
+    //       }
+    //       otherReference.update({conversations: capturedData.conversations});
+    //       console.log('capturedData other', capturedData.conversations);
 
-        }
-      }); 
-    });
+    //     }
+    //   }); 
+    // });
 
-    sessionStorage.setItem('other_userid', user.userid);
-    sessionStorage.setItem('other_username', user.username);
-    sessionStorage.setItem('other_dp', this.userdp);
-    this.routes.navigateByUrl('messages/chat');
+    // sessionStorage.setItem('other_userid', user.userid);
+    // sessionStorage.setItem('other_username', user.username);
+    // sessionStorage.setItem('other_dp', this.userdp);
+    // this.routes.navigateByUrl('messages/chat');
   }
 
   async ngAfterViewInit() {

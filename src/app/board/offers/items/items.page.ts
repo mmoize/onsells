@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Post } from '../../post.model';
+//import { Post } from '../../post.model';
 import { PostService } from '../../post.service';
-import { Product } from '../../product.model';
+import { Product } from '../../../models/product.model';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-items',
@@ -102,7 +103,7 @@ export class ItemsPage implements OnInit {
 
 
   async retrieveUserProducts() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
     this.postservice.fetchProducts(dicToken).subscribe( data => {

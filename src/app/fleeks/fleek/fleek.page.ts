@@ -1,13 +1,15 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor} from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
+import { Geolocation } from '@capacitor/geolocation';
 import { Subscription } from 'rxjs';
 import { ProfileService } from 'src/app/accounts/profile.service';
-import { Post } from 'src/app/board/post.model';
 import { PostService } from 'src/app/board/post.service';
-import {  Coordinates } from '../../location.model';
+import {  Coordinates } from '../../models/location.model';
 
 import { IonInfiniteScroll, IonVirtualScroll } from '@ionic/angular';
+import { Post } from 'src/app/models/post.model';
 
 
 interface fleeksData {
@@ -149,7 +151,7 @@ ionViewWillEnter() {
 
 
 async setCurrentUserDetails() {
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const { value } = await Storage.get({ key : 'authData'}) ;
   const userDicData = JSON.parse(value);
 
   this.email = userDicData.email;
@@ -171,7 +173,7 @@ async setCurrentUserDetails() {
       return;
     }
 
-    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+    Geolocation.getCurrentPosition().then(geoPosition => {
       const Coordinates: Coordinates = {
         lat: geoPosition.coords.latitude,
         lng: geoPosition.coords.longitude
@@ -184,7 +186,7 @@ async setCurrentUserDetails() {
     });
   }
 
-openMarketplace(id) {
+openMarketplace() {
   this.routes.navigateByUrl(`/board/discover`);
 }
 
@@ -247,7 +249,7 @@ openMarketplace(id) {
 
     this.locateUser(); // location tracker
 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
 

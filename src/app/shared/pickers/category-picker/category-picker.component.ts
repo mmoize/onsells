@@ -1,7 +1,8 @@
-import { Subcategory } from './../../../board/subcategoy.model';
+
 import { CategoyService } from './../../../board/categoy.service';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Subcategory } from 'src/app/models/subcategoy.model';
 
 @Component({
   selector: 'app-category-picker',
@@ -21,20 +22,29 @@ export class CategoryPickerComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private categoryservice: CategoyService) { }
+    private categoryservice: CategoyService) {
+
+      this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
+      this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
+      this.familyCategoryList = this.categoryservice.getFamilyCategory();
+      this.eletronicsCategoryList = this.categoryservice.getElectronicsCategory();
+      this.hobbiesCategoryList = this.categoryservice.getHobbiesCategory();
+      this.entertainmentCategoryList = this.categoryservice.getEntertainmentCategory();
+
+     }
 
   ngOnInit() {
 
   }
 
-  ionViewWillEnter() {
-    this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
-    this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
-    this.familyCategoryList = this.categoryservice.getFamilyCategory();
-    this.eletronicsCategoryList = this.categoryservice.getElectronicsCategory();
-    this.hobbiesCategoryList = this.categoryservice.getHobbiesCategory();
-    this.entertainmentCategoryList = this.categoryservice.getEntertainmentCategory();
-  }
+  // ionViewWillEnter() {
+  //   this.homeGardenCategoryList = this.categoryservice.getHomeAndGardenCategory(); 
+  //   this.clothingAccCategoryList = this.categoryservice.getClothingAndAcc();
+  //   this.familyCategoryList = this.categoryservice.getFamilyCategory();
+  //   this.eletronicsCategoryList = this.categoryservice.getElectronicsCategory();
+  //   this.hobbiesCategoryList = this.categoryservice.getHobbiesCategory();
+  //   this.entertainmentCategoryList = this.categoryservice.getEntertainmentCategory();
+  // }
 
   onExist() {
       

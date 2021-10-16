@@ -15,6 +15,6 @@ import { AndroidHomePage } from './android-home.page';
     IonicModule,
     AndroidHomePageRoutingModule
   ],
-  declarations: [AndroidHomePage]
+  declarations: []
 })
 export class AndroidHomePageModule {}

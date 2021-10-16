@@ -23,6 +23,6 @@ import { MomentModule } from 'ngx-moment';
   providers: [
     VideoPlayer],
 
-  declarations: [UsermessagesPage, ]
+  declarations: []
 })
 export class UsermessagesPageModule {}

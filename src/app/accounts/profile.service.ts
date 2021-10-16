@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { userProfileData } from './profile/userProfileData.model';
+import { userProfileData } from '../models/userProfileData.model';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Plugins } from '@capacitor/core';
-import { Post } from '../board/post.model';
+import { Post } from '../models/post.model';
+import { Storage } from '@capacitor/storage';
+
 
 export interface ProfileData {
   user_id: string;
@@ -33,12 +34,12 @@ export class ProfileService {
 
   userresultData;
 
-  baseUrl = 'https://sellet.herokuapp.com/api/profiles/';
-  profileEditUrl = 'https://sellet.herokuapp.com/api/user/';
+  baseUrl = 'https://fleekmarket.herokuapp.com/api/profiles/';
+  profileEditUrl = 'https://fleekmarket.herokuapp.com/api/user/';
   
-  fullProfileUrl = 'https://sellet.herokuapp.com/api/core/';
+  fullProfileUrl = 'https://fleekmarket.herokuapp.com/api/core/';
 
-  userProfileListingsUrl = 'https://sellet.herokuapp.com/api/getprofilepostlisting/';
+  userProfileListingsUrl = 'https://fleekmarket.herokuapp.com/api/getprofilepostlisting/';
 
   constructor(private http: HttpClient, ) { }
   
@@ -107,13 +108,14 @@ export class ProfileService {
 
      ) {
        const data = JSON.stringify({user_id, username, first_name, last_name, country, city, bio, image});
-       Plugins.Storage.set({key: 'userProfileData', value: data});
+       localStorage.setItem('userProfileData', data);
   }
 
 
   clearProfile() {
     this._userProfileData.next(null);
-    Plugins.Storage.remove({key: 'userProfileData'});
+    localStorage.removeItem('userProfileData');
+    //Storage.remove({key: 'userProfileData'} || {});
   }
 
   UserProfileinfo(token, userData) {
@@ -129,47 +131,40 @@ export class ProfileService {
   }
 
 
-  // async UserProfileListings(id) {
+  async currentUserProfileListings(id) {
 
-  //   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  //   const dic = JSON.parse(value);
-  //   const dicToken = dic.token;
-  //   console.log('for auth token', dicToken);
-  
-  //   return this.http.get(`${this.userProfileListingsUrl}${id}`, {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       // tslint:disable-next-line: max-line-length
-  //       Authorization: 'Token ' + dicToken ,
-  //     }
-  //   }).subscribe(resultData => {
-
-  //     const posts = [];
-  //     // tslint:disable-next-line: forin
-  //     for (const key in resultData) {
-  //       if (resultData.hasOwnProperty(key)) {
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
+    
+    return this.http.get(`${this.userProfileListingsUrl}${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + authDictionary.Token ,
+      }
+    }).subscribe(resultData => {
+      const posts = [];
+      for (const key in resultData) {
+        if (resultData.hasOwnProperty(key)) {
          
-  //         posts.push(new Post (
-  //             resultData[key].id,
-  //             resultData[key].product,
-  //             resultData[key].owner,
-  //             resultData[key].location,
-  //             resultData[key].created_at,
-  //             resultData[key].updated_at,
-  //             resultData[key].viewcount,
-  //           )
-  //         );
-  //       }
-  //     }
-  //     return posts;
-  //   });
-  //  }
+          posts.push(new Post (
+              resultData[key].id,
+              resultData[key].product,
+              resultData[key].owner,
+              resultData[key].location,
+              resultData[key].created_at,
+              resultData[key].updated_at,
+              resultData[key].viewcount,
+            )
+          );
+        }
+      }
+      console.log("user Profile listings", posts)
+      return posts;
+    });
+   }
 
   
   UserProfileListings(id, token) {
-
-
-  
     return this.http.get(`${this.userProfileListingsUrl}${id}`, {
       headers: {
         'Content-Type': 'application/json',

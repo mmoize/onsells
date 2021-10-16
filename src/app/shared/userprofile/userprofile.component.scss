@@ -39,6 +39,8 @@
     text-align: center;
     background: transparent;
     border-radius: 1em;
+    background-image: url('https://img2.goodfon.com/wallpaper/nbig/f/6c/mountain-tower-lookout-birds.jpg');
+    //background-position: center;
     // box-shadow: 0 0 2em rgba(0,0,0,0.150);
     overflow: hidden;
     flex-direction: column;
@@ -77,6 +79,7 @@
       &__name{
         margin-top:  4em;
         margin-bottom: .5em;
+        color: aliceblue;
         font-size: 1.5rem;
         font-weight: bold;
         font-family: Georgia, 'Times New Roman', Times, serif;
@@ -178,6 +181,21 @@
       }
   
   }
+
+
+  ion-item {
+    --ion-background-color: transparent !important
+  }
+
+
+  div.item-native {
+    background: transparent;
+  }
+
+  .item-native {
+    background: transparent;
+  }
+
 
   #ion-grids {
     height: 100%;

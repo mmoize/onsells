@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ProfileService } from '../accounts/profile.service';
-import * as firebase from 'firebase';
+
 
 
 

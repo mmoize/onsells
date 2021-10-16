@@ -36,32 +36,32 @@
                   <!-- <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img> -->
               </div>
             </ion-card-header>
-            <p class="contact-card__name">{{ profilesData?.username }}</p>
+            <p class="contact-card__name">{{ profilesData?.username |titlecase }}</p>
             <div class="contact-card__footer">
-              <div class="contact-card__footer__core">
+              <div style="background: transparent;" class="contact-card__footer__core">
               
-                <ion-card color="transparent"  class="contact-card__footer__core__email">
+                <ion-card style="background: transparent;" class="contact-card__footer__core__email">
                   <!-- <ion-card-header>
                     <ion-card-title></ion-card-title>
                   </ion-card-header> -->
-                  <ion-card-content >
-                    <ion-item lines="none">
-                      <ion-item (click)="onFollowUser()" *ngIf="isFollowing"  slot="start">
+                  <ion-card-content style="--background: transparent;" >
+                    <ion-item style="background-color: transparent;" lines="none">
+                      <ion-item  style="background-color: rgba(240, 248, 255, 0.315);border-radius:15%"    (click)="onFollowUser()" *ngIf="isFollowing && selectedPost['username'] != currentUser.username "  slot="start">
                         <ion-buttons>
-                          <ion-icon slot="start" color="tertiary" name="person-add-outline"></ion-icon>
+                          <ion-icon slot="start" style="color:azure;transform: scale(1.5);" name="person-add-outline"></ion-icon>
                         </ion-buttons>
                         <ion-buttons>
-                          <ion-button style="color:dodgerblue">
+                          <ion-button style="color:azure;font-weight:900">
                             follow
                           </ion-button>
                         </ion-buttons>
                       </ion-item>
-                      <ion-item (click)="unFollowUser()" lines="none" *ngIf="isUnFollowing" slot="end">
+                      <ion-item style="background-color: rgba(240, 248, 255, 0.315);border-radius:15%" lines="none" *ngIf="isUnFollowing" slot="end">
                         <ion-buttons>
-                          <ion-icon slot="start" name="person-remove-outline"></ion-icon>
+                          <ion-icon slot="start" style="color:azure;transform: scale(1.5);"   slot="start" name="person-remove-outline"></ion-icon>
                         </ion-buttons>
                         <ion-buttons>
-                          <ion-button style="color:dodgerblue">
+                          <ion-button  style="color:azure;font-weight:900">
                             unfollow
                           </ion-button>
                         </ion-buttons>

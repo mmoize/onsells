@@ -3,12 +3,13 @@ import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { ActionSheetController, IonContent, ModalController } from '@ionic/angular';
-import * as firebase from 'firebase';
-import { Post } from 'src/app/board/post.model';
+// import * as firebase from 'firebase';
+
 import { MessageService } from '../message.service';
 import { map } from 'rxjs/operators';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-chat',
@@ -121,26 +122,26 @@ export class ChatPage implements OnInit {
   getCurrentUserChats() {
     console.log('imaaage', this.msgService.getDisplayP(this.userid));
     this.msgService.setCurrentUser(this.userid); //setting up the uid in the service for easy access.
-    this.msgService.getUsers().pipe(map(actions => {
-      return actions.map(resData => {
-        const data = resData.payload.doc.data();
-        const id = resData.payload.doc.id;
-        return {...data};
-      });
-    })
-  ).subscribe(data => {
+  //   this.msgService.getUsers().pipe(map(actions => {
+  //     // return actions.map(resData => {
+  //     //   const data = resData.payload.doc.data();
+  //     //   const id = resData.payload.doc.id;
+  //     //   return {...data};
+  //     // });
+  //   })
+  // ).subscribe(data => {
 
-    console.log('data',  this.msgService.currentUser.conversations );
-    this.users = data.filter(item => {
-      const find  = this.msgService.currentUser.conversations.find(resElement => resElement.userid === item.userid);
-      console.log('data',  find  );
-      console.log('data1',  item );
-      if (!find) {
-        return item;
-      }
-    });
-    console.log('data users', this.users );
-  });
+  //   console.log('data',  this.msgService.currentUser.conversations );
+  //   this.users = data.filter(item => {
+  //     const find  = this.msgService.currentUser.conversations.find(resElement => resElement.userid === item.userid);
+  //     console.log('data',  find  );
+  //     console.log('data1',  item );
+  //     if (!find) {
+  //       return item;
+  //     }
+  //   });
+  //   console.log('data users', this.users );
+  // });
 }
 
 
@@ -154,24 +155,24 @@ export class ChatPage implements OnInit {
     const find = chats.find(resItem => resItem.userid === user.userid);
     console.log('this is resData find', find);
     if (find) {
-      this.msgService.getChat(find.chatid).subscribe(resData => {
-        this.temp = resData;
+      // this.msgService.getChat(find.chatid).subscribe(resData => {
+      //   this.temp = resData;
        
-        this.msgService.chat = this.temp[0];
-        console.log('this is resData chat', this.msgService.chat);
+      //   this.msgService.chat = this.temp[0];
+      //   console.log('this is resData chat', this.msgService.chat);
 
-        this.messages = this.msgService.chat.messages === undefined ? [] : this.msgService.chat.messages;
-        this.showMessages = true;
-        console.log('this is resData chat', this.messages);
-        setTimeout(() => {
-          this.triggerScrollTo() //scroll to bottom
-        }, 1000);
-        return
-      });
+      //   this.messages = this.msgService.chat.messages === undefined ? [] : this.msgService.chat.messages;
+      //   this.showMessages = true;
+      //   console.log('this is resData chat', this.messages);
+      //   setTimeout(() => {
+      //     this.triggerScrollTo() //scroll to bottom
+      //   }, 1000);
+      //   return
+      // });
     } else {
-      this.msgService.addNewChat().then(async () => {
-        let resEl = await this.msgService.addChat(user);
-      });
+      // this.msgService.addNewChat().then(async () => {
+      //   let resEl = await this.msgService.addChat(user);
+      // });
     }
   
   }
@@ -305,10 +306,10 @@ export class ChatPage implements OnInit {
 
     this.messages.push(msg);
     console.log('list', this.messages);
-    this.msgService.pushNewMessage(this.messages, this.message, this.otherUserId).then(() => {
-      console.log('sent ids', this.otherUserId);
-      this.message = '';
-    });
+    // this.msgService.pushNewMessage(this.messages, this.message, this.otherUserId).then(() => {
+    //   console.log('sent ids', this.otherUserId);
+    //   this.message = '';
+    // });
 
 
   }

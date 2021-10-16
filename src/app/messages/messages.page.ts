@@ -10,8 +10,8 @@ import { Plugins } from '@capacitor/core';
 import { stringify } from 'querystring';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AngularFireStorage } from '@angular/fire/storage';
-import * as firebase from 'firebase';
+// import { AngularFireStorage } from '@angular/fire/storage';
+// import * as firebase from 'firebase';
 
 import { SuperTabs } from '@ionic-super-tabs/angular';
 import { SuperTabsConfig } from '@ionic-super-tabs/core';
@@ -63,7 +63,7 @@ export class MessagesPage implements OnInit {
     private http: HttpClient,
     private messageService: MessageService,
     private router: Router,
-    private storage: AngularFireStorage,
+    // private storage: AngularFireStorage,
     private navCtrl: NavController,
     private profileservice: ProfileService,
 
@@ -72,13 +72,13 @@ export class MessagesPage implements OnInit {
    this.getUserData();
    setTimeout(() => {
 
-    firebase.firestore().collection('chatUsers').get().then(resData => {
-         resData.forEach(childData => {
-           if (childData.data()['userid'] != this.userid) {
-             this.users.push(childData.data());
-           }
-         });
-    });
+    // firebase.firestore().collection('chatUsers').get().then(resData => {
+    //      resData.forEach(childData => {
+    //        if (childData.data()['userid'] != this.userid) {
+    //          this.users.push(childData.data());
+    //        }
+    //      });
+    // });
 
   }, 1000);
 

@@ -1,13 +1,14 @@
 import { PostService } from './../board/post.service';
 import { BehaviorSubject, from } from 'rxjs';
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 import { environment } from './../../environments/environment';
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from './user.model';
+import { User } from '../models/user.model';
 import { map, tap, timeout } from 'rxjs/operators';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 
 export interface AuthResponseData {
   user_id: string;
@@ -98,14 +99,14 @@ export class AuthService  implements OnDestroy {
   }
 
   async returnUserId() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dit = JSON.parse(value);
     const dat = dit.user_id;
     return dat;
   }
 
   async returnUsername() { 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dit = JSON.parse(value);
     const dat = dit.username;
     return dat;
@@ -113,7 +114,7 @@ export class AuthService  implements OnDestroy {
    
  
   async returnUserToken() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
     console.log('for auth token', dicToken);
@@ -124,7 +125,7 @@ export class AuthService  implements OnDestroy {
   constructor(private http: HttpClient) { }
 
   autoLogin() {
-    return from (Plugins.Storage.get({key: 'authData'}))
+    return from (Storage.get({key: 'authData'}))
       .pipe(map(storedData => {
          if (!storedData || !storedData.value) {
            return null;
@@ -159,12 +160,12 @@ export class AuthService  implements OnDestroy {
 
   signup(email: string, password: string, username: string ) {
      return this.http.post<AuthResponseData>
-     ('https://sellet.herokuapp.com/api/users/', { email, password, username }
+     ('https://fleekmarket.herokuapp.com/api/users/', { email, password, username }
     ).pipe(tap(this.setUserData.bind(this)));
   }
 
   login(email: string, password: string) {
-     return this.http.post<AuthResponseData>('https://sellet.herokuapp.com/api/users/login/', {email, password}
+     return this.http.post<AuthResponseData>('https://fleekmarket.herokuapp.com/api/users/login/', {email, password}
     ).pipe(tap(this.setUserData.bind(this)));
   }
 
@@ -173,11 +174,11 @@ export class AuthService  implements OnDestroy {
       clearTimeout(this.activeLogoutTimer);
     }
     this._user.next(null);
-    Plugins.Storage.remove({key: 'authData'});
+    Storage.remove({key: 'authData'});
   }
 
   getTokenExpirationDate(token: string): Date {
-    const decoded = jwt_decode(token);
+    const decoded: any = jwtDecode(token);
     if (decoded.exp === undefined) { return null; }
     const date  = new Date(0);
     date.setUTCSeconds(decoded.exp);
@@ -185,7 +186,7 @@ export class AuthService  implements OnDestroy {
   }
 
   getUserId(token: string) {
-    const decoded = jwt_decode(token);
+    const decoded:any = jwt_decode(token);
     const userId = decoded.id;
     return userId;
   }
@@ -213,7 +214,7 @@ export class AuthService  implements OnDestroy {
 
   private storeAuthData(user_id: string, username: string, email: string, token: string, tokenExpirationDate: Date ) {
     const data = JSON.stringify({user_id, username, email, token, tokenExpirationDate });
-    Plugins.Storage.set({key: 'authData', value: data});
+    Storage.set({key: 'authData', value: data});
   }
 
   private autoLogout(duration: number) {
@@ -233,7 +234,7 @@ export class AuthService  implements OnDestroy {
 
 
   onRequestPasswordReset(requestData) {
-    const passReqUrl = 'https://sellet.herokuapp.com/api/password_reset/'
+    const passReqUrl = 'https://fleekmarket.herokuapp.com/api/password_reset/'
     
 
     const data = requestData;
@@ -244,7 +245,7 @@ export class AuthService  implements OnDestroy {
   }
 
   onRequestNewPasswordReset(requestData) {
-    const passReqUrl = 'https://sellet.herokuapp.com/api/password_reset/confirm/'
+    const passReqUrl = 'https://fleekmarket.herokuapp.com/api/password_reset/confirm/'
     
     const data = requestData;
     const xhr = new XMLHttpRequest();

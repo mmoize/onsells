@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Category } from 'src/app/board/category.model';
+import { Category } from 'src/app/models/category.model';
 
 @Component({
   selector: 'app-main-filter',

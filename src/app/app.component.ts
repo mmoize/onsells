@@ -3,15 +3,16 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Plugins, Capacitor } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 
 import { Platform } from '@ionic/angular';
 
 
 import {
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed
+  // PushNotification,
+  // PushNotificationToken,
+  // PushNotificationActionPerformed
 } from '@capacitor/core';
 
 
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
   initializeApp() {
     this.platform.ready().then(() => {
       if (Capacitor.isPluginAvailable('SplashScreen')) {
-        Plugins.SplashScreen.hide();
+        SplashScreen.hide();
       }
 
     
@@ -72,12 +73,12 @@ export class AppComponent implements OnInit, OnDestroy {
    PushNotifications.register();
 
     // On succcess, we should be able to receive notifications
-   PushNotifications.addListener('registration',
-      (token: PushNotificationToken) => {
-        alert('Push registration success, token: ' + token.value);
-        console.log('Push registration success, token: ' + token.value);
-      }
-    );
+  //  PushNotifications.addListener('registration',
+  //     (token: PushNotificationToken) => {
+  //       alert('Push registration success, token: ' + token.value);
+  //       console.log('Push registration success, token: ' + token.value);
+  //     }
+  //   );
 
     // Some issue with our setup and push will not work
    PushNotifications.addListener('registrationError',
@@ -87,29 +88,29 @@ export class AppComponent implements OnInit, OnDestroy {
     );
 
     // Show us the notification payload if the app is open on our device
-   PushNotifications.addListener('pushNotificationReceived',
-      (notification: PushNotification) => {
-        // let audio1 = new Audio('assets/audio.mp3');
-        // console.log('Audio');
-        // audio1.play();
-        alert('Push received: ' + JSON.stringify(notification));
-        console.log('Push received: ', notification);
+  //  PushNotifications.addListener('pushNotificationReceived',
+  //     (notification: PushNotification) => {
+  //       // let audio1 = new Audio('assets/audio.mp3');
+  //       // console.log('Audio');
+  //       // audio1.play();
+  //       alert('Push received: ' + JSON.stringify(notification));
+  //       console.log('Push received: ', notification);
 
-        const alertRet = Modals.alert({
-          title: notification.title,
-          message: notification.body
-        });
+  //       const alertRet = Modals.alert({
+  //         title: notification.title,
+  //         message: notification.body
+  //       });
 
-      }
-    );
+  //     }
+  //   );
 
     // Method called when tapping on a notification
-   PushNotifications.addListener('pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        alert('Push action performed: ' + JSON.stringify(notification));
-        console.log('Push action performed: ' + notification);
-      }
-    );
+  //  PushNotifications.addListener('pushNotificationActionPerformed',
+  //     (notification: PushNotificationActionPerformed) => {
+  //       alert('Push action performed: ' + JSON.stringify(notification));
+  //       console.log('Push action performed: ' + notification);
+  //     }
+  //   );
 
   }
 

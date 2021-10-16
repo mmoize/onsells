@@ -61,7 +61,7 @@ export class HomePage implements OnInit {
     // Initialise the video player plugin
     // if (Capacitor.isNative) {
     //   this.videoPlayer = CapacitorVideoPlayer;
-    // } else {
+    // } else { 
     //   this.videoPlayer = WebVPPlugin.CapacitorVideoPlayer;
     // }
 
@@ -189,7 +189,7 @@ playOrPauseSticky() {
 }
 
 
-SlideDidChange(item) {
+SlideDidChange() {
   let realUrl;
   console.log('src vids', this.videos);
   this.videoService.loadVideos().then(async videos => {
@@ -242,7 +242,7 @@ SlideDidChange(item) {
 
 }
 
-  didScrolls(eer) {
+  didScrolls() {
 
   }
 

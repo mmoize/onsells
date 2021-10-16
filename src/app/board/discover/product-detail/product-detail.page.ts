@@ -4,7 +4,6 @@ import { NewMessageComponent } from './../../../shared/new-message/new-message.c
 import { CreateMessagePage } from './../../../messages/create-message/create-message.page';
 import { UserprofileComponent } from './../../../shared/userprofile/userprofile.component';
 import { PostService } from './../../post.service';
-import { Post } from './../../post.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,7 +11,8 @@ import { NavController, ModalController, ActionSheetController, LoadingControlle
 import { AuthService } from 'src/app/auth/auth.service';
 import { take, map } from 'rxjs/operators';
 import { MessageService } from 'src/app/messages/message.service';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
+import { Post } from 'src/app/models/post.model';
 
 
 @Component({
@@ -208,7 +208,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
   async openChatDetail() {
 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const currentUserData = dic;
 

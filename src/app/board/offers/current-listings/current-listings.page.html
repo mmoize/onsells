@@ -89,7 +89,7 @@
       <div class="pin" style="background:transparent">
         <div id="pins" *ngFor="let post of loadedUserPosts" style="background:transparent">
     
-          <ion-card   (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+          <ion-card    class="card" no-margin >
             <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
             <ion-card-content>
               <ion-label style="text-align: left;">
@@ -121,7 +121,7 @@
       <div class="pinDesktop" style="background:transparent">
         <div id="pinsDesktop" *ngFor="let post of loadedUserPosts" style="background:transparent">
     
-          <ion-card   (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
+          <ion-card     class="card" no-margin >
             <!-- <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge> -->
             <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
             <ion-card-content>

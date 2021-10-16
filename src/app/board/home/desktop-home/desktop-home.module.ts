@@ -15,6 +15,6 @@ import { DesktopHomePage } from './desktop-home.page';
     IonicModule,
     DesktopHomePageRoutingModule
   ],
-  declarations: [DesktopHomePage]
+  declarations: []
 })
 export class DesktopHomePageModule {}

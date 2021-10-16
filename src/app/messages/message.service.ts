@@ -4,8 +4,8 @@ import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, take } from 'rxjs/operators';
 import { Plugins } from '@capacitor/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import * as firebase from 'firebase';
+// import { AngularFirestore } from '@angular/fire/firestore';
+// import * as firebase from 'firebase';
 
 export interface Video {
   title: string;
@@ -52,13 +52,13 @@ export class MessageService {
 
 
   constructor(private authService: AuthService,
-              private afs: AngularFirestore,
+              // private afs: AngularFirestore,
               private httpService: HttpClient) { }
 
-messagesUrl = 'https://sellet.herokuapp.com/api/lobby/';
-messageRoomUrl = 'https://sellet.herokuapp.com/api/room/';
-sendExistMsgRmUrl = 'https://sellet.herokuapp.com/api/postmessager/1';
-createNewMessageUrl = 'https://sellet.herokuapp.com/api/postmessagex/1';
+messagesUrl = 'https://fleekmarket.herokuapp.com/api/lobby/';
+messageRoomUrl = 'https://fleekmarket.herokuapp.com/api/room/';
+sendExistMsgRmUrl = 'https://fleekmarket.herokuapp.com/api/postmessager/1';
+createNewMessageUrl = 'https://fleekmarket.herokuapp.com/api/postmessagex/1';
 
 private videosList: Video[] = [
   {
@@ -120,27 +120,27 @@ conversationId;
 
 
 createUser(userId, data) {
-  return this.afs.doc('chatUsers/' + userId).set({
-    userid: userId,
-    username: data.username,
-    email: data.email,
-    userdp: data.userdp,
-    conversations: []
-  });
+  // return this.afs.doc('chatUsers/' + userId).set({
+  //   userid: userId,
+  //   username: data.username,
+  //   email: data.email,
+  //   userdp: data.userdp,
+  //   conversations: []
+  // });
 }
 
 
 updateUser(userId, data) {
-  return this.afs.doc('chatUsers/' + userId).update(data);
+  // return this.afs.doc('chatUsers/' + userId).update(data);
 }
 
 getDisplayP(userId) {
   let data;
-  this.afs.doc('chatUsers/' + userId).valueChanges().subscribe(resp => {
-    data = resp['userdp'];
+  // this.afs.doc('chatUsers/' + userId).valueChanges().subscribe(resp => {
+  //   data = resp['userdp'];
 
-    console.log('this is currents', data);
-  }, err => { console.log('error', err); });
+  //   console.log('this is currents', data);
+  // }, err => { console.log('error', err); });
 
   return data;
 }
@@ -149,30 +149,30 @@ getDisplayP(userId) {
 setCurrentUser(userId) {
   sessionStorage.setItem('userId', userId);
   console.log('service id', userId );
-  this.afs.doc('chatUsers/' + userId).valueChanges().subscribe(resp => {
-    this.temp = resp;
-    this.currentUser =this.temp;
-    console.log('this is current', this.temp);
-  }, err => { console.log('error', err); });
+  // this.afs.doc('chatUsers/' + userId).valueChanges().subscribe(resp => {
+  //   this.temp = resp;
+  //   this.currentUser =this.temp;
+  //   console.log('this is current', this.temp);
+  // }, err => { console.log('error', err); });
 }
 
 getCurrentUser() {
-  return this.afs.doc('chatUsers/' + sessionStorage.getItem('userId')).valueChanges();
+  // return this.afs.doc('chatUsers/' + sessionStorage.getItem('userId')).valueChanges();
 }
 
 public getUsers() {
-  return this.afs.collection<any>('chatUsers').snapshotChanges();
+  // return this.afs.collection<any>('chatUsers').snapshotChanges();
 }
 
 getChat(chatid) {
-  return this.afs.collection('conversations', ref => ref.where('chatid', '==', chatid)).valueChanges();
+  // return this.afs.collection('conversations', ref => ref.where('chatid', '==', chatid)).valueChanges();
  }
 
  refreshCurrentUser(){
-  this.afs.collection('chatUsers/' + sessionStorage.getItem('userId')).valueChanges().subscribe(data => {
-       this.temp = data;
-       this.currentUser = this.temp;
-  });
+  // this.afs.collection('chatUsers/' + sessionStorage.getItem('userId')).valueChanges().subscribe(data => {
+  //      this.temp = data;
+  //      this.currentUser = this.temp;
+  // });
 }
 
 
@@ -182,122 +182,122 @@ async addChat(user) {
   const currentUserMsg = {username: user.username, userid: user.userid, chatid: this.chat.chatid};
   const otherMsg = {username: this.currentUser.username, userid: this.currentUser.userid, chatid: this.chat.chatid};
   // first set both references.
-  const myReference = this.afs.doc('chatUsers/' + this.currentUser.userid);
-  const otherReference = this.afs.doc('chatUsers/' + user.userid);
+  // const myReference = this.afs.doc('chatUsers/' + this.currentUser.userid);
+  // const otherReference = this.afs.doc('chatUsers/' + user.userid);
 
-  myReference.get().subscribe(resData => {
-    const capturedData = resData.data();
-    console.log('capturedData', capturedData);
-    if (!capturedData.conversations) {
-      capturedData.conversations = [];
-    }
-    capturedData.conversations.push(currentUserMsg);
-    return myReference.update({conversations: capturedData.conversations});
-  });
+  // myReference.get().subscribe(resData => {
+  //   const capturedData = resData.data();
+  //   console.log('capturedData', capturedData);
+  //   if (!capturedData.conversations) {
+  //     capturedData.conversations = [];
+  //   }
+  //   capturedData.conversations.push(currentUserMsg);
+  //   return myReference.update({conversations: capturedData.conversations});
+  // });
 
 
-  otherReference.get().subscribe(resData => {
-    const capturedData = resData.data();
-    console.log('capturedData', capturedData);
-    if (!capturedData.conversations) {
-      capturedData.conversations = [];
-    }
-    capturedData.conversations.push(otherMsg);
-    return otherReference.update({conversations: capturedData.conversations});
-  });
+  // otherReference.get().subscribe(resData => {
+  //   const capturedData = resData.data();
+  //   console.log('capturedData', capturedData);
+  //   if (!capturedData.conversations) {
+  //     capturedData.conversations = [];
+  //   }
+  //   capturedData.conversations.push(otherMsg);
+  //   return otherReference.update({conversations: capturedData.conversations});
+  // });
 
 }
 
 addNewChat() {
-  const chatId = this.afs.createId();
-  return this.afs.doc('conversations/' + chatId).set({
-    chatid: chatId,
-    messsages: []
-  }).then(() => {
-    this.chat = {
-      chatid: chatId,
-      messages: []
-    };
-  });
+  // const chatId = this.afs.createId();
+  // return this.afs.doc('conversations/' + chatId).set({
+  //   chatid: chatId,
+  //   messsages: []
+  // }).then(() => {
+  //   this.chat = {
+  //     chatid: chatId,
+  //     messages: []
+  //   };
+  // });
 }
 
 
 pushNewMessage(list, msg, OtherUserId) {
 
-  const myReference = this.afs.doc('chatUsers/' + this.currentUser.userid);
-  const otherReference = this.afs.doc('chatUsers/' + OtherUserId);
+  // const myReference = this.afs.doc('chatUsers/' + this.currentUser.userid);
+  // const otherReference = this.afs.doc('chatUsers/' + OtherUserId);
 
-  myReference.get().subscribe(resData => {
-    const capturedData = resData.data();
+  // myReference.get().subscribe(resData => {
+  //   const capturedData = resData.data();
     
-    capturedData.conversations.forEach(element => {
-      //console.log('capturedData', element);
-      if ( element.chatid === this.chat.chatid) {
-        if (element.inbox) {
-          element.inbox = false;
-          element.viewed = true;
-          element.outbox = true;
-          element.content = msg;
-          element.timestamp = new Date();
-          element.theyviewed = false;
-          element.onseen = '';
-          console.log('capturedData aq', element);
-        } else if (!element.inbox) {
-            element.inbox = false;
-            element.outbox = true;
-            element.viewed = true;
-            element.content = msg;
-            element.timestamp = new Date();
-            element.theyviewed = false;
-            element.onseen = '';
-            console.log('capturedData', element);
-        }
+  //   capturedData.conversations.forEach(element => {
+  //     //console.log('capturedData', element);
+  //     if ( element.chatid === this.chat.chatid) {
+  //       if (element.inbox) {
+  //         element.inbox = false;
+  //         element.viewed = true;
+  //         element.outbox = true;
+  //         element.content = msg;
+  //         element.timestamp = new Date();
+  //         element.theyviewed = false;
+  //         element.onseen = '';
+  //         console.log('capturedData aq', element);
+  //       } else if (!element.inbox) {
+  //           element.inbox = false;
+  //           element.outbox = true;
+  //           element.viewed = true;
+  //           element.content = msg;
+  //           element.timestamp = new Date();
+  //           element.theyviewed = false;
+  //           element.onseen = '';
+  //           console.log('capturedData', element);
+  //       }
 
-        myReference.update({conversations: capturedData.conversations});
-        console.log('capturedData a', capturedData.conversations);
-      }
-    });
+  //       myReference.update({conversations: capturedData.conversations});
+  //       console.log('capturedData a', capturedData.conversations);
+  //     }
+  //   });
     
-  });
+  // });
 
-  otherReference.get().subscribe(resData => {
-    const capturedData = resData.data();
+  // otherReference.get().subscribe(resData => {
+  //   const capturedData = resData.data();
     
-    capturedData.conversations.forEach(element => {
-      //console.log('capturedData', element);
-      if ( element.chatid === this.chat.chatid) {
-        if (element.inbox) {
-          element.inbox = true;
-          element.outbox = false;
-          element.viewed = false;
-          element.content = msg;
-          element.timestamp = new Date();
-          element.theyviewed = true;
-          element.onseen = '';
-          console.log('capturedData aq other', element);
-        } else if (!element.inbox) {
-            element.inbox = true;
-            element.outbox = false;
-            element.viewed = false;
-            element.content = msg;
-            element.timestamp = new Date();
-            element.theyviewed = true;
-            element.onseen = '';
-            console.log('capturedData', element);
-        }
+  //   capturedData.conversations.forEach(element => {
+  //     //console.log('capturedData', element);
+  //     if ( element.chatid === this.chat.chatid) {
+  //       if (element.inbox) {
+  //         element.inbox = true;
+  //         element.outbox = false;
+  //         element.viewed = false;
+  //         element.content = msg;
+  //         element.timestamp = new Date();
+  //         element.theyviewed = true;
+  //         element.onseen = '';
+  //         console.log('capturedData aq other', element);
+  //       } else if (!element.inbox) {
+  //           element.inbox = true;
+  //           element.outbox = false;
+  //           element.viewed = false;
+  //           element.content = msg;
+  //           element.timestamp = new Date();
+  //           element.theyviewed = true;
+  //           element.onseen = '';
+  //           console.log('capturedData', element);
+  //       }
 
-        otherReference.update({conversations: capturedData.conversations});
-        console.log('capturedData a other', capturedData.conversations);
-      }
-    });
+  //       otherReference.update({conversations: capturedData.conversations});
+  //       console.log('capturedData a other', capturedData.conversations);
+  //     }
+  //   });
     
-  });
+  // });
 
   console.log('this-chat-x-x-x-x-x-x-', this.chat);
 
-  return this.afs.doc('conversations/' + this.chat.chatid).update(
-    {messages: list}
-  );
+  // return this.afs.doc('conversations/' + this.chat.chatid).update(
+  //   {messages: list}
+  // );
 }
 
 

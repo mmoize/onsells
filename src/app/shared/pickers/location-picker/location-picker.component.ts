@@ -1,14 +1,14 @@
 
-import { PlaceLocation, Coordinates } from '../../../location.model';
-
-import { environment } from './../../../../environments/environment';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ModalController, ActionSheetController, AlertController } from '@ionic/angular';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor} from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
+import { Coordinates, PlaceLocation } from 'src/app/models/place-location.model';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -70,7 +70,7 @@ export class LocationPickerComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+    Geolocation.getCurrentPosition().then(geoPosition => {
       const coordinates: Coordinates = {
         lat: geoPosition.coords.latitude,
         lng: geoPosition.coords.longitude
@@ -95,7 +95,7 @@ export class LocationPickerComponent implements OnInit {
 
   private getAddress(lat: number, lng: number) {
     return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=
-    ${environment.googleMapsApiKey}`
+    ${environment.firebase.apiKey}`
     ).pipe(map(geoData => {
       if (!geoData || !geoData.results || geoData.results.length === 0) {
         return null;
@@ -109,7 +109,7 @@ export class LocationPickerComponent implements OnInit {
   private getMapImage(lat: number, lng: number, zoom: number) {
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=500x300&maptype=roadmap
     &markers=color:red%7Clabel:Place%7C${lat},${lng}
-    &key=${environment.googleMapsApiKey}`;
+    &key=${environment.firebase.apiKey}`;
   }
 
   private createPlace(lat: number, lng: number) {

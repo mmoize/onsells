@@ -5,7 +5,7 @@ import { CategoryPickerComponent } from './category-picker.component';
 
 
 @NgModule({
-  declarations: [CategoryPickerComponent],
+  declarations: [],
   imports: [
     CommonModule
   ],

@@ -10,8 +10,7 @@ import { ProductDetailPageRoutingModule } from './product-detail-routing.module'
 import { ProductDetailPage } from './product-detail.page';
 
 
-import { AngularFireModule } from '@angular/fire';
-import { environment } from 'src/environments/environment';
+// import { environment } from 'src/environments/environment';
 import { ChatPageModule } from 'src/app/messages/chat/chat.module';
 import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
 
@@ -24,7 +23,7 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
     SharedModule,
     NgxIonicImageViewerModule,
     ChatPageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+ 
   ],
   declarations: [ProductDetailPage]
 })

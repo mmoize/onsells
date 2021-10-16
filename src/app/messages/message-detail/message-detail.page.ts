@@ -12,7 +12,6 @@ import { Plugins } from '@capacitor/core';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
 
 
-import * as firebase from 'firebase';
 import { SuperTabs } from '@ionic-super-tabs/angular';
 
 
@@ -55,14 +54,14 @@ userid
 
       setTimeout(() => {
         console.log('this is other', this.other_username);
-        firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).orderBy('time')
-        .onSnapshot(snapRes => {
-          console.log('this is other', snapRes);
-          this.chats = []; // clears the chats array for replacations error.
-          snapRes.forEach(child => {
-             this.chats.push(child.data());
-           });
-        });
+        // firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).orderBy('time')
+        // .onSnapshot(snapRes => {
+        //   console.log('this is other', snapRes);
+        //   this.chats = []; // clears the chats array for replacations error.
+        //   snapRes.forEach(child => {
+        //      this.chats.push(child.data());
+        //    });
+        // });
       }, 1000);
 
 
@@ -86,21 +85,21 @@ userid
 
 
     //my chats collection
-    firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).add({
-      time:Date.now(),
-      userid: this.userid,
-      msg: this.textMsg
-    });
+    // firebase.firestore().collection('chats').doc(this.userid).collection(this.other_userid).add({
+    //   time:Date.now(),
+    //   userid: this.userid,
+    //   msg: this.textMsg
+    // });
 
 
     //other's chats collection
-    firebase.firestore().collection('chats').doc(this.other_userid).collection(this.userid).add({
-      time:Date.now(),
-      userid: this.userid,
-      msg: this.textMsg
-    }).then(() => {
-      this.textMsg = '';
-    });
+    // firebase.firestore().collection('chats').doc(this.other_userid).collection(this.userid).add({
+    //   time:Date.now(),
+    //   userid: this.userid,
+    //   msg: this.textMsg
+    // }).then(() => {
+    //   this.textMsg = '';
+    // });
 
 
 

@@ -1,10 +1,10 @@
 import { NavController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from './../../post.service';
-import { Post } from './../../post.model';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-edit-product',

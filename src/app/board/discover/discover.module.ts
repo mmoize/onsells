@@ -1,6 +1,6 @@
 import { ProductDetailPage } from './product-detail/product-detail.page';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MainFilterComponent } from './../../shared/filters/main-filter/main-filter.component';
+import { MainFilterComponent } from '../../shared/filters/main-filter/main-filter.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,8 +24,8 @@ import { ProductDetailPageModule } from './product-detail/product-detail.module'
     SharedModule,
     LazyLoadImageModule,
     ReactiveFormsModule,
-    DiscoverPageRoutingModule
+    DiscoverPageRoutingModule,
   ],
-  declarations: [DiscoverPage, MainFilterComponent, TimeAgoPipe]
+  declarations: [DiscoverPage, ],
 })
 export class DiscoverPageModule {}

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Plugins, FilesystemDirectory} from '@capacitor/core';
-const { Filesystem, Storage } = Plugins
+import { Storage } from '@capacitor/storage';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+
 
 
 @Injectable({
@@ -26,7 +27,7 @@ export class VideoService {
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
-      directory: FilesystemDirectory.Data
+      directory: Directory.Data
     });
  
     // Add file to local array
@@ -54,7 +55,7 @@ export class VideoService {
     const path = fullPath.substr(fullPath.lastIndexOf('/') + 1);
     const file = await Filesystem.readFile({
       path: path,
-      directory: FilesystemDirectory.Data
+      directory: Directory.Data
     });
     console.log('this is path', path);
     return `data:video/mp4;base64,${file.data}`;

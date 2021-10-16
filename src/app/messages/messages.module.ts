@@ -11,6 +11,7 @@ import { MessagesPageRoutingModule } from './messages-routing.module';
 import { MessagesPage } from './messages.page';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
 import { UsermessagesPageModule } from './usermessages/usermessages.module';
+import { ChatPage } from './chat/chat.page';
 
 
 @NgModule({
@@ -21,6 +22,6 @@ import { UsermessagesPageModule } from './usermessages/usermessages.module';
     SuperTabsModule.forRoot(),
     MessagesPageRoutingModule,
   ],
-  declarations: [MessagesPage, UsermessagesPage]
+  declarations: [ChatPage, MessagesPage, UsermessagesPage]
 })
 export class MessagesPageModule {}

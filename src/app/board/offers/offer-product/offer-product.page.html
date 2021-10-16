@@ -5,13 +5,13 @@
       <ion-img src="assets/img/popular3.png"></ion-img>
     </ion-thumbnail>
     <ion-label>
-      <h1>  {{ offers.product[0]['title'] }}</h1>
+      <h1>  {{ offers?.product[0]['title'] }}</h1>
       <div id="offerDetail">
-          <ion-text color="primary"  class="space-left">{{ offers.product[0].description}}</ion-text>
+          <ion-text color="primary"  class="space-left">{{ offers?.product[0].description}}</ion-text>
       </div>
     </ion-label>
     <ion-note slot="end">
-      <h1>  {{ offers.product[0]['price'] | currency}}</h1>
+      <h1>  {{ offers?.product[0]['price'] | currency}}</h1>
       <ion-text color="primary" class="space-left">{{ offers.created_at | date:'shortTime'  }}</ion-text>
    </ion-note>
   </ion-item>

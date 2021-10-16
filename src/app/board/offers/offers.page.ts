@@ -1,11 +1,11 @@
-import { Product } from './../product.model';
+import { Product } from '../../models/product.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from './../post.service';
-import { Post } from './../post.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IonItemSliding, NavController, LoadingController, AlertController } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
+import { Post } from 'src/app/models/post.model';
+import { Storage } from '@capacitor/storage';
 
 
 @Component({
@@ -86,17 +86,17 @@ export class OffersPage implements OnInit, OnDestroy {
     return this.loadedUserPosts.some(r => r.id === id);
   }
 
-  async ionViewWillEnter() {
+  async ionViewWillEnter() { 
      
     
 
     ////////////////////--product--///////////////////////////////////
 
-     const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-     const dic = JSON.parse(value);
-     const dicToken = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
+    
      this.isLoading = true;
-     this.postservice.fetchProducts(dicToken).subscribe( data => {
+     this.postservice.fetchProducts(authDictionary.token).subscribe( data => {
       this.isLoading = false;
       // this.postservice.getProducts.subscribe(data => {
       //   if (!this.loadedProducts) {
@@ -179,7 +179,7 @@ export class OffersPage implements OnInit, OnDestroy {
 
 
 
-     this.postservice.fetchUserPosts(dicToken).subscribe(data => {
+     this.postservice.fetchUserPosts(authDictionary.token).subscribe(data => {
        this.postservice.getUserPosts.subscribe(resData => {
          this.loadedUserPosts = resData;
          const count = Object.keys(this.loadedUserPosts).length;

@@ -23,4 +23,4 @@ import { AndroidHomePage } from './android-home/android-home.page';
   ],
   declarations: [HomePage, IosHomePage, AndroidHomePage, DesktopHomePage ]
 })
-export class HomePageModule {}
+export class HomePageModule {} 

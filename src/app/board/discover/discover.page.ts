@@ -1,27 +1,29 @@
 import { environment } from './../../../environments/environment';
 import { ProfileService } from './../../accounts/profile.service';
-import { Category } from './../category.model';
+import { Category } from '../../models/category.model';
 import { FcmService } from './../../fcm.service';
 import { Router } from '@angular/router';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { AuthService } from './../../auth/auth.service';
 import { PostService } from './../post.service';
-import { Post } from './../post.model';
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription, fromEvent } from 'rxjs';
 import { take, debounceTime, map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Plugins, Capacitor } from '@capacitor/core';
+import {  Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
 import { Platform, ModalController, ActionSheetController, PopoverController, IonContent } from '@ionic/angular';
 import { FormControl } from '@angular/forms';
-import {  Coordinates } from '../location.model';
+import {  Coordinates } from '../../models/location.model';
 import { MainFilterComponent } from 'src/app/shared/filters/main-filter/main-filter.component';
 import { MapFilterModalComponent } from 'src/app/shared/filters/map-filter-modal/map-filter-modal.component';
 import { MessageService } from 'src/app/messages/message.service';
-import * as firebase from 'firebase';
+
 import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { resetFakeAsyncZone } from '@angular/core/testing';
 import { CategoyService } from '../categoy.service';
+import { Post } from 'src/app/models/post.model';
+import { Storage } from '@capacitor/storage';
 
 
 type CurrentPlatform = 'browser' | 'native'; 
@@ -232,8 +234,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
               private platform: Platform,
               public popoverController: PopoverController,
               private categoryservice: CategoyService,
-
-                ) {
+              ) {
 
 
                   this.setCurrentPlatform();
@@ -256,39 +257,39 @@ export class DiscoverPage implements OnInit, OnDestroy {
                     // Set firebase credentials.
 
                     const users = [];
-                    firebase.firestore().collection('chatUsers').get().then(resData => {
-                      resData.forEach(childData => {
-                        users.push(childData.data());
-                        if (childData.data()['userid'] !== this.userid) {
-                          users.push(childData.data());
-                          this.testUsers.push(childData.data());
-                        }
+                    // firebase.firestore().collection('chatUsers').get().then(resData => {
+                    //   resData.forEach(childData => {
+                    //     users.push(childData.data());
+                    //     if (childData.data()['userid'] !== this.userid) {
+                    //       users.push(childData.data());
+                    //       this.testUsers.push(childData.data());
+                    //     }
 
-                      });
-                      this.chatuserListTest = users;
+                    //   });
+                    //   this.chatuserListTest = users;
 
 
-                      const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
-                      const onexist = checkRoleExistence(this.userid);
-                      console.log(' does user exist', onexist);
-                      setTimeout(() => {
-                        if (!onexist) {
-                          // tslint:disable-next-line: no-unused-expression
-                          this.msgService.createUser(
-                            this.userid,
-                          {'username': this.username,
-                          'email': this.email,
-                          'userid': this.userid,
-                          'userdp': this.userdp,
-                          'conversations': []}
-                            ).then(() => {
-                              // do nothing for now..
-                            });  
-                        } else {
-                          this.setUpMsgService();
-                        }
-                      }, 500);
-                    });
+                    //   const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
+                    //   const onexist = checkRoleExistence(this.userid);
+                    //   console.log(' does user exist', onexist);
+                    //   setTimeout(() => {
+                    //     if (!onexist) {
+                    //       // tslint:disable-next-line: no-unused-expression
+                    //       this.msgService.createUser(
+                    //         this.userid,
+                    //       {'username': this.username,
+                    //       'email': this.email,
+                    //       'userid': this.userid,
+                    //       'userdp': this.userdp,
+                    //       'conversations': []}
+                    //         ).then(() => {
+                    //           // do nothing for now..
+                    //         });  
+                    //     } else {
+                    //       this.setUpMsgService();
+                    //     }
+                    //   }, 500);
+                    // });
                   }, 1000);
                   this.PreloadPost();
   }
@@ -399,12 +400,12 @@ PreloadPost() {
   }
 
   async setCurrentUserDetails() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const userDicData = JSON.parse(value);
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
-    this.email = userDicData.email;
-    this.username = userDicData.username;
-    this.userid = JSON.stringify(userDicData.user_id);
+    this.email = authDictionary.email;
+    this.username = authDictionary.username;
+    this.userid = JSON.stringify(authDictionary.user_id);
 
 
     this.profileservice.loadUserProfile(this.userid).subscribe(res => {
@@ -445,10 +446,8 @@ PreloadPost() {
 
   async onSearchListings() {
 
-
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  const dic = JSON.parse(value);
-  const dicToken = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
   this.searchControl.valueChanges
 
@@ -462,7 +461,7 @@ PreloadPost() {
     const dicParam = {};
     dicParam['lat']= this.latitude;
     dicParam['lng'] = this.longitude;
-    dicParam['usertoken'] = dicToken;
+    dicParam['usertoken'] = authDictionary.token;
     dicParam['searchTerm'] = search;
     dicParam['taggit'] = this.taggit;
 
@@ -533,9 +532,8 @@ PreloadPost() {
   // Sets the filters that fetches current listed Post within the user's radius.
   async onClickedCategory(category) {
     this.searching = true;
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
    this.secondselectedCategory = '';
 
@@ -545,7 +543,7 @@ PreloadPost() {
     const dicParam = {};
     dicParam['lat']= this.latitude;
     dicParam['lng'] = this.longitude;
-    dicParam['usertoken'] = dicToken;
+    dicParam['usertoken'] = authDictionary.token;
     dicParam['category'] = category_id ;
 
     if (this.minFilterPrice) {
@@ -625,7 +623,7 @@ PreloadPost() {
       return;
     }
 
-    Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+    Geolocation.getCurrentPosition().then(geoPosition => {
       const Coordinates: Coordinates = {
         lat: geoPosition.coords.latitude,
         lng: geoPosition.coords.longitude
@@ -644,10 +642,10 @@ PreloadPost() {
   }
 
   async getCurrentUserProfile() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const userid = dic.user_id;
-    this.profileservice.loadUserProfile1(dic.token, dic.username).subscribe(resData => {
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
+
+    this.profileservice.loadUserProfile1(authDictionary.token, authDictionary.username).subscribe(resData => {
       this.currentUserDP = resData.image;
       console.log('setting up user image', resData);
     });
@@ -655,9 +653,8 @@ PreloadPost() {
 
   async ionViewWillEnter() {
 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
     if (this.listedLoadedPosts === undefined) {
       this.isLoading = true;
@@ -666,16 +663,14 @@ PreloadPost() {
       this.searching =false;
     }   
     
-  
   }
 
   async setUpListings() {
 
     this.locateUser();
 
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
 
     if (this.listedLoadedPosts === undefined) {
       this.isLoading = true;
@@ -685,7 +680,7 @@ PreloadPost() {
         const dicParam = {};
         dicParam['lat']= this.latitude;
         dicParam['lng'] = this.longitude;
-        dicParam['usertoken'] = dicToken;
+        dicParam['usertoken'] = authDictionary.token;
         if (this.minFilterPrice) {
           dicParam['minPrice'] = this.minFilterPrice;
         }
@@ -773,8 +768,7 @@ onOpenMapFiltersModal() {
 
   private getMapImage(lat: number, lng: number, zoom: number) {
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=1920x900&maptype=roadmap
-    &markers=color:red%7Clabel:Place%7C${lat},${lng}
-    &key=${environment.googleMapsApiKey}`;
+            &markers=color:red%7Clabel:Place%7C${lat},${lng}&key=${environment.firebase.apiKey}`;
   }
 
 
@@ -812,7 +806,6 @@ onOpenMapFiltersModal() {
         this.latitude = coordinates.lat;
         this.longitude = coordinates.lng;
         this.locationimage = this.getMapImage(coordinates.lat, coordinates.lng, 10);
-        console.log('image 01', this.locationimage);
         this.onClickedCategory(this.Selectedcategory);
         this.getAddress( this.latitude, this.longitude).subscribe(resData => {
           console.log('address o1', resData.address_components[3]);
@@ -824,8 +817,9 @@ onOpenMapFiltersModal() {
   }
 
   private getAddress(lat, lng) {
-    return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=
-    ${environment.googleMapsApiKey}`
+
+    return  this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=
+    ${environment.firebase.apiKey}`
     ).pipe(map(geoData => {
       if (!geoData || !geoData.results || geoData.results.length === 0) {
         return null;

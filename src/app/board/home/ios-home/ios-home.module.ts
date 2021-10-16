@@ -15,6 +15,6 @@ import { IosHomePage } from './ios-home.page';
     IonicModule,
     IosHomePageRoutingModule
   ],
-  declarations: [IosHomePage]
+  declarations: []
 })
 export class IosHomePageModule {}

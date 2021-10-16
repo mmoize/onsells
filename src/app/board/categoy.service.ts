@@ -1,6 +1,7 @@
-import { Subcategory } from './subcategoy.model';
+
 import { Injectable } from '@angular/core';
-import { Category } from './category.model';
+import { Category } from '../models/category.model';
+import { Subcategory } from '../models/subcategoy.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,32 +59,32 @@ export class CategoyService {
 
   HomeGardenCategoryList = [
     new Subcategory(
-      '22',
+      '8',
       'Tools',
       'tool',
       '1'
     ),
     new Subcategory(
-      '7',
+      '9',
       'Furniture',
       'furniture ',
       '1'
     ),
     new Subcategory(
-      '8',
+      '10',
       'Garden',
       'garden',
       '1'
     ),
     new Subcategory(
-      '23',
+      '11',
       'Appliances',
-      'Electronics',
+      'appliances',
       '1'
 
     ),
     new Subcategory(
-      '25',
+      '12',
       'Household',
       'household',
       '1'
@@ -94,28 +95,28 @@ export class CategoyService {
   ];
   clothingAccessoriesCategoryList = [
     new Subcategory(
-      '24',
+      '13',
       'Jewelry & Accessories',
-      'jewelry_&_accessories',
-      '2'
+      'jewelry_and_accessories',
+      '5'
     ),
     new Subcategory(
-      '9',
+      '14',
       'Bags & luggage',
-      'Bags_&_luggage',
-      '2'
+      'Bags_and_luggage',
+      '5'
     ),
     new Subcategory(
-      '10',
-      'Men\'s Clothing & Shoes',
-      'mens_clothing_&_shoes',
-      '2'
+      '15',
+      "Men's Clothing & Shoes",
+      'mens_clothing_and_shoes',
+      '5'
     ),
     new Subcategory(
-      '28',
-      'Women\'s Clothing & Shoes',
-      'womens_clothing_&_shoes',
-      '2'
+      '16',
+      "Women's Clothing & Shoes",
+      'womens_clothing_and_shoes',
+      '5'
 
     ),
 
@@ -124,15 +125,15 @@ export class CategoyService {
 
   ElectronicsCategoryList = [
     new Subcategory(
-      '18',
+      '17',
       'Mobile Phones',
       'mobile_phones',
       '3'
     ),
     new Subcategory(
-      '13',
+      '18',
       'Electronics & Computers',
-      'electronics_&_Computers',
+      'electronics_and_Computers',
       '3'
     ),
   ];
@@ -140,27 +141,27 @@ export class CategoyService {
 
   familyCategoryList = [
     new Subcategory(
-      '29',
+      '19',
       'Toy & Games',
-      'toy_&_Games',
+      'toy_and_Games',
+      '4'
+    ),
+    new Subcategory(
+      '20',
+      'Baby & Kids',
+      'baby_and_kids',
       '4'
     ),
     new Subcategory(
       '21',
-      'Baby & Kids',
-      'baby_&_kids',
-      '4'
-    ),
-    new Subcategory(
-      '17',
       'Pet Supplies',
       'pet_supplies',
       '4'
     ),
     new Subcategory(
-      '12',
+      '22',
       'Health & Beauty',
-      'health_&_beauty',
+      'health_and_beauty',
       '4'
 
     ),
@@ -170,58 +171,57 @@ export class CategoyService {
 
     hobbiesCategoryList = [
       new Subcategory(
-        '11',
+        '23',
         'Sports & Outdoors',
-        'sports_&_outdoors',
-        '6'
+        'sports_and_outdoors',
+        '7'
       ),
       new Subcategory(
-        '15',
+        '24',
         'Musical Instrunments',
         'musical_instrunments',
-        '6'
+        '7'
       ),
       new Subcategory(
-        '14',
+        '25',
         'Arts & Crafts',
-        'art_&_crafts',
-        '6'
-      ),
-      new Subcategory(
-        '22',
-        'Antiques & Collectibles',
-        'antiques_&_collectibles',
-        '6'
-  
+        'art_and_crafts',
+        '7'
       ),
       new Subcategory(
         '26',
-        'Auto Parts',
-        'auto_parts',
-        '6'
+        'Antiques & Collectibles',
+        'antiques_and_collectibles',
+        '7'
   
       ),
       new Subcategory(
-        '30',
+        '27',
+        'Auto Parts',
+        'auto_parts',
+        '7'
+  
+      ),
+      new Subcategory(
+        '28',
         'Bicycles',
         'bicycles',
-        '6'
-  
+        '7'
       ),
   
       ];
       entertainmentCategoryList = [
         new Subcategory(
-          '32',
+          '29',
           'Books, Movies & Music',
-          'books_&_movies_&_music',
-          '31'
+          'books_and_movies_and_music',
+          '2'
         ),
         new Subcategory(
-          '33',
+          '30',
           'Video Games',
           'video_games',
-          '31'
+          '2'
         ),
       ]
 

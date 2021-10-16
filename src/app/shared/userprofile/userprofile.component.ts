@@ -1,12 +1,13 @@
-import { userProfileData } from './../../accounts/profile/userProfileData.model';
+import { userProfileData } from '../../models/userProfileData.model';
 import { SegmentChangeEventDetail } from '@ionic/core';
 import { Subscription } from 'rxjs';
 import { ProfileService } from './../../accounts/profile.service';
-import { Post } from './../../board/post.model';
+
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { IonSlide, ModalController } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-userprofile',
@@ -20,6 +21,8 @@ export class UserprofileComponent implements OnInit {
   @Input() selectedProfile;
   @Input() userId;
   @Input() fromRelationData;
+
+  currentUser;
 
   theImageString;
   profilesData;
@@ -53,12 +56,15 @@ export class UserprofileComponent implements OnInit {
               }
 
   async ngOnInit() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicData = dic;
-    const token = dicData.token;
+
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
+
+    this.currentUser = authDictionary;
+
+    console.log("profile authData",value)
     
-    const userId = dicData.user_id;
+    const userId = authDictionary.user_id
 
     if (this.selectedPost) {
 
@@ -72,7 +78,7 @@ export class UserprofileComponent implements OnInit {
         console.log('for res listed', resData);
       });
 
-      this.profileservice.loadUserProfile1(token, username).subscribe(resData => {
+      this.profileservice.loadUserProfile1(authDictionary.token, username).subscribe(resData => {
         this.is_following = resData.is_following;
         if (this.is_following) {
           this.isUnFollowing = true;
@@ -104,7 +110,7 @@ export class UserprofileComponent implements OnInit {
         console.log('for res listed', resData);
       });
 
-      this.profileservice.loadUserProfile1(token, this.fromRelationData.username).subscribe(resData => {
+      this.profileservice.loadUserProfile1(authDictionary.token, this.fromRelationData.username).subscribe(resData => {
         this.is_following = resData.is_following;
         if (this.is_following) {
           this.isUnFollowing = true;
@@ -126,12 +132,10 @@ export class UserprofileComponent implements OnInit {
 
 
     async reloadUser() {
-      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-      const dic = JSON.parse(value);
-      const dicData = dic;
-      const token = dicData.token;    
+       const {value}   = await Storage.get({ key : 'authData'})  ; 
+      const authDictionary = JSON.parse(value);   
        
-      this.profileservice.loadUserProfile1(token, this.fromRelationData.username).subscribe(resData => {
+      this.profileservice.loadUserProfile1(authDictionary.token, this.fromRelationData.username).subscribe(resData => {
         this.is_following = resData.is_following;
         if (this.is_following) {
           this.isUnFollowing = true;
@@ -150,19 +154,15 @@ export class UserprofileComponent implements OnInit {
 
 
     async getUserFromChat(userid) {
-      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-      const dic = JSON.parse(value);
-      const dicData = dic.token;
-      const token = dicData.token;
-      const username = dicData.username;
-      const userId = dicData.user_id;
+       const {value}   = await Storage.get({ key : 'authData'})  ; 
+      const authDictionary = JSON.parse(value); 
       
-      this.userListedSub = this.profileservice.UserProfileListings(userid, username).subscribe(resData => {
+      this.userListedSub = this.profileservice.UserProfileListings(userid, authDictionary.username).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
 
-      this.userListedSub = this.profileservice.loadUserProfile1(token, username).subscribe(resData => {
+      this.userListedSub = this.profileservice.loadUserProfile1(authDictionary.token, authDictionary.username).subscribe(resData => {
         console.log('Profile Data Results', resData);
         this.theImageString = resData.image;
         this.profilesData = resData;
@@ -173,7 +173,7 @@ export class UserprofileComponent implements OnInit {
   
       const user = this.selectedPost.owner;
       const userID = user['id'];
-      this.userListedSub = this.profileservice.UserProfileListings(userID , token).subscribe(resData => {
+      this.userListedSub = this.profileservice.UserProfileListings(userID , authDictionary.token).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
@@ -195,7 +195,7 @@ export class UserprofileComponent implements OnInit {
      this.isFollowing = true;
      this.isUnFollowing = false;
    }
-   const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+   const { value } = await Storage.get({ key : 'authData'}) ;
    const dic = JSON.parse(value);
    const dicData = dic;
    const token = dicData.token;
@@ -218,7 +218,7 @@ export class UserprofileComponent implements OnInit {
     this.isFollowing = false;
     this.isUnFollowing = true;
   }
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+  const { value } = await Storage.get({ key : 'authData'}) ;
   const dic = JSON.parse(value);
   const dicData = dic;
   const token = dicData.token;

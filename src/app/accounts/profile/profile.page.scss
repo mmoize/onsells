@@ -39,7 +39,9 @@
     text-align: center;
     background: transparent;
     border-radius: 1em;
-    // box-shadow: 0 0 2em rgba(0,0,0,0.150);
+    //box-shadow: 0 0 2em rgba(0,0,0,0.150);
+    background-image: url('https://img2.goodfon.com/wallpaper/nbig/f/6c/mountain-tower-lookout-birds.jpg');
+    background-position: center;
     overflow: hidden;
     flex-direction: column;
     border-radius: 20px;
@@ -79,6 +81,7 @@
         margin-bottom: .5em;
         font-size: 1.5rem;
         font-weight: bold;
+        color: aliceblue;
         font-family: Georgia, 'Times New Roman', Times, serif;
         
       }

@@ -25,7 +25,7 @@ import { MessagesPageModule } from '../messages/messages.module';
     FormsModule,
     IonicModule,
     DiscoverPageModule,
-    OffersPageModule,
+    //OffersPageModule,
     MessagesPageModule,
     FleekscameraPageModule,
     BoardPageRoutingModule,

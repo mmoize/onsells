@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, NgZone, Renderer2, ElementRef } from '@angular/core';
-import { PlaceLocation, Coordinates } from '../../../location.model';
+import { Coordinates } from '../../../models/location.model';
+import { Geolocation } from '@capacitor/geolocation';
 import { ModalController, AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Plugins, Capacitor } from '@capacitor/core';
+// import { environment } from 'src/environments/environment';
+import {  Capacitor } from '@capacitor/core';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-map-filter-modal',
@@ -87,8 +89,7 @@ export class MapFilterModalComponent implements OnInit, AfterViewInit, OnDestroy
 
 
     if (!this.center) {
-      console.log('it was a');
-      Plugins.Geolocation.getCurrentPosition().then(geoPosition => {
+      Geolocation.getCurrentPosition().then(geoPosition => {
         const coordinates: Coordinates = {
           lat: geoPosition.coords.latitude,
           lng: geoPosition.coords.longitude
@@ -214,7 +215,7 @@ export class MapFilterModalComponent implements OnInit, AfterViewInit, OnDestroy
 
     return new Promise ((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + environment.googleMapsApiKey;
+      script.src = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + environment.firebase.apiKey;
       script.async = true;
       script.defer = true;
       document.body.appendChild(script);

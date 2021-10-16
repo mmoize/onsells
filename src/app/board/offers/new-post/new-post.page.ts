@@ -1,10 +1,9 @@
-import { PlaceLocation } from 'src/app/location.model';
 
 import { LoadingController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../post.service';
-import { Plugins } from '@capacitor/core';
-import { Product } from '../../product.model';
+import { Storage } from '@capacitor/storage';
+import { Product } from '../../../models/product.model';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -203,28 +202,36 @@ export class NewPostPage implements OnInit {
 
   async ionViewDidEnter(){
   
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
 
 
     this.postservice.fetchProducts(dicToken).subscribe( data => {
       this.postservice.getProducts.subscribe(data => {
+
         if (!this.loadedProducts) {
             this.loadedProducts = data;
             const count = Object.keys(this.loadedProducts).length;
             this.userPostCount = count;
         } else {
-          for (const key in this.loadedProducts)  {
-            if (this.loadedProducts.hasOwnProperty(key)) {
-              if (this.loadedProducts[key].id in this.loadedProducts) {
-              } else {
-                this.loadedProducts.push(this.loadedProducts[key]);
+
+          for (let i  of data) {
+
+            for (const key in this.loadedProducts)  {
+
+              if (this.loadedProducts.hasOwnProperty(key)) {
+
+                if (this.loadedProducts[key].id === i[key].id) {
+                  // Do nothing as it already in the product array.
+                } else {
+                  this.loadedProducts.push(i[key]);
+                }
               }
             }
           }
+
         }
-        console.log('offer prod data', data);
       });
     });
 
@@ -232,7 +239,8 @@ export class NewPostPage implements OnInit {
 
 
   async ionViewWillEnter() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    this.loadedProducts = []
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
 
@@ -243,17 +251,19 @@ export class NewPostPage implements OnInit {
             this.loadedProducts = data;
             const count = Object.keys(this.loadedProducts).length;
             this.userPostCount = count;
+            console.log('offer prod data 1', data);
         } else {
           for (const key in this.loadedProducts)  {
             if (this.loadedProducts.hasOwnProperty(key)) {
               if (this.loadedProducts[key].id in this.loadedProducts) {
               } else {
+                console.log('offer prod data 2', data);
                 this.loadedProducts.push(this.loadedProducts[key]);
               }
             }
           }
         }
-        console.log('offer prod data', data);
+        
       });
     });
 
@@ -262,14 +272,15 @@ export class NewPostPage implements OnInit {
 
   onselectItem(item) {
     this.selectedProduct = item;
-    console.log('this is selected item', this.selectedProduct);
+    this.loadedProducts = []
   }
 
   onItemsSelect() {
     this.selectedProduct = null;
+    this.ionViewWillEnter()
   }
 
-  onCreatePostListing(data) {
+  onCreatePostListing() {
    this.loadingCtrl.create({keyboardClose: true, message: 'Creating your item for listing'})
    .then(loadingEl => {
      loadingEl.present();

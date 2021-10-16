@@ -234,8 +234,8 @@
 
           <div class="iospinsMobile" style="background:transparent">
             <div id="firstlayerIOS" *ngFor="let post of listedLoadedPosts" style="background:transparent">
-              <ion-card (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
-                <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge>
+              <ion-card (click)="onDetail(post.id)"  class="card" no-margin>
+                <ion-badge class="badge" >{{ post?.created_at }}</ion-badge>
                 <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
                 <ion-card-content>
                   <ion-label style="text-align: left;">
@@ -459,8 +459,8 @@
                       </div>
                   </ion-card> -->
 
-                  <ion-card (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
-                    <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge>
+                  <ion-card (click)="onDetail(post.id)"  class="card" no-margin >
+                    <ion-badge class="badge" >{{ post?.created_at  }}</ion-badge>
                     <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
                     <ion-card-content>
                       <ion-label style="text-align: left;">
@@ -669,7 +669,7 @@
     <ion-grid style="margin: 5rem" *ngIf="!isLoading && (!listedLoadedPosts  || listedLoadedPosts.length <=0) ">
       <ion-row>
         <ion-col size ="12" size-sm="8" offset-sm ="2" text-center>
-           <h4 style="font-family: ;">There are no available Listings right now, please come back later or change your  location </h4>
+           <h4 >There are no available Listings right now, please come back later or change your  location </h4>
         </ion-col>
       </ion-row>
     </ion-grid>

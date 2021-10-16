@@ -7,8 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ChatPageRoutingModule } from './chat-routing.module';
 
 import { ChatPage } from './chat.page';
-import { AngularFireModule } from '@angular/fire';
-import { environment } from 'src/environments/environment';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -18,8 +16,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     SharedModule,
     ChatPageRoutingModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
-  declarations: [ChatPage]
+  declarations: []
 })
 export class ChatPageModule {}

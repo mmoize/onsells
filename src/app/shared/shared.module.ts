@@ -9,6 +9,8 @@ import { ImagePickerComponent } from './pickers/image-picker/image-picker.compon
 import { MapFilterModalComponent } from './filters/map-filter-modal/map-filter-modal.component';
 import { ImageviewerComponent } from './imageviewer/imageviewer.component';
 import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
+import { MainFilterComponent } from './filters/main-filter/main-filter.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule ({
     declarations: [LocationPickerComponent,
@@ -16,8 +18,9 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
                    MapFilterModalComponent,
                    UserprofileComponent,
                    MapModalComponent,
+                   MainFilterComponent,
                    ImagePickerComponent],
-    imports: [CommonModule, IonicModule, NgxIonicImageViewerModule],
+    imports: [CommonModule, IonicModule,FormsModule, NgxIonicImageViewerModule],
     exports: [LocationPickerComponent,
               ImageviewerComponent,
               MapModalComponent,

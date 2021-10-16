@@ -1,6 +1,7 @@
-import { Post } from './../../post.model';
+
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-offer-product',

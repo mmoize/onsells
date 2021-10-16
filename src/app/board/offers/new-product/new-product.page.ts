@@ -1,13 +1,13 @@
 import { CategoryPickerComponent } from './../../../shared/pickers/category-picker/category-picker.component';
 import { stringify } from 'querystring';
 import { PostService } from './../../post.service';
-import { CameraSource, Camera, CameraResultType } from '@capacitor/core';
+import { CameraSource, CameraResultType, Camera} from '@capacitor/camera';
+
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Platform, ActionSheetController, LoadingController, ModalController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { PlaceLocation } from 'src/app/location.model';
 import { Key } from 'protractor';
 
 @Component({

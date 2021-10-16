@@ -3,9 +3,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ProfileService } from '../profile.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-profile',
@@ -46,22 +46,20 @@ export class ProfilePage implements OnInit {
               private modalCtrl: ModalController,
               private routes: Router,
               private router: Router
-              ) { }
+              ) { 
+               
+              }
 
 
-  ngOnInit() {
+  async ngOnInit() {
+
 
     setTimeout(async () => {
       
-      const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-      const dic = JSON.parse(value);
-      const dicToken = dic.token;
+       const {value}   = await Storage.get({ key : 'authData'})  ; 
+      const authDictionary = JSON.parse(value);
 
-
-
-      
-      const userID = this.userId;
-      this.userListedSub = this.profileservice.UserProfileListings(dic.user_id, dic.token).subscribe(resData => {
+      this.userListedSub = this.profileservice.UserProfileListings(authDictionary.user_id, authDictionary.token).subscribe(resData => {
         this.userListedPost = resData;
         console.log('for res listed', resData);
       });
@@ -70,15 +68,15 @@ export class ProfilePage implements OnInit {
   }
 
   async doRefresh(event) {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const Token = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
+    console.log('for res listed profile', authDictionary);
 
     this.authService.returnUserId().then(resData => {
       this.userId = resData;
       const userid = resData;
 
-      this.profileservice.loadUserProfile1(Token, this.userName).subscribe(resDatas => {
+      this.profileservice.loadUserProfile1(authDictionary.token, authDictionary.username).subscribe(resDatas => {
       this.userProfile = resDatas;
       this.imageString = this.userProfile.image;
       this.userProfileData.emit(resData);
@@ -93,22 +91,21 @@ export class ProfilePage implements OnInit {
 
    //
   async ionViewWillEnter() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const Token = dic.token;
+     const {value}   = await Storage.get({ key : 'authData'})  ; 
+    const authDictionary = JSON.parse(value);
     
     this.authService.returnUsername().then(resData => {
       this.userName = resData;
 
 
-      this.profileservice.loadUserProfile1(Token, this.userName).subscribe(resDatas => {
+      this.profileservice.loadUserProfile1(authDictionary.token, authDictionary.username).subscribe(resDatas => {
         console.log('profile', resDatas);
         this.userProfile = resDatas;
         this.imageString = this.userProfile.image;
         this.userProfileData.emit(resData);
       });
 
-      this.profileservice.loadUserProfile1(dic.token, dic.username).subscribe(resData => {
+      this.profileservice.loadUserProfile1(authDictionary.token, authDictionary.username).subscribe(resData => {
         this.is_following = resData.is_following;
         if (this.is_following) {
           this.isUnFollowing = true;

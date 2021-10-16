@@ -1,7 +1,7 @@
         <ion-content [scrollEvents]="true">
-          <ion-slides (ionSlideDidChange)="SlideDidChange(item)" (ionScroll)="didScrolls($event)"  (ionScroll)="didScroll($event)" [options]="slideOptions">
+          <ion-slides (ionSlideDidChange)="SlideDidChange()" (ionScroll)="didScrolls()"  (ionScroll)="didScroll()" [options]="slideOptions">
         
-            <ion-slide (click)="SlideDidChange(item)"   style="background: black;" *ngFor="let item of videos"  (ionSlideDidChange)="SlideDidChange(item)">
+            <ion-slide (click)="SlideDidChange()"   style="background: black;" *ngFor="let item of videos"  (ionSlideDidChange)="SlideDidChange()">
               <div class="ion-padding">
                 <ion-card style="background: rgba(0, 0, 0, 0.603);" >
                  <!-- <ion-card-header>
