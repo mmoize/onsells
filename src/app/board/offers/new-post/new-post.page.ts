@@ -191,7 +191,6 @@ export class NewPostPage implements OnInit {
       longitude: new FormControl(null, {
         validators: [Validators.required
         ]}),
-      // image: new FormControl(null)
     });
   }
 
@@ -200,8 +199,9 @@ export class NewPostPage implements OnInit {
     this.form.patchValue({longitude: data.lng});
   }
 
-  async ionViewDidEnter(){
-  
+
+
+  async ionViewWillEnter() {
     const { value } = await Storage.get({ key : 'authData'}) ;
     const dic = JSON.parse(value);
     const dicToken = dic.token;
@@ -234,45 +234,12 @@ export class NewPostPage implements OnInit {
         }
       });
     });
-
-  }
-
-
-  async ionViewWillEnter() {
-    this.loadedProducts = []
-    const { value } = await Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const dicToken = dic.token;
-
-
-    this.postservice.fetchProducts(dicToken).subscribe( data => {
-      this.postservice.getProducts.subscribe(data => {
-        if (!this.loadedProducts) {
-            this.loadedProducts = data;
-            const count = Object.keys(this.loadedProducts).length;
-            this.userPostCount = count;
-            console.log('offer prod data 1', data);
-        } else {
-          for (const key in this.loadedProducts)  {
-            if (this.loadedProducts.hasOwnProperty(key)) {
-              if (this.loadedProducts[key].id in this.loadedProducts) {
-              } else {
-                console.log('offer prod data 2', data);
-                this.loadedProducts.push(this.loadedProducts[key]);
-              }
-            }
-          }
-        }
-        
-      });
-    });
-
   }
 
 
   onselectItem(item) {
     this.selectedProduct = item;
-    this.loadedProducts = []
+    //this.loadedProducts = []
   }
 
   onItemsSelect() {

@@ -519,8 +519,8 @@
 
 
 
-<ion-toolbar *ngIf="scrolled"  >
-  <ion-item lines="none">
+<ion-toolbar  *ngIf="scrolled"  >
+  <ion-item  lines="none">
     <ion-buttons style="margin:0rem"  *ngIf="!aboutToSearch"  slot="start">
       <ion-button  style="height:3rem;margin-right:0rem">
         <ion-img style="height:2.5rem;width:8rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
@@ -532,8 +532,8 @@
         <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
       </div>
     </ion-col>
-    <ion-buttons style="height: 3rem; border-raidus:100%" (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
-      <ion-button style="height: 3rem; border-raidus:100%">
+    <ion-buttons style="height: 3rem; border-radius:100%" (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
+      <ion-button style="height: 3rem; border-radius:100%">
         <ion-img [src]="currentUserDP" class="img-head"></ion-img>
       </ion-button>
     </ion-buttons>
