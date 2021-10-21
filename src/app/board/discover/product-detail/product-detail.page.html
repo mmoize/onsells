@@ -17,65 +17,58 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col size ="12" size-sm="4" offset-sm ="4">
-        <!-- <ion-card id="imgslidediv">
+  <ion-grid style="box-shadow: 20px 0 15px -4px rgba(125, 31, 97, 0.8), -20px 0 8px -4px rgba(125, 31, 97, 0.8);" class="ion-no-padding">
+    <ion-col  style="--background: darkmagenta;"   size ="12" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
 
-      </ion-card>   -->
-      <ion-slides class="ionSlides" pager="true" [options]="slideOpts" >
-        <ion-slide style="border-top-right-radius: 10px;border-top-left-radius: 10px;" *ngFor="let item of post?.product[0].productimage_set">
-
-           <!-- <img  [src]="item.image"/> -->
-           <ion-img                
-           [title]="post?.product[0].title" 
-           [text]="post?.owner.username" 
-           scheme="dark"  
-           class="thumb-img"
-           ionImgViewer 
-           style="border-top-bottom-radius: 10px;border-bottom-left-radius: 10px;"
-           [src]="item.image"></ion-img>
-          <!-- <ion-item lines="none" text-center>
-                <ion-img  [src]="item.image"></ion-img>
-          </ion-item> -->
-          <div class="product-image-overlay"></div>
-        </ion-slide> 
-      </ion-slides>
-      <ion-badge class="badge">
-        <ion-icon style="margin-right: 1rem;" name="images"></ion-icon>{{post?.product[0].productimage_set.length}}
-      </ion-badge>
-      <ion-row justify-content-end class="hover-buttons">
-        <!-- <ion-icon size="small" float-right name="logo-instagram" class="fab" (click)="shareViaInstagram(product.image[0])"></ion-icon>
-        <ion-icon size="small" float-right name="share" class="fab" (click)="shareCommon(product.image[0])"></ion-icon> -->
-        <ion-icon *ngIf="!liked" size="small" float-right name="heart-outline" class="fab" (click)="like()"></ion-icon>
-        <ion-icon *ngIf="liked" size="small" float-right name="heart" class="fab red" (click)="like()"></ion-icon>
-      </ion-row>
-      </ion-col>
+      <ion-row>
+        <ion-col  fixed="true" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3" >
+          <ion-slides class="ionSlides" pager="true" [options]=" slideOptsOne" >
+            <ion-slide  class="ionSlide-div"  *ngFor="let item of post?.product[0].productimage_set">
+              <ion-img              
+              ionImgViewer   
+              [title]="post?.product[0].title" 
+              [text]="post?.owner.username" 
+              scheme="dark"  
+              class="product-img"
+              [src]="item.image"></ion-img>
+        
+                <!-- <img 
+                ionImgViewer 
+                [title]="post?.product[0].title" 
+                scheme="dark"
+                id="product-img"  
+                [src]="item.image"/> -->
+          
+              <!-- <div class="product-image-overlay"></div> -->
+            </ion-slide> 
+          </ion-slides>
+          <ion-badge class="badge">
+            <ion-icon style="margin-right: 1rem;" name="images"></ion-icon>{{post?.product[0].productimage_set.length}}
+          </ion-badge>
+          <ion-row justify-content-end class="hover-buttons">
+            <!-- <ion-icon size="small" float-right name="logo-instagram" class="fab" (click)="shareViaInstagram(product.image[0])"></ion-icon>
+            <ion-icon size="small" float-right name="share" class="fab" (click)="shareCommon(product.image[0])"></ion-icon> -->
+            <ion-icon *ngIf="!liked" size="small" float-right name="heart-outline" class="fab" (click)="like()"></ion-icon>
+            <ion-icon *ngIf="liked" size="small" float-right name="heart" class="fab red" (click)="like()"></ion-icon>
+          </ion-row>
+          </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col size ="12" size-sm="4" offset-sm ="4">
+    <ion-row *ngIf="loadTimeVariable">
+      <ion-col  size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
         <ion-item lines="none">
-           <ion-label></ion-label>
-          <!-- <ion-note style="font-weight: bold;">
-           {{ post?.created_at | timeAgo }}
-          </ion-note> -->
+           <ion-label style="font-weight: bold;">{{ post?.created_at | timeago }}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size ="12" size-sm="4" offset-sm ="4">
-         <ion-label class="itemlabelData">{{ isLoading ? 'Loading...' : post?.product[0].title |titlecase}}</ion-label>
+      <ion-col size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
+         <ion-title class="itemlabelData">{{ isLoading ? 'Loading...' : post?.product[0].title |titlecase}}</ion-title>
       </ion-col>
     </ion-row>
-    <!-- <ion-row>
-      <ion-col size ="12" size-sm="4" offset-sm ="4">
-         <ion-label class="itemlabelData2">{{ isLoading ? 'Loading...' : post?.product[0].price |currency }}</ion-label>
-      </ion-col>
-    </ion-row> -->
     <ion-row >
       <ion-col    style="box-shadow: 0 25px 20px rgba(255, 11, 133, 0.1);
       border-bottom-right-radius: 10px;
-      border-bottom-left-radius: 10px;" size ="12" size-sm="4" offset-sm ="4">
+      border-bottom-left-radius: 10px;" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
         <ion-item style="border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;" class="avatarItem" lines="none">
 
           <ion-avatar (click)="openModal()" style="margin-top: 15px;cursor:pointer" slot="start">
@@ -83,7 +76,7 @@
           </ion-avatar>
           <ion-label (click)="openModal()" >
               <ion-buttons  style="margin: 0px;padding:0px;font-size:28px;font-weight:bolder;cursor:pointer" shape="round" fill="none">
-                <h5 style="font-size:20px;font-weight:bolder;margin-top:3%" >{{ post?.owner.username |titlecase }}</h5>
+                <h5 style="font-size:20px;font-weight:bold;margin-top:1%" >{{ post?.owner.username |titlecase }}</h5>
               </ion-buttons>
           </ion-label>
 
@@ -96,49 +89,57 @@
     </ion-row>
 
     <ion-row style="margin-top: 40px;">
-      <ion-col style="margin-top: 10px;" size ="12" size-sm="4" offset-sm ="4">
-          <ion-label  style="font-weight: bold;color: #474747 ; font-family: sans-serif;font-size: 26px;">
+      <ion-col style="margin-top: 10px;" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
+         <div id="description-div">
+          <ion-title  style="font-weight: bold;font-family: sans-serif;font-size: 20px;">
             Description
-          </ion-label>
-          <ion-item lines="none">
-            <p slot="start">{{ post?.product[0].description }}</p>
-          </ion-item>
-
+          </ion-title>
+            <p id="description-paragram" >{{ post?.product[0].description }}</p>
+         </div>
       </ion-col>
     </ion-row>
     <ion-row class="tagsRow">
-      <ion-col size ="12" size-sm="4" offset-sm ="4"> 
+      <ion-col size ="12" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3"> 
       <ion-list>
         <ion-list-header>
-          <ion-label style="font-weight: bold;">
+          <ion-title style="font-weight: bold;">
             Tags
-          </ion-label>
+          </ion-title>
         </ion-list-header>
         <ion-slides  [options]="{ slidesPerView: '4', zoom: true, grabCursor: false }">
           <ion-slide *ngFor="let tag of post?.product[0].taggit" >
-            <ion-button  shape="round" fill="round">
-              <ion-label  style="font-weight: bold;color: #8d3185 ; font-family: sans-serif;font-size: 10px;">
-                {{ tag }}
+    
+              <ion-label id="tags">
+                {{ tag |titlecase }}
               </ion-label>
-            </ion-button>
+   
           </ion-slide>
         </ion-slides>
       </ion-list>
       </ion-col>
     </ion-row>
+
+    </ion-col>
+
   </ion-grid>
 </ion-content>
-<ion-footer class="footer" align-items-center >
-  <ion-row align-items-center>
-    <ion-col padding>
-      <ion-text >
-        <ion-label style="margin-top: 1rem;" no-margin class="foot-highlight">{{post?.product[0].price |currency }}</ion-label>
-        
-      </ion-text>
-    </ion-col>
-    <ion-col size="4">
-      <ion-button float-right class="white foot-btn" color="orange" no-margin expand="block"><strong>Buy</strong></ion-button>
-    </ion-col>
-  </ion-row>
-</ion-footer>
+
+<ion-row>
+  <ion-col  size ="12" size ="12" sizeXl="6"  sizeLg="8" sizeXs="12"  sizeMd="8" size-sm="8" offset-sm ="2" offsetMd="2" offsetLg="2" offsetXl="3">
+    <ion-footer  class="footer" align-items-center >
+      <ion-row align-items-center>
+        <ion-col padding>
+          <ion-text >
+            <ion-label style="margin-top: 1rem;" no-margin class="foot-highlight">{{post?.product[0].price |currency }}</ion-label>
+            
+          </ion-text>
+        </ion-col>
+        <ion-col style="margin-right: 2px;" size="4">
+          <ion-button float-right class="white foot-btn" color="orange" no-margin expand="block"><strong>Buy</strong></ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
+    
+  </ion-col>
+</ion-row>
 

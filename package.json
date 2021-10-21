@@ -81,6 +81,7 @@
     "ng-lazyload-image": "^9.1.0",
     "ngx-ionic-image-viewer": "^0.7.4",
     "ngx-moment": "^5.0.0",
+    "ngx-timeago": "^2.0.0",
     "node-forge": "^0.10.0",
     "node-gyp": "^8.2.0",
     "rxfire": "^6.0.0",

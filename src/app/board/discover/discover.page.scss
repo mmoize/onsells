@@ -249,7 +249,7 @@ ion-searchbar{
 
 #searchBarDesktop {
 
-    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.1);
+    --box-shadow: 0 25px 20px rgba(0, 0, 0, 0.267);
     margin-top: 7rem;
 
 
@@ -531,7 +531,7 @@ input {
     //background: url("https://www.goodfreephotos.com/albums/united-states/virginia/other-virginia/purple-skies-and-landscape-over-the-lake.jpg") no-repeat center fixed;
     // background-size: cover;
     // background: url("https://www.wallpaperup.com/uploads/wallpapers/2013/12/02/182518/8854ad3013a3ae7072656c43ec1a568b-1000.jpg") no-repeat center fixed ;
-    background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
+         //background: url("https://images4.alphacoders.com/964/964483.jpg") no-repeat center fixed;
     // background: url("https://wallpaperaccess.com/full/48753.jpg") no-repeat center fixed;
     // background: url("https://i.redd.it/afhhcswvk9821.jpg") no-repeat center fixed;
     // background: url("https://i.pinimg.com/originals/5c/4a/d2/5c4ad2b8188d3d14613902209dc33165.jpg") no-repeat center fixed;
@@ -540,7 +540,7 @@ input {
     // background: url("https://wallpaperaccess.com/full/2703797.jpg") no-repeat center fixed;
     // background: url("https://www.wallpaperup.com/uploads/wallpapers/2012/03/23/1742/0281fbc906a36721c25f55f3ce963407.jpg") no-repeat center fixed;
     // background: url("https://cdn.wallpapersafari.com/27/90/uwPC5N.jpg") no-repeat center fixed;
-    height: 80vh;
+    height: 50vh;
 }
 
 
@@ -602,3 +602,65 @@ input {
     border-radius: 0;
 }
 
+
+
+.collection {
+       column-count: 2;
+       padding-right: 10px;
+       padding-left: 2px;
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: 600px) {
+           column-count: 3;
+        }
+        
+        /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and (min-width: 768px) {
+            column-count: 4;
+        } 
+        
+        /* Large devices (laptops/desktops, 992px and up) */
+        @media only screen and (min-width: 992px) {
+            column-count: 5;
+        } 
+        
+        /* Extra large devices (large laptops and desktops, 1200px and up) */
+        @media only screen and (min-width: 1200px) {
+          column-count: 6;
+        }
+}
+
+.collection-item {
+    display: inline-block;
+    padding: 12px 12px 28px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    img {
+        border-radius: 12px;
+    }
+
+    .save-btn {
+        color: azure;
+        display: none;
+        position:absolute;
+        top: 15px;
+    }
+}
+
+.collection-item:hover {
+    animation: tapAnimation 0.25s cubic-bezier(0.31, 1, 0.34, 1) forwards;
+    .save-btn {
+        display: block;
+    }
+}
+
+@keyframes tapAnimation {
+    0% {
+        opacity: 1;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.05);
+        transform: scale(1.2);
+    }
+}

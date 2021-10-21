@@ -22,6 +22,7 @@ import { Post } from 'src/app/models/post.model';
 })
 export class ProductDetailPage implements OnInit, OnDestroy {
 
+  loadTimeVariable = false;
 
   liked = false;
 
@@ -43,6 +44,12 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   post: Post;
   private aPostSub: Subscription;
 
+
+  slideOptsOne = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    autoplay: true
+  };
 
 
   slideOpts = {
@@ -96,7 +103,6 @@ export class ProductDetailPage implements OnInit, OnDestroy {
             eventTriggered = true;
             swiper.animating = false;
             const triggerEvents = ['webkitTransitionEnd', 'transitionend'];
-            // tslint:disable-next-line: prefer-for-of
             for (let i = 0; i < triggerEvents.length; i += 1) {
               $wrapperEl.trigger(triggerEvents[i]);
             }
@@ -108,6 +114,12 @@ export class ProductDetailPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+
+    setTimeout(() => {
+      this.loadTimeVariable =true;
+    }, 1000);
+
+
     let don ='';
     this.route.paramMap.subscribe(async paramMap => {
       don = paramMap.get('postId')

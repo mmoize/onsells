@@ -29,6 +29,7 @@ import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { MomentModule } from 'ngx-moment';
 import { environment } from '../environments/environment.prod';
+import { TimeagoModule } from 'ngx-timeago';
 
 
 
@@ -68,6 +69,8 @@ import { provideMessaging,getMessaging } from '@angular/fire/messaging';
             provideAnalytics(() => getAnalytics()),
             LazyLoadImageModule,
             provideMessaging(() => getMessaging()),
+            TimeagoModule.forRoot(),
+            NgxIonicImageViewerModule,
             ServiceWorkerModule.register('ngsw-worker.js', {
               enabled: environment.production,
               // Register the ServiceWorker as soon as the app is stable

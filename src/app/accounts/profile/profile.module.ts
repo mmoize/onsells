@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +14,8 @@ import { ProfilePage } from './profile.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfilePageRoutingModule
+    ProfilePageRoutingModule,
+    NgxIonicImageViewerModule
   ],
   declarations: [ProfilePage]
 })

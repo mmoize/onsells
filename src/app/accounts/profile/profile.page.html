@@ -24,7 +24,15 @@
           <div  class="contact-card">
             <ion-card-header color="transparent" class="contact-card__header-image"> 
               <div class="contact-card__avatar" style="background: transparent;overflow:hidden; border-radius: 100%;">
-                  <ion-img *ngIf="imageString"  style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  [src]="imageString"></ion-img>
+                  <ion-img 
+                  ionImgViewer   
+                  [title]="" 
+                  [text]="" 
+                  scheme="dark"  
+                  class="product-img"
+                  *ngIf="imageString"  
+                  style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover;cursor:pointer'  
+                  [src]="imageString"></ion-img>
                   <!-- <img *ngIf="imageString"  style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  [src]="imageString"/> -->
                   <ion-img *ngIf="!imageString" style='height: 100%; width: 100%; border-radius: 100%; object-fit: cover'  src='assets/profile-avatar.png' ></ion-img>
               </div>

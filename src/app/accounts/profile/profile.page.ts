@@ -91,6 +91,7 @@ export class ProfilePage implements OnInit {
 
    //
   async ionViewWillEnter() {
+    this.listedSeg =true
      const {value}   = await Storage.get({ key : 'authData'})  ; 
     const authDictionary = JSON.parse(value);
     
@@ -115,7 +116,6 @@ export class ProfilePage implements OnInit {
         this.loadedFollowers = resData.followers;
         this.loadedFollowing = resData.following;
 
-        console.log('selected post username', resData);
       });
 
     });
@@ -147,7 +147,6 @@ export class ProfilePage implements OnInit {
   //     this.listedSeg = false;
   //     this.mapSeg = true;
   //   }
-
   // }
 
   segmentChanged(event: CustomEvent<SegmentChangeEventDetail>) {

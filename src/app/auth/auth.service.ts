@@ -36,6 +36,8 @@ export class AuthService  implements OnDestroy {
   // tslint:disable-next-line: variable-name
   private activeLogoutTimer: any;
 
+
+
   get UserId() {
     return this._user.asObservable().pipe(map(user => {
       if (user) {

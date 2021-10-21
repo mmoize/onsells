@@ -54,6 +54,8 @@ export class DiscoverPage implements OnInit, OnDestroy {
   selectedSecondChildCategory;
   secondselectedCategory;
 
+  
+
 
   @ViewChild('itemSearch') itemSearch: ElementRef<any>;
 
@@ -252,45 +254,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
                   this.getCurrentUserProfile();
                   this.setCurrentUserDetails();
 
-                  setTimeout(() => {
-
-                    // Set firebase credentials.
-
-                    const users = [];
-                    // firebase.firestore().collection('chatUsers').get().then(resData => {
-                    //   resData.forEach(childData => {
-                    //     users.push(childData.data());
-                    //     if (childData.data()['userid'] !== this.userid) {
-                    //       users.push(childData.data());
-                    //       this.testUsers.push(childData.data());
-                    //     }
-
-                    //   });
-                    //   this.chatuserListTest = users;
-
-
-                    //   const checkRoleExistence = roleParam => this.chatuserListTest.some( data => data.userid === roleParam );
-                    //   const onexist = checkRoleExistence(this.userid);
-                    //   console.log(' does user exist', onexist);
-                    //   setTimeout(() => {
-                    //     if (!onexist) {
-                    //       // tslint:disable-next-line: no-unused-expression
-                    //       this.msgService.createUser(
-                    //         this.userid,
-                    //       {'username': this.username,
-                    //       'email': this.email,
-                    //       'userid': this.userid,
-                    //       'userdp': this.userdp,
-                    //       'conversations': []}
-                    //         ).then(() => {
-                    //           // do nothing for now..
-                    //         });  
-                    //     } else {
-                    //       this.setUpMsgService();
-                    //     }
-                    //   }, 500);
-                    // });
-                  }, 1000);
                   this.PreloadPost();
   }
 
@@ -382,7 +345,6 @@ PreloadPost() {
         }
       }
 
-     // this.loaded = true;
 
     }
 
@@ -439,11 +401,6 @@ PreloadPost() {
   }
 
 
- onSecondChildCategory(selectedChild) {
-   
- }
-
-
   async onSearchListings() {
 
      const {value}   = await Storage.get({ key : 'authData'})  ; 
@@ -495,6 +452,7 @@ PreloadPost() {
 
       if (ev.target.value.length <= 1) {
         this.searching = false;
+        this.onSearchListings();
       } else if (ev.target.value.length > 1) {
         this.searching = true;
       }
@@ -588,7 +546,7 @@ PreloadPost() {
       // Closes the category slider after 15 seconds from opening it.
       setTimeout(() => {
         this.onfilter = false;
-        this.categorySelected = false;
+        // this.categorySelected = false;
       }, 15500);
 
     // Else none of the offered categories are selected other than 'All'.
@@ -667,7 +625,7 @@ PreloadPost() {
 
   async setUpListings() {
 
-    this.locateUser();
+    //this.locateUser();
 
      const {value}   = await Storage.get({ key : 'authData'})  ; 
     const authDictionary = JSON.parse(value);
@@ -743,7 +701,7 @@ onOpenMapFiltersModal() {
 
   onDetail(id) {
     this.routes.navigateByUrl(`/board/discover/post-detail/${id}`);
-    console.log('clickx', this.loaded);
+   
   }
 
   onOpenProfile() {

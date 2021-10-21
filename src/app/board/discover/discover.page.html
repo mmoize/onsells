@@ -6,11 +6,7 @@
 
 <ion-toolbar *ngIf="mobileScrolled  && iosPlatform"  >
   <ion-item lines="none">
-    <!-- <ion-buttons slot="start" style="margin:0rem"  *ngIf="!aboutToSearch"  >
-      <ion-button  style="height:3rem;margin-right:0rem">
-        <ion-img style="height:1.5rem;width:6rem;object-fit: cover" src="assets/fleekslogo.png"></ion-img>
-      </ion-button>
-    </ion-buttons> -->
+
     <div     id="divsearchInput">
       <ion-searchbar style="margin-top: 1rem;"  [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
     </div>
@@ -32,11 +28,6 @@
           </ion-button>
         </ion-buttons>
         
-        <!-- <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
-          <div id="divsearchInput">
-            
-          </div>
-        </ion-col> -->
         <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
           <ion-button style="height: 3rem;">
             <ion-img [src]="currentUserDP" class="img-head"></ion-img>
@@ -45,9 +36,6 @@
       </ion-item>
     </ion-toolbar>
 
-
-
-
     <ion-row>
       <ion-col size ="12"  text-center>
         <div id="divsearchInputIOS" >
@@ -55,10 +43,6 @@
         </div>
       </ion-col>
     </ion-row>
-
-
-
-
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -82,7 +66,7 @@
       <ion-col  size ="12" size-sm="8" offset-sm ="2">
         <ion-item lines="none">
           <ion-buttons slot="start">
-            <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
+
             <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
               <ion-icon style="color: #141111 ;"  name="add-circle-outline"></ion-icon>
             </ion-button>
@@ -91,18 +75,13 @@
             </ion-button>
           </ion-buttons>
           <ion-item (click)="onPickLocation()" slot="end"lines="none">
-            <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
             <ion-icon style="color: #141111 ;height:1.5rem;margin-top: 0.9rem" slot="start" name="map"></ion-icon>
             <h4   style="margin-top: 10px" style="font-family: 'Open Sans', sans-serif;font-weight: bolder;color:#141111 " >{{ currentAreaLocationName}}</h4>
           </ion-item>
           <ion-buttons (click)="onOpenFiltersModal()"  >
             <ion-icon style="color: #141111 ;"  name="settings-outline"></ion-icon>
-            <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
           </ion-buttons>
         </ion-item>
-          <!-- <ion-note (click)="onDisplayFilters()" >filters</ion-note>
-          <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
-          <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon> -->
       </ion-col>
     </ion-row>
 
@@ -110,60 +89,17 @@
       <ion-spinner  style="color: rgb(248, 38, 255);height:3rem;width:3rem;" ></ion-spinner>
     </div>
 
-
-
-    <!-- <ion-row *ngIf="onfilter" >
-      <ion-col size ="12" size-sm="8" offset-sm ="2" >
-       <ion-slides  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }">
-          <ion-slide  *ngFor="let category of categoryList"  >
-            <ion-card  class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
-              <ion-item-sliding style="padding: 0.2rem" lines="none">
-                <ion-icon slot="start"  style="width:1rem;height:1rem" [src]="category.icon"></ion-icon>
-                <ion-label slot="end" style="overflow: hidden;">{{ category.name }}</ion-label>
-              </ion-item-sliding>
-            </ion-card>
-        </ion-slide>
-       </ion-slides>
-      </ion-col>
-    </ion-row>  [options]="{ slidesPerView: '3', zoom: false, grabCursor: true }" -->
-
-
     <ion-row *ngIf="onfilter && !aboutToSearch" >
       <ion-col size ="12" size-sm="8" offset-sm ="2" >
        <ion-slides  [options]="slideOpts1">
           <ion-slide   *ngFor="let category of categoryList"  >
-            <!-- <ion-card style="margin-bottom: 2rem;overflow: visible; background: transparent"  class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
-              <ion-item style="padding: 0.2rem;overflow: visible;" lines="none">
-                <ion-icon slot="start"  style="width:1.8rem;height:1.8rem;" [src]="category.icon"></ion-icon>
-                <ion-label slot="end" style=" color: #faf6f6 ;overflow: visible;font-family: 'Open Sans', sans-serif;font-weight: bolder;">{{ category.name }}</ion-label>
-              </ion-item>
-            </ion-card> -->
             <ion-item  (click)="onClickedCategory(category)"lines="none">
-              <!-- <ion-icon slot="start"  style="width:1.8rem;height:1.8rem;" [src]="category.icon"></ion-icon> -->
               <ion-label  style=" color: 	#000000 ;overflow: hidden;font-family: 'Open Sans';font-weight:bolder;font-size: large;">{{ category.name }}   </ion-label>
             </ion-item>
         </ion-slide>
        </ion-slides>
       </ion-col>
     </ion-row>
-
-    <!-- <ion-row >
-      <ion-col size ="12" size-sm="8" offset-sm ="2" style="padding: 10px;" >
-        <div class="mapDiv" style="margin: 0px;border-radius:15px"  >
-          <ion-img 
-          
-          role="button"
-          class="location-image" 
-          [src]="locationimage" 
-          style="height: 8rem;object-fit: cover;width:100%;border-radius:20px;margin:0px"
-          (click)="onPickLocation()"
-          *ngIf="locationimage" 
-          ></ion-img>
-        
-        </div>
-      </ion-col>
-    </ion-row> -->
-
   </ion-grid>
 
 
@@ -185,56 +121,9 @@
     <ion-row style="background:transparent">
         <ion-col    color="transparent" size ="12">
           
-          <!-- <div class="iospinsMobile" style="background:transparent">
-            <div id="firstlayer" *ngFor="let post of listedLoadedPosts" style="background:transparent"> 
-              <ion-card (click)="onDetail(post.id)"  class="card" no-margin (click)="open(data)">
-                <ion-badge class="badge" >{{ post?.created_at | timeAgo }}</ion-badge>
-                <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
-                <ion-card-content>
-                  <ion-label style="text-align: left;">
-                    <ion-card-header style="padding: 0.25rem;color:#000000;"> {{ post?.product[0].title }} </ion-card-header>
-                  </ion-label>
-                  <ion-card-title >
-                    <ion-row>
-                        <ion-col >
-                        <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
-                        <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
-                          <ion-icon  id="divViewsicon" name="eye-outline"></ion-icon>
-                          <h2 slot="end"style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                        </ion-item>
-                        </ion-col>
-                    </ion-row>
-                  </ion-card-title>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </div> -->
-
-          <!-- <ion-card class="cardios" no-margin ">
-            <ion-badge class="badgeios" *ngIf="data.offer">{{data.discount}}%</ion-badge>
-            <img [src]="data.image[0]" [alt]="data.name">
-            <ion-card-content>
-              <ion-card-title>
-                <ion-row>
-                  <ion-col *ngIf="data.offer" no-padding>
-                    <ion-text text-left><span class="priceios"><span class="inline">{{data.currency}}{{data.cost_price}}</span> <strong>{{data.currency}}{{fun.calculate(data.cost_price, data.discount)}}</strong></span></ion-text>
-                  </ion-col>
-                  <ion-col *ngIf="!data.offer" no-padding>
-                    <ion-text text-left><span class="priceios"><strong>{{data.currency}}{{data.cost_price}}</strong></span></ion-text>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col text-left no-padding>
-                    <h6 text-left class="subtitleios">{{data.bought}}+ bought this</h6>
-                  </ion-col>
-                </ion-row>
-              </ion-card-title>
-            </ion-card-content>
-          </ion-card> -->
-
           <div class="iospinsMobile" style="background:transparent">
             <div id="firstlayerIOS" *ngFor="let post of listedLoadedPosts" style="background:transparent">
-              <ion-card (click)="onDetail(post.id)"  class="card" no-margin>
+              <!-- <ion-card (click)="onDetail(post.id)"  class="card" no-margin>
                 <ion-badge class="badge" >{{ post?.created_at }}</ion-badge>
                 <img [src]="post.product[0].productimage_set[0].image" [alt]="post?.product[0].title">
                 <ion-card-content>
@@ -253,7 +142,8 @@
                     </ion-row>
                   </ion-card-title>
                 </ion-card-content>
-              </ion-card>
+              </ion-card> -->
+              
             </div>
           </div>
 
@@ -293,9 +183,6 @@
       <ion-searchbar [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
     </div>
     
-    <!-- <ion-buttons slot="end" *ngIf="!aboutToSearch"  slot="start">
-      <ion-menu-button menu="m1"></ion-menu-button>
-    </ion-buttons> -->
   </ion-item>
 
 </ion-toolbar>
@@ -356,7 +243,7 @@
       <ion-col  size ="12" size-sm="8" offset-sm ="2">
         <ion-item lines="none">
           <ion-buttons slot="start">
-            <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
+
             <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
               <ion-icon style="color: #141111 ;"  name="add-circle-outline"></ion-icon>
             </ion-button>
@@ -365,13 +252,12 @@
             </ion-button>
           </ion-buttons>
           <ion-item (click)="onPickLocation()" slot="end"lines="none">
-            <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
             <ion-icon style="color: #141111 ;height:1.5rem;margin-top: 0.9rem" slot="start" name="map"></ion-icon>
             <h4   style="margin-top: 10px" style="font-family: 'Open Sans', sans-serif;font-weight: bolder;color:#141111 " >{{ currentAreaLocationName}}</h4>
           </ion-item>
           <ion-buttons (click)="onOpenFiltersModal()"  >
             <ion-icon style="color: #141111 ;"  name="settings-outline"></ion-icon>
-            <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
+
           </ion-buttons>
         </ion-item>
       </ion-col>
@@ -388,31 +274,12 @@
        <ion-slides  [options]="slideOpts1">
           <ion-slide   *ngFor="let category of categoryList"  >
             <ion-item  (click)="onClickedCategory(category)"lines="none">
-              <!-- <ion-icon slot="start"  style="width:1.8rem;height:1.8rem;" [src]="category.icon"></ion-icon> -->
               <ion-label  style=" color: 	#000000 ;overflow: hidden;font-family: 'Open Sans';font-weight:bolder;font-size: large;">{{ category.name }}   </ion-label>
             </ion-item>
         </ion-slide>
        </ion-slides>
       </ion-col>
     </ion-row>
-
-    <!-- <ion-row >
-      <ion-col size ="12" size-sm="8" offset-sm ="2" style="padding: 10px;" >
-        <div class="mapDiv" style="margin: 0px;border-radius:15px"  >
-          <ion-img 
-          
-          role="button"
-          class="location-image" 
-          [src]="locationimage" 
-          style="height: 8rem;object-fit: cover;width:100%;border-radius:20px;margin:0px"
-          (click)="onPickLocation()"
-          *ngIf="locationimage" 
-          ></ion-img>
-        
-        </div>
-      </ion-col>
-    </ion-row> -->
-
   </ion-grid>
 
 
@@ -430,34 +297,11 @@
   </ion-grid>
 
 
-  <ion-grid id="mobilePinGrid" style="padding: 1rem;" *ngIf="platformIsMobile" >
+  <ion-grid id="mobilePinGrid" style="padding: 0px;" *ngIf="platformIsMobile" >
     <ion-row style="background:transparent">
-        <ion-col color="transparent" size ="12" size-sm="8" offset-sm ="2">
-                    <!-- <img style="border-radius: 5px;"  (click)="onDetail(post.id)" [lazyLoad]="post.product[0].productimage_set[0].image" /> -->
-          <div class="pinsMobile" style="background:transparent">
+        <ion-col >
+          <!-- <div class="pinsMobile" style="background:transparent">
             <div id="firstlayer" *ngFor="let post of listedLoadedPosts" style="background:transparent"> 
-                <!-- <ion-card >
-
-                      <ion-img style="border-radius: 5px;"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img>
-                        <ion-label>
-                          <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
-                        </ion-label>
-
-
-                      <div   >
-                        <ion-item>
-                          <ion-label>
-                              <ion-item lines="none">
-                                <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                                <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                              </ion-item>
-                          </ion-label>
-                          <ion-label  >
-                              <h3  >{{ post?.product[0].price  |currency }}</h3>
-                          </ion-label>
-                        </ion-item>
-                      </div>
-                  </ion-card> -->
 
                   <ion-card (click)="onDetail(post.id)"  class="card" no-margin >
                     <ion-badge class="badge" >{{ post?.created_at  }}</ion-badge>
@@ -468,9 +312,6 @@
                       </ion-label>
                       <ion-card-title >
                         <ion-row>
-                            <!-- <ion-col  no-padding>
-                              <ion-text text-left><span class="price"><span class="inline">{{data.currency}}{{data.cost_price}}</span> <strong>{{data.currency}}{{fun.calculate(data.cost_price, data.discount)}}</strong></span></ion-text>
-                            </ion-col> -->
                             <ion-col >
                             <ion-text  text-left><span class="price"><strong>{{ post?.product[0].price  |currency }}</strong></span></ion-text>
                             <ion-item style="position: absolute;top: -15%;right:6%;"  lines="none">
@@ -482,16 +323,30 @@
 
 
                         <ion-row>
-                          <!-- <ion-col text-left no-padding>
-                            <h6 text-left class="subtitle">jn+ bought this</h6>
-                          </ion-col> -->
                         </ion-row>
                       </ion-card-title>
                     </ion-card-content>
                   </ion-card>
-
             </div>
-
+          </div> -->
+          <div class="collection ion-padding">
+            <div class="collection-item" text-center  *ngFor="let post of listedLoadedPosts" >
+              <ion-icon class="save-btn" name="bookmark" slot="start"></ion-icon>
+              <img   (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
+              <div>
+                <ion-item>
+                  <ion-label slot="start" >
+                      <ion-item lines="none">
+                        <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                        <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                      </ion-item>
+                  </ion-label>
+                  <ion-label >
+                      <h3 >{{ post?.product[0].price  |currency }}</h3>
+                  </ion-label>
+                </ion-item>
+              </div>
+            </div>
 
           </div>
 
@@ -538,19 +393,6 @@
       </ion-button>
     </ion-buttons>
   </ion-item>
-      <!-- <ion-row>
-        <ion-col>   
-          <ion-item lines="none">
-            <ion-buttons slot="start">
-              <ion-menu-button menu="m1"></ion-menu-button>
-            </ion-buttons>
-            <ion-img style="height:3rem;width:180px;margin-top: 5px; object-fit: cover" src="assets/fleekslogo.png"></ion-img>
-            <ion-buttons  slot="end" *ngIf="currentUserDP"   color="success">
-              <ion-img [src]="currentUserDP" class="img-head"></ion-img>
-            </ion-buttons>
-          </ion-item>
-        </ion-col>
-      </ion-row> -->
 </ion-toolbar>
 
 <ion-content  [scrollEvents]="true"  #desktopContent *ngIf="!platformIsMobile" (ionScroll)="logScrolling($event)" (ionScrollStart)="logScrollStart()">
@@ -565,11 +407,6 @@
             </ion-button>
           </ion-buttons>
           
-          <!-- <ion-col size ="12" size-sm="4" offset-sm ="4" text-center>
-            <div id="divsearchInput">
-              
-            </div>
-          </ion-col> -->
           <ion-buttons (click)="onOpenProfile()"  *ngIf="!aboutToSearch && currentUserDP"  slot="end"    color="success">
             <ion-button style="height: 3rem;">
               <ion-img [src]="currentUserDP" class="img-head"></ion-img>
@@ -587,7 +424,7 @@
             <ion-searchbar  style="height:rem;width: 50%; margin-left:25%" id="searchBarDesktop" [(ngModel)]="searchtext" (ionFocus)="aboutTosearch()" (ionBlur)="aboutTosearch()"  (ionChange)="onSearchInput($event)"   [formControl]="searchControl"></ion-searchbar>
           </div>
         </ion-col>
-    </ion-row>
+      </ion-row>
 
       <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -599,7 +436,7 @@
         <ion-col size ="12" size-sm="8" offset-sm ="2">
           <div *ngIf="allCategory">
             <ion-item lines="none">
-              <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-family: 'Open Sans', sans-serif;font-weight: bolder; font-size:xxx-large;color: #faf6f6; ">{{ Selectedcategory.name }}</h2>
+              <h2 slot="start"  *ngIf="Selectedcategory"  (click)="resetCategoryFilters(Selectedcategory)"  style="font-family: 'Open Sans', sans-serif;font-weight: bolder; font-size:xxx-large;color: #9e387a; ">{{ Selectedcategory.name }}</h2>
               <ion-select slot="end" [(ngModel)]="secondselectedCategory" (ngModelChange)="onsecondCategory($event)"   class="custom-options">
                 <ion-select-option   *ngFor="let category of selectedSecondChildCategory" color="white" [value]="category"  >{{category.name}}</ion-select-option>
               </ion-select>
@@ -613,31 +450,26 @@
         <ion-col  size ="12" size-sm="8" offset-sm ="2">
           <ion-item lines="none">
             <ion-buttons slot="start">
-              <!-- <ion-note (click)="onDisplayFilters()" style="font-weight: bold;" >category</ion-note> -->
+
               <ion-button (click)="onDisplayFilters()" *ngIf="!onfilter">
-                <ion-icon style="color: #faf6f6;  height:2rem;width:2rem"  name="add-circle-outline"></ion-icon>
+                <ion-icon style="color: rgba(125, 14, 129, 0.541);  height:2rem;width:2rem"  name="add-circle-outline"></ion-icon>
               </ion-button>
               <ion-button *ngIf="onfilter" (click)="onDisplayFilters()">
-                <ion-icon   style="color: #faf6f6;  height:2rem;width:2rem"  name="add-circle"></ion-icon>
+                <ion-icon   style="color: rgb(248, 38, 255);  height:2rem;width:2rem"  name="add-circle"></ion-icon>
               </ion-button>
             </ion-buttons>
             <ion-item (click)="onPickLocation()" slot="end"lines="none">
-              <!-- <ion-icon color="primary" src="assets/icons/world.svg"></ion-icon> -->
               <ion-buttons>
                 <ion-button>
-                  <ion-icon style="color: #faf6f6 ;margin:2rem;" slot="start" name="map"></ion-icon>
-                  <h4   style="margin-top: 10px" style="color: #faf6f6 ;font-size:x-large;font-family: 'Open Sans', sans-serif;font-weight: bolder;"  >{{ currentAreaLocationName}}</h4>
+                  <ion-icon style="color: rgb(248, 38, 255);margin:2rem;" slot="start" name="map"></ion-icon>
+                  <h4   style="margin-top: 10px" style="color: rgb(248, 38, 255) ;font-size:x-large;font-family: 'Open Sans', sans-serif;font-weight: bolder;"  >{{ currentAreaLocationName}}</h4>
                 </ion-button>
               </ion-buttons>
             </ion-item>
             <ion-buttons (click)="onOpenFiltersModal()"  >
-              <ion-icon style="color: #faf6f6;  height:2rem;width:2rem" name="settings"></ion-icon>
-              <!-- <ion-note style="font-weight: bold;"  >filters</ion-note> -->
+              <ion-icon style="color: rgb(248, 38, 255);  height:2rem;width:2rem" name="settings"></ion-icon>
             </ion-buttons>
           </ion-item>
-            <!-- <ion-note (click)="onDisplayFilters()" >filters</ion-note>
-            <ion-icon (click)="onDisplayFilters()" *ngIf="!onfilter" name="add-circle-outline"></ion-icon>
-            <ion-icon (click)="onDisplayFilters()" *ngIf="onfilter"  color="primary" name="add-circle-outline"></ion-icon> -->
         </ion-col>
       </ion-row>
  
@@ -654,7 +486,7 @@
               <ion-card style="margin-bottom: 2rem;overflow: visible; background: transparent"  class="diplayedCategory" (click)="onClickedCategory(category)" lines="none">
                 <ion-item style="padding: 0.2rem;overflow: visible;" lines="none">
                   <ion-icon slot="start"  style="width:3rem;height:3rem;margin-right:1rem" [src]="category.icon"></ion-icon>
-                  <ion-label slot="end" style="color: #faf6f6 ;overflow: visible;font-family: 'Open Sans', sans-serif;font-weight: bolder;">{{ category.name }}</ion-label>
+                  <ion-label slot="end" style="color: #9e387a ;overflow: visible;font-family: 'Open Sans', sans-serif;font-weight: bolder;">{{ category.name }}</ion-label>
                 </ion-item>
               </ion-card>
           </ion-slide>
@@ -680,37 +512,28 @@
     </div>
 
 
-    <ion-grid  style="padding: 1rem;margin-top:1rem" *ngIf="!platformIsMobile" >
+    <ion-grid  style="padding: 1rem;margin-top:5rem" *ngIf="!platformIsMobile" >
       <ion-row>
-          <ion-col size ="12" size-sm="8" offset-sm ="2" >
-
-            <div class="pins">
-              <div id="firstlayer" *ngFor="let post of listedLoadedPosts" > 
-                        
-                <ion-card style="min-width: 10.371rem;min-height:15.158rem" >
-                  <!-- <ion-img style="border-radius: 5px;min-width:13.125rem;max-width:13.125rem;min-height:13.125rem"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" ></ion-img> -->
-                  <img style="border-radius: 5px;min-width:13.125rem;max-width:13.125rem;min-height:13.125rem;object-fit:cover"  (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
-                    <ion-label>
-                      <ion-card-header> {{ post?.product[0].title }} </ion-card-header>
+          <ion-col  >
+            <div class="collection ion-padding">
+              <div class="collection-item" text-center  *ngFor="let post of listedLoadedPosts" >
+                <ion-icon class="save-btn" name="bookmark" slot="start"></ion-icon>
+                <img   (click)="onDetail(post.id)" [src]="post.product[0].productimage_set[0].image" />
+                <div>
+                  <ion-item>
+                    <ion-label slot="start" >
+                        <ion-item lines="none">
+                          <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
+                          <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
+                        </ion-item>
                     </ion-label>
-
-
-                  <div>
-                    <ion-item>
-                      <ion-label slot="start" >
-                          <ion-item lines="none">
-                            <ion-icon id="divViewsicon" name="eye-outline"></ion-icon>
-                            <h2 style="font-weight: bold;">{{ post?.viewcount}}</h2>
-                          </ion-item>
-                      </ion-label>
-                      <ion-label >
-                          <h3 >{{ post?.product[0].price  |currency }}</h3>
-                      </ion-label>
-                    </ion-item>
-                  </div>
-                </ion-card>
-                  
+                    <ion-label >
+                        <h3 >{{ post?.product[0].price  |currency }}</h3>
+                    </ion-label>
+                  </ion-item>
+                </div>
               </div>
+
             </div>
 
           </ion-col>

@@ -18,6 +18,7 @@ import { SuperTabsConfig } from '@ionic-super-tabs/core';
 import { UsermessagesPage } from './usermessages/usermessages.page';
 import { FollowersPage } from './followers/followers.page';
 import { GroupsPage } from './groups/groups.page';
+import { Storage } from '@capacitor/storage';
 
 
 
@@ -34,7 +35,7 @@ export class MessagesPage implements OnInit {
   searchbar = false;
   @ViewChild(SuperTabs) superTabs: SuperTabs;
 
-  currentuserdp;
+  currentUserData;
 
   opts = {
     icon: false,
@@ -69,7 +70,7 @@ export class MessagesPage implements OnInit {
 
   ) {
 
-   this.getUserData();
+
    setTimeout(() => {
 
     // firebase.firestore().collection('chatUsers').get().then(resData => {
@@ -80,32 +81,24 @@ export class MessagesPage implements OnInit {
     //      });
     // });
 
-  }, 1000);
+   }, 1000);
+
+
 
   }
 
 
 
+  async ngOnInit() {
+    const { value } = await Storage.get({ key : 'authData'}) ;
+    const userDicData = JSON.parse(value);
+  
+    this.profileservice.loadUserProfile(userDicData.user_id).subscribe(resData => {
+     this.currentUserData = resData;
+    });
+   }
 
 
-
-
-  async getUserData() {
-  const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-  const userDicData = JSON.parse(value);
-  const dicToken = userDicData.token;
-  this.email = userDicData.email;
-  this.username = userDicData.username;
-  this.userid = JSON.stringify(userDicData.user_id);
-
-}
-
-
-
-  ngOnInit() {
-   console.log('this is userData', this.userid, this.username, this.email)    ;
-
-  }
 
 
   openChatDetail(userid, username) {
@@ -114,14 +107,6 @@ export class MessagesPage implements OnInit {
     this.routes.navigateByUrl('messages/message-detail');
   }
 
-  async ionViewWillEnter(){
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
-    const dic = JSON.parse(value);
-    const userid = dic.user_id;
-    this.profileservice.loadUserProfile(userid).subscribe(resData => {
-        this.currentuserdp = resData.image;
-     });
-  }
 
   onCurrentUserProfile() {
     this.routes.navigateByUrl('/accounts/profile');

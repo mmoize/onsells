@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { ProductDetailPageRoutingModule } from './product-detail-routing.module';
 
 import { ProductDetailPage } from './product-detail.page';
+import { TimeagoModule } from 'ngx-timeago';
+
 
 
 // import { environment } from 'src/environments/environment';
@@ -23,6 +25,7 @@ import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
     SharedModule,
     NgxIonicImageViewerModule,
     ChatPageModule,
+    TimeagoModule
  
   ],
   declarations: [ProductDetailPage]

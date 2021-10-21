@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 import { UserprofileComponent } from 'src/app/shared/userprofile/userprofile.component';
 import { Post } from 'src/app/models/post.model';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-chat',
@@ -178,7 +179,7 @@ export class ChatPage implements OnInit {
   }
 
   async getCurrentUserData() {
-    const { value } = await Plugins.Storage.get({ key : 'authData'}) ;
+    const { value } = await Storage.get({ key : 'authData'}) ;
     const userDicData = JSON.parse(value);
     const dicToken = userDicData.token;
     this.userid = JSON.stringify(userDicData.user_id);

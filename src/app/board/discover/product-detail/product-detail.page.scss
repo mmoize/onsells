@@ -1,3 +1,7 @@
+ion-content {
+    background-color: #8d3185;
+}
+
 ion-card {
 
     padding: 0px;
@@ -19,17 +23,86 @@ ion-card-content {
     border-top: none;
 }
 
-ion-img {
-    object-fit: inherit;
-    width: 100%;
-    height: 100%;
+.product-img {
+    cursor: pointer;
+    width: fit-content !important;
+    height: 100% !important;
+    // max-width: 100vw !important;
+    // max-height: 100vh !important;
+    object-fit: cover;
+    background-color: #0f0e0f;
 
 
-    //max-height: 70vh;
-    //max-width: 70vw;
-    //min-height: 60vh;
-    //min-width: 60vw;
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        border-radius: 20px
+    }
+    
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        border-radius: 20px
+    } 
+    
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        border-radius: 20px
+    } 
+    
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        border-radius: 20px
+    }
 }
+
+.product-img:hover {
+    animation: tapAnimation 0.25s cubic-bezier(0.31, 1, 0.34, 1) forwards;
+
+}
+
+@keyframes tapAnimation {
+    0% {
+        opacity: 1;
+        transform: scale(2);
+    }
+    100% {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.05);
+        transform: scale(3);
+    }
+}
+
+#product-img {
+    width: 100% !important;
+    height: 100% !important;
+    // max-width: 100vw !important;
+    // max-height: 100vh !important;
+    object-fit: cover;
+
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        border-radius: 20px 20px 20px 20px;
+    }
+    
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        border-radius: 10px 10px 10px 10px;
+    } 
+    
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        border-radius: 10px 10px 10px 10px;
+    } 
+    
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        border-radius: 10px 10px 10px 10px;
+    }
+}
+
+.ionSlide-div {
+     width: fit-content;
+}
+
 
 ion-col{
     padding: 0px;
@@ -37,7 +110,28 @@ ion-col{
 }
 
 .ionSlides {
-max-height: 50vh;
+  max-height: 70vh;
+  background: #474747;
+
+      /* Small devices (portrait tablets and large phones, 600px and up) */
+      @media only screen and (min-width: 600px) {
+        border-radius: 20px;
+    }
+    
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        border-radius: 20px;
+    } 
+    
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        border-radius: 20px;
+    } 
+    
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        border-radius: 20px;
+    }
 }
 
 ion-slide {
@@ -133,7 +227,7 @@ p {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(transparent 50%,white 70%);
+    background: linear-gradient(transparent 80%,white 70%);
 }
 
 .badge {
@@ -174,6 +268,8 @@ p {
 .footer {
     background-color: rgb(12, 12, 12);
     color: rgb(210, 210, 210);
+    border-radius: 20px 20px 0px 0px;
+    object-fit: contain;
 }
 
 .foot-highlight {
@@ -186,5 +282,31 @@ p {
 .foot-btn {
     width: 100%;
     background-color:  rgba(231, 26, 163, 0.575);  
-    //background-color:  rgba(241, 67, 183, 0.808);
+    border-radius: 20px 20px 0px 0px;
+    height: 100%;
+    margin-right: 10px;
+}
+
+#description-div {
+    margin: 10px;
+}
+
+#description-paragram {
+    margin: 10px;
+    padding-left: 10px;
+    font-family: sans-serif;
+    font-weight: normal;
+    width: 60%;
+}
+
+#tags {
+    font-weight: bold;
+    padding: 5PX;
+    color: #0f0e0f ; 
+    font-family: sans-serif;
+    font-size: 18px;
+    border: 10px;
+    border-radius: 10PX;
+    border-color: #8d3185;
+    background-color: #c9a0c79c;
 }
